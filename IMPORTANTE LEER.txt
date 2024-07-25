@@ -1,0 +1,20 @@
+¿Qué es el diseño web responsive?
+
+Es una técnica que permite que un sitio web se ajuste automáticamente al tamaño y 
+orientación del dispositivo desde el que se está viendo. Esto significa que tu página 
+se verá bien tanto en una pantalla de escritorio como en una pantalla pequeña de un 
+smartphone.
+
+¿Cómo lograr un diseño web responsive?
+
+Existen varias formas de hacer que tu sitio web sea responsive, pero las más comunes 
+son:
+
+Utilizar un framework CSS: Frameworks como Bootstrap o Foundation proporcionan una 
+estructura predefinida y componentes CSS que facilitan la creación de diseños 
+responsive.
+Escribir CSS personalizado: Si prefieres tener un mayor control sobre el diseño, puedes
+escribir tus propias reglas CSS utilizando media queries. Estas reglas te permiten 
+aplicar diferentes estilos según el tamaño de la pantalla.
+Utilizar un CMS con soporte responsive: Muchos CMS populares, como WordPress, ofrecen 
+temas y plugins que incorporan diseño responsive de forma nativa.
