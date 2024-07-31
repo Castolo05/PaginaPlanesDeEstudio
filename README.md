@@ -1,1 +1,1 @@
-holaaaaaaaaaaaa
+Si estas leyendo esto es debido a alguna falla en el funcionamiento de nuestra pagina web. En caso de contar con la disponibilidad, comunicate con las personas responsables para notificarles de su mal funcionamiento.
