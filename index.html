@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes de Estudio - Facultad de Ciencias Económicas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img id="logo" src="Logo.png" alt="Logo de la Universidad" onclick="window.open('https://www.econ.unicen.edu.ar/', '_blank')">
+        <div class="header-content">
+            <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
+        </div>
+        <img id="mensaje" src="mensaje.png" alt="Mensaje" onclick="window.open('https://linktr.ee/cece_franjamorada', '_blank')">
+    </header>
+    <nav>
+        <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
+            <span>Licenciatura en</span>
+            <span>Gestión Tecnológica</span>
+        </button>
+        <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
+            <span>Licenciatura en</span>
+            <span>Economía Empresarial</span>
+        </button>
+        <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
+        <button id="btn-administracion" onclick="loadCareer('administracion')">
+            <span>Licenciatura en</span>
+            <span>Administración</span>
+        </button>
+        <button id="btn-save" onclick="saveChanges()">Guardar Cambios</button>
+    </nav>
+    <main id="year-sections">
+        <!-- Las secciones de año se cargarán aquí dinámicamente -->
+    </main>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title">¿Tienes alguna sugerencia o necesitas comunicarte con nosotros? ¡Aquí puedes!</h2>
+            <form class="modal-form">
+                <input type="email" placeholder="Tu correo electrónico" required>
+                <textarea placeholder="Tu mensaje" rows="4" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

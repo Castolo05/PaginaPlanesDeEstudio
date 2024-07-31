@@ -1,0 +1,238 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #003366;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+    margin: 0 auto;
+}
+#logo, #mensaje {
+    height: 75px;
+    margin: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+#logo:hover, #mensaje:hover {
+    transform: scale(1.05);
+}
+h1 {
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+nav {
+    background-color: #00406e;
+    padding: 10px;
+    text-align: center;
+}
+nav button {
+    background-color: #ffffff;
+    border: none;
+    color: #00406e;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 220px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    flex-direction: column;
+    border-radius: 10px;
+}
+nav button:hover, nav button.active {
+    background-color: #1e90ff;
+    color: #ffffff;
+}
+main {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.year-section, .mix-section {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px;
+}
+.year-title, .mix-title {
+    background-color: #00406e;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.course-grid {
+    display: flex;
+    flex-direction: column;
+}
+.course {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.course:hover {
+    filter: brightness(0.85);
+}
+.course h2 {
+    font-size: 0.9em;
+    margin: 0;
+}
+.details {
+    display: none;
+    padding: 10px;
+    border-top: 1px solid #cccccc;
+    font-size: 0.8em;
+}
+.course.active .details {
+    display: block;
+}
+.correlatives, .is-correlative-for {
+    list-style-type: none;
+    padding-left: 10px;
+}
+.status-buttons {
+    margin-top: 5px;
+}
+.status-button {
+    margin: 2px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+.final-aprobado, .ingreso-aprobado {
+    background-color: #99d98c;
+}
+.sin-cursada, .sin-ingreso {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #cccccc;
+}
+.cursada-aprobada {
+    background-color: #a1c4fd;
+}
+.disabled {
+    background-color: #7a7a7a;
+    color: #ffffff;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-title {
+    margin-top: 0;
+    color: #003366;
+}
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+.modal-form input,
+.modal-form textarea {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.modal-form button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.modal-form button:hover {
+    background-color: #00406e;
+}
+body.blur > *:not(.modal) {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+@media only screen and (max-width: 600px) {
+    header {
+        flex-direction: column;
+    }
+    .header-content {
+        flex-direction: column;
+    }
+    #logo, #mensaje {
+        height: 60px;
+        margin: 10px 0;
+    }
+    h1 {
+        font-size: 1.5em;
+        position: static;
+    }
+    nav button {
+        width: 100%;
+        margin: 5px 0;
+    }
+    .year-section, .mix-section {
+        width: 100%;
+    }
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+}
