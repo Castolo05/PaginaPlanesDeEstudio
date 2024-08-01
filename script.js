@@ -130,8 +130,7 @@ const careers = {
                 { id: 38, name: 'Taller de Idiomas I', correlatives: [], year: 2, mix: 'T' },
                 { id: 39, name: 'Taller de Idioma II', correlatives: [38], year: 3, mix: 'T' },
                 { id: 40, name: 'Taller de Práctica de Sistemas Contables', correlatives: [1], year: 3, mix: 'T' },
-                { id: 41, name: 'Espacio de Práctica Profesional Supervisada', correlatives: [15, 21], year: 4, mix: 'P' },
-                { id: 42, name: 'Taller de Idiomas (Examen Internacional)', correlatives: [], year: 3, mix: 'T' }
+                { id: 41, name: 'Espacio de Práctica Profesional Supervisada', correlatives: [15, 21], year: 4, mix: 'P' }
             ],
 'administracion': [
     { id: 0, name: 'Introducción a las Ciencias Económicas', correlatives: [], year: 1, mix: '-' },
