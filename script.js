@@ -170,12 +170,12 @@ const careers = {
     { id: 33, name: 'Metodología de la Investigación', correlatives: [10, 27], year: 5, mix: 'A' },
     { id: 34, name: 'Tecnología de Información', correlatives: [9, 15], year: 5, mix: 'A' },
     { id: 35, name: 'Práctica Profesional', correlatives: [27], year: 5, mix: 'A' },
-    { id: 36, name: 'T1 Taller de Desarrollo de Habilidades I', correlatives: [], year: 1, mix: 'T' },
-    { id: 37, name: 'T2 Taller de Desarrollo de Habilidades II', correlatives: [], year: 1, mix: 'T' },
-    { id: 38, name: 'T3 Taller de Manejo de Herramientas Informáticas', correlatives: [], year: 2, mix: 'T' },
-    { id: 39, name: 'T4 Taller de Idiomas I', correlatives: [], year: 2, mix: 'T' },
-    { id: 40, name: 'T5 Taller de Idioma II', correlatives: [39], year: 3, mix: 'T' },
-    { id: 41, name: 'T6 Taller de Práctica de Sistemas Contables', correlatives: [1], year: 3, mix: 'T' },
+    { id: 36, name: 'Taller de Desarrollo de Habilidades I', correlatives: [], year: 1, mix: 'T' },
+    { id: 37, name: 'Taller de Desarrollo de Habilidades II', correlatives: [], year: 1, mix: 'T' },
+    { id: 38, name: 'Taller de Manejo de Herramientas Informáticas', correlatives: [], year: 2, mix: 'T' },
+    { id: 39, name: 'Taller de Idiomas I', correlatives: [], year: 2, mix: 'T' },
+    { id: 40, name: 'Taller de Idioma II', correlatives: [39], year: 3, mix: 'T' },
+    { id: 41, name: 'Taller de Práctica de Sistemas Contables', correlatives: [1], year: 3, mix: 'T' },
     { id: 42, name: 'Espacio de Práctica Profesional Supervisada', correlatives: [15, 18], year: 4, mix: 'P' }
 ]
         };
