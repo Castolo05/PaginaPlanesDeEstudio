@@ -60,9 +60,24 @@ nav button {
     flex-direction: column;
     border-radius: 10px;
 }
-nav button:hover, nav button.active {
+nav button:hover {
+    background-color: #2f4a64;
+    color: #ffffff;
+}
+nav button.active {
     background-color: #1e90ff;
     color: #ffffff;
+}
+#btn-save {
+    background-color: #99d98c;
+    color: #000000;
+    width: 24%;
+    height: 3%;
+}
+#btn-save:hover {
+    /* Estilos cuando el cursor está sobre el botón */
+    background-color: #45a049;
+    color: #fffefe;
 }
 main {
     padding: 20px;
@@ -128,14 +143,17 @@ main {
 }
 .final-aprobado, .ingreso-aprobado {
     background-color: #99d98c;
+    padding: 10px;
 }
 .sin-cursada, .sin-ingreso {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #cccccc;
+    padding: 10px;
 }
 .cursada-aprobada {
     background-color: #a1c4fd;
+    padding: 10px;
 }
 .disabled {
     background-color: #7a7a7a;
