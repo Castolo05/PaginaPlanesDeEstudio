@@ -338,4 +338,7 @@ body.blur > *:not(.modal) {
         width: 90%;
         margin: 20% auto;
     }
+    #btn-gestion-tecnologica {
+        margin-left: 0px;
+}
 }
