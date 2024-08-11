@@ -83,7 +83,7 @@ nav button span {
     line-height: 1.2;
 }
 #btn-gestion-tecnologica {
-    margin-left: 10%;
+    margin-left: 11.5%;
 }
 
 #btn-gestion-tecnologica, #btn-economia-empresarial, #btn-administracion, #btn-contador-publico, #btn-save {
@@ -340,5 +340,5 @@ body.blur > *:not(.modal) {
     }
     #btn-gestion-tecnologica {
         margin-left: 0px;
-}
+    }
 }
