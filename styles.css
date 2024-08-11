@@ -291,18 +291,98 @@ body.blur > *:not(.modal) {
 }
 
 @media only screen and (max-width: 1200px) {
+    body {
+        font-size: 16px;
+    }
+
+    header {
+        padding: 10px 15px;
+    }
+
+    .header-content {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #logo, #mensaje {
+        height: 65px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        position: static;
+        margin: 10px 0;
+        text-align: center;
+    }
+
     nav {
+        padding: 10px;
         flex-wrap: wrap;
     }
-    
+
     .career-buttons {
         width: 100%;
+        justify-content: center;
         margin-bottom: 10px;
     }
-    
+
     nav button, #btn-save {
-        width: 100%;
-        margin: 5px 0;
+        width: calc(33.33% - 10px);
+        margin: 5px;
+        height: 60px;
+        font-size: 0.9em;
+        white-space: normal;
+    }
+
+    #btn-gestion-tecnologica {
+        margin-left: 5px;
+    }
+
+    #btn-save {
+        width: calc(33.33% - 10px);
+        margin-top: 10px;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    .year-section, .mix-section {
+        width: calc(50% - 20px);
+        max-width: none;
+    }
+
+    .course h2 {
+        font-size: 1em;
+    }
+
+    .details {
+        font-size: 0.9em;
+    }
+
+    .status-button {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .modal-content {
+        width: 70%;
+        max-width: 600px;
+    }
+
+    .close {
+        font-size: 28px;
+    }
+
+    .modal-title {
+        font-size: 1.4em;
+    }
+
+    .modal-form input,
+    .modal-form textarea,
+    .modal-form button {
+        font-size: 1em;
+        padding: 10px;
     }
 }
 
