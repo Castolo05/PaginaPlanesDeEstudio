@@ -307,38 +307,110 @@ body.blur > *:not(.modal) {
 }
 
 @media only screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
     header {
         flex-direction: column;
+        padding: 10px;
     }
-    
+
     .header-content {
         flex-direction: column;
+        width: 100%;
     }
-    
+
     #logo, #mensaje {
-        height: 60px;
+        height: 50px;
+        margin: 5px 0;
+    }
+
+    h1 {
+        font-size: 1.2em;
+        position: static;
         margin: 10px 0;
     }
-    
-    h1 {
-        font-size: 1.5em;
-        position: static;
+
+    nav {
+        padding: 5px;
     }
-    
+
+    .career-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
     nav button, #btn-save {
         width: 100%;
         margin: 5px 0;
+        height: 50px;
+        padding: 0;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    
-    .year-section, .mix-section {
+
+    #btn-gestion-tecnologica,
+    #btn-economia-empresarial,
+    #btn-administracion,
+    #btn-contador-publico,
+    #btn-save {
         width: 100%;
     }
-    
-    .modal-content {
-        width: 90%;
-        margin: 20% auto;
+
+    nav button span {
+        display: inline;
+        white-space: normal;
     }
+
     #btn-gestion-tecnologica {
-        margin-left: 0px;
+        margin-left: 0;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    .year-section, .mix-section {
+        width: 100%;
+        max-width: none;
+    }
+
+    .course h2 {
+        font-size: 1em;
+    }
+
+    .details {
+        font-size: 0.9em;
+    }
+
+    .status-button {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 15px;
+    }
+
+    .close {
+        font-size: 24px;
+        top: 5px;
+        right: 10px;
+    }
+
+    .modal-title {
+        font-size: 1.2em;
+    }
+
+    .modal-form input,
+    .modal-form textarea,
+    .modal-form button {
+        font-size: 1em;
+        padding: 8px;
     }
 }
