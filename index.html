@@ -16,19 +16,21 @@
         <img id="mensaje" src="mensaje.png" alt="Mensaje" onclick="window.open('https://linktr.ee/cece_franjamorada', '_blank')">
     </header>
     <nav>
-        <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
-            <span>Licenciatura en</span>
-            <span>Gestión Tecnológica</span>
-        </button>
-        <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
-            <span>Licenciatura en</span>
-            <span>Economía Empresarial</span>
-        </button>
-        <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
-        <button id="btn-administracion" onclick="loadCareer('administracion')">
-            <span>Licenciatura en</span>
-            <span>Administración</span>
-        </button>
+        <div class="career-buttons">
+            <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
+                <span>Licenciatura en</span>
+                <span>Gestión Tecnológica</span>
+            </button>
+            <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
+                <span>Licenciatura en</span>
+                <span>Economía Empresarial</span>
+            </button>
+            <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
+            <button id="btn-administracion" onclick="loadCareer('administracion')">
+                <span>Licenciatura en</span>
+                <span>Administración</span>
+            </button>
+        </div>
         <button id="btn-save" onclick="saveChanges()">Guardar Cambios</button>
     </nav>
     <main id="year-sections">
@@ -46,6 +48,10 @@
             </form>
         </div>
     </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
 
     <script src="script.js"></script>
 </body>
