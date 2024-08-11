@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 header {
     background-color: #003366;
     color: white;
@@ -14,21 +15,25 @@ header {
     align-items: center;
     justify-content: space-between;
 }
+
 .header-content {
     display: flex;
     align-items: center;
     flex-grow: 0;
     margin: 0 auto;
 }
+
 #logo, #mensaje {
     height: 75px;
     margin: 0;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
+
 #logo:hover, #mensaje:hover {
     transform: scale(1.05);
 }
+
 h1 {
     text-align: center;
     margin: 0;
@@ -37,59 +42,93 @@ h1 {
     left: 0;
     right: 0;
 }
+
 nav {
     background-color: #00406e;
     padding: 10px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
+
+.career-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    
+}
+
 nav button {
     background-color: #ffffff;
     border: none;
     color: #00406e;
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 10px 15px;
+    margin: 0 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: background-color 0.3s;
-    width: 220px;
-    height: 60px;
-    display: inline-flex;
+    height: 50px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    vertical-align: top;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 5px;
+    white-space: nowrap;
 }
-nav button:hover {
-    background-color: #2f4a64;
+
+nav button span {
+    display: block;
+    line-height: 1.2;
+}
+#btn-gestion-tecnologica {
+    margin-left: 11.5%;
+}
+
+#btn-gestion-tecnologica, #btn-economia-empresarial, #btn-administracion, #btn-contador-publico, #btn-save {
+    width: 180px;
+    justify-items: center;
+    align-items: center ;
+}
+
+
+
+#btn-save {
+    background-color: #57da3c;
     color: #ffffff;
+    width: 140px;
+    position: relative;
+    
 }
+
 nav button.active {
     background-color: #1e90ff;
     color: #ffffff;
 }
-#btn-save {
-    background-color: #99d98c;
-    color: #000000;
-    width: 24%;
-    height: 3%;
+nav button:hover {
+    background-color: #6cc4ff86;
+    color: #ffffff;
 }
+
 #btn-save:hover {
-    /* Estilos cuando el cursor está sobre el botón */
-    background-color: #45a049;
-    color: #fffefe;
+    background-color: #a4f095;
+    color: #000000;
 }
+
 main {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
+
 .year-section, .mix-section {
     width: 100%;
     max-width: 300px;
     margin: 10px;
 }
+
 .year-title, .mix-title {
     background-color: #00406e;
     color: white;
@@ -97,10 +136,12 @@ main {
     text-align: center;
     margin-bottom: 10px;
 }
+
 .course-grid {
     display: flex;
     flex-direction: column;
 }
+
 .course {
     background-color: #ffffff;
     border: 1px solid #cccccc;
@@ -109,29 +150,36 @@ main {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 .course:hover {
     filter: brightness(0.85);
 }
+
 .course h2 {
     font-size: 0.9em;
     margin: 0;
 }
+
 .details {
     display: none;
     padding: 10px;
     border-top: 1px solid #cccccc;
     font-size: 0.8em;
 }
+
 .course.active .details {
     display: block;
 }
+
 .correlatives, .is-correlative-for {
     list-style-type: none;
     padding-left: 10px;
 }
+
 .status-buttons {
     margin-top: 5px;
 }
+
 .status-button {
     margin: 2px;
     padding: 5px 10px;
@@ -141,24 +189,29 @@ main {
     border: none;
     border-radius: 3px;
 }
+
 .final-aprobado, .ingreso-aprobado {
     background-color: #99d98c;
     padding: 10px;
 }
+
 .sin-cursada, .sin-ingreso {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #cccccc;
     padding: 10px;
 }
+
 .cursada-aprobada {
     background-color: #a1c4fd;
     padding: 10px;
 }
+
 .disabled {
     background-color: #7a7a7a;
     color: #ffffff;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -170,6 +223,7 @@ main {
     overflow: auto;
     background-color: rgba(0,0,0,0.5);
 }
+
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
@@ -181,6 +235,7 @@ main {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
+
 .close {
     color: #aaa;
     float: right;
@@ -191,20 +246,24 @@ main {
     top: 10px;
     right: 20px;
 }
+
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
+
 .modal-title {
     margin-top: 0;
     color: #003366;
 }
+
 .modal-form {
     display: flex;
     flex-direction: column;
 }
+
 .modal-form input,
 .modal-form textarea {
     margin-bottom: 10px;
@@ -212,6 +271,7 @@ main {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
+
 .modal-form button {
     background-color: #003366;
     color: white;
@@ -220,35 +280,60 @@ main {
     cursor: pointer;
     border-radius: 3px;
 }
+
 .modal-form button:hover {
     background-color: #00406e;
 }
+
 body.blur > *:not(.modal) {
     filter: blur(5px);
     transition: filter 0.3s ease;
 }
+
+@media only screen and (max-width: 1200px) {
+    nav {
+        flex-wrap: wrap;
+    }
+    
+    .career-buttons {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    nav button, #btn-save {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     header {
         flex-direction: column;
     }
+    
     .header-content {
         flex-direction: column;
     }
+    
     #logo, #mensaje {
         height: 60px;
         margin: 10px 0;
     }
+    
     h1 {
         font-size: 1.5em;
         position: static;
     }
-    nav button {
+    
+    nav button, #btn-save {
         width: 100%;
         margin: 5px 0;
     }
+    
     .year-section, .mix-section {
         width: 100%;
     }
+    
     .modal-content {
         width: 90%;
         margin: 20% auto;
