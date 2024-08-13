@@ -180,241 +180,257 @@ const careers = {
         };
 
         let currentCareer = '';
-let openCourses = [];
-
-function loadCareer(careerName) {
-    currentCareer = careerName;
-    localStorage.setItem('lastCareer', careerName);
-    const yearSections = document.getElementById('year-sections');
-    yearSections.innerHTML = '';
-
-    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`btn-${careerName}`).classList.add('active');
-
-    const yearNames = ['1er', '2do', '3er', '4to', '5to'];
-    const maxYear = Math.max(...careers[careerName].map(course => course.year));
-
-    for (let year = 1; year <= maxYear; year++) {
-        const yearSection = document.createElement('div');
-        yearSection.className = 'year-section';
-        yearSection.innerHTML = `<div class="year-title">${yearNames[year-1]} Año</div><div class="course-grid"></div>`;
-        const courseGrid = yearSection.querySelector('.course-grid');
-
-        careers[careerName].filter(course => course.year === year).forEach(course => {
-            const courseDiv = document.createElement('div');
-            courseDiv.className = 'course sin-cursada';
-            courseDiv.id = `course-${course.id}`;
-
-            let statusButtons = `
-                <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'final-aprobado')">Final Aprobado</button>
-                <button class="status-button cursada-aprobada" onclick="changeStatus(${course.id}, 'cursada-aprobada')">Cursada Aprobada</button>
-                <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-cursada')">Sin Cursada</button>
-            `;
-
-            if (course.id === 0) {
-                statusButtons = `
-                    <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'ingreso-aprobado')">Ingreso Aprobado</button>
-                    <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-ingreso')">Sin Ingreso</button>
-                `;
-            } else if (course.mix === 'T') {
-                statusButtons = `
-                    <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'final-aprobado')">Final Aprobado</button>
-                    <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-cursada')">Sin Cursada</button>
-                `;
+        let openCourses = [];
+        
+        function loadCareer(careerName) {
+            currentCareer = careerName;
+            localStorage.setItem('lastCareer', careerName);
+            const yearSections = document.getElementById('year-sections');
+            yearSections.innerHTML = '';
+        
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${careerName}`).classList.add('active');
+        
+            const yearNames = ['1er', '2do', '3er', '4to', '5to'];
+            const maxYear = Math.max(...careers[careerName].map(course => course.year));
+        
+            for (let year = 1; year <= maxYear; year++) {
+                const yearSection = document.createElement('div');
+                yearSection.className = 'year-section';
+                yearSection.innerHTML = `<div class="year-title">${yearNames[year-1]} Año</div><div class="course-grid"></div>`;
+                const courseGrid = yearSection.querySelector('.course-grid');
+        
+                careers[careerName].filter(course => course.year === year).forEach(course => {
+                    const courseDiv = document.createElement('div');
+                    courseDiv.className = 'course sin-cursada';
+                    courseDiv.id = `course-${course.id}`;
+        
+                    let statusButtons = `
+                        <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'final-aprobado')">Final Aprobado</button>
+                        <button class="status-button cursada-aprobada" onclick="changeStatus(${course.id}, 'cursada-aprobada')">Cursada Aprobada</button>
+                        <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-cursada')">Sin Cursada</button>
+                    `;
+        
+                    if (course.id === 0) {
+                        statusButtons = `
+                            <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'ingreso-aprobado')">Ingreso Aprobado</button>
+                            <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-ingreso')">Sin Ingreso</button>
+                        `;
+                    } else if (course.mix === 'T') {
+                        statusButtons = `
+                            <button class="status-button final-aprobado" onclick="changeStatus(${course.id}, 'final-aprobado')">Final Aprobado</button>
+                            <button class="status-button sin-cursada" onclick="changeStatus(${course.id}, 'sin-cursada')">Sin Cursada</button>
+                        `;
+                    }
+        
+                    courseDiv.innerHTML = `
+                        <h2>${course.name}</h2>
+                        <div class="details">
+                            <h3>Correlativas necesarias:</h3>
+                            <ul class="correlatives">
+                                ${course.correlatives.length ? course.correlatives.map(corrId => `<li>- ${careers[currentCareer].find(c => c.id === corrId).name}</li>`).join('') : '<li>Ninguna</li>'}
+                            </ul>
+                            <h3>Es correlativa para:</h3>
+                            <ul class="is-correlative-for">
+                                ${careers[currentCareer].filter(c => c.correlatives.includes(course.id)).length ? careers[currentCareer].filter(c => c.correlatives.includes(course.id)).map(c => `<li>- ${c.name}</li>`).join('') : '<li>Ninguna</li>'}
+                            </ul>
+                            <div class="status-buttons">
+                                ${statusButtons}
+                            </div>
+                        </div>
+                    `;
+                    courseGrid.appendChild(courseDiv);
+        
+                    courseDiv.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('status-button')) {
+                            toggleCourseDetails(courseDiv);
+                        }
+                    });
+                });
+        
+                yearSections.appendChild(yearSection);
             }
-
-            courseDiv.innerHTML = `
-                <h2>${course.name}</h2>
-                <div class="details">
-                    <h3>Correlativas necesarias:</h3>
-                    <ul class="correlatives">
-                        ${course.correlatives.length ? course.correlatives.map(corrId => `<li>- ${careers[currentCareer].find(c => c.id === corrId).name}</li>`).join('') : '<li>Ninguna</li>'}
-                    </ul>
-                    <h3>Es correlativa para:</h3>
-                    <ul class="is-correlative-for">
-                        ${careers[currentCareer].filter(c => c.correlatives.includes(course.id)).length ? careers[currentCareer].filter(c => c.correlatives.includes(course.id)).map(c => `<li>- ${c.name}</li>`).join('') : '<li>Ninguna</li>'}
-                    </ul>
-                    <div class="status-buttons">
-                        ${statusButtons}
-                    </div>
-                </div>
-            `;
-            courseGrid.appendChild(courseDiv);
-
-            courseDiv.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('status-button')) {
-                    toggleCourseDetails(courseDiv);
+        
+            loadSavedState();
+            updateCourseAvailability();
+        }
+        
+        function toggleCourseDetails(courseDiv) {
+            if (courseDiv.classList.contains('active')) {
+                courseDiv.classList.remove('active');
+                openCourses = openCourses.filter(c => c !== courseDiv);
+            } else {
+                if (openCourses.length >= 3) {
+                    openCourses[0].classList.remove('active');
+                    openCourses.shift();
+                }
+                courseDiv.classList.add('active');
+                openCourses.push(courseDiv);
+            }
+            
+            const details = courseDiv.querySelector('.details');
+            if (details) {
+                details.style.backgroundColor = getComputedStyle(courseDiv).backgroundColor;
+            }
+        }
+        
+        function changeStatus(courseId, status) {
+            const courseDiv = document.getElementById(`course-${courseId}`);
+            const course = careers[currentCareer].find(c => c.id === courseId);
+        
+            if ((status === 'final-aprobado' || status === 'ingreso-aprobado') && !allCorrelativesApproved(course)) {
+                alert('No se puede aprobar. Todas las correlativas deben estar aprobadas.');
+                return;
+            }
+        
+            courseDiv.className = `course ${status}`;
+            updateCourseAvailability();
+            updateCorrelativeStatus(courseId, status);
+        
+            const details = courseDiv.querySelector('.details');
+            if (details && courseDiv.classList.contains('active')) {
+                details.style.backgroundColor = getComputedStyle(courseDiv).backgroundColor;
+            }
+        }
+        
+        function allCorrelativesApproved(course) {
+            return course.correlatives.every(corrId => {
+                const corrDiv = document.getElementById(`course-${corrId}`);
+                return corrDiv.classList.contains('final-aprobado') || corrDiv.classList.contains('ingreso-aprobado');
+            });
+        }
+        
+        function updateCorrelativeStatus(courseId, status) {
+            const course = careers[currentCareer].find(c => c.id === courseId);
+            careers[currentCareer].filter(c => c.correlatives.includes(courseId)).forEach(correlative => {
+                const correlativeDiv = document.getElementById(`course-${correlative.id}`);
+                if (status === 'sin-cursada' || status === 'sin-ingreso') {
+                    correlativeDiv.classList.remove('final-aprobado', 'ingreso-aprobado', 'cursada-aprobada');
+                    correlativeDiv.classList.add('sin-cursada');
+                    updateCorrelativeStatus(correlative.id, 'sin-cursada');
                 }
             });
-        });
-
-        yearSections.appendChild(yearSection);
-    }
-
-    loadSavedState();
-    updateCourseAvailability();
-}
-
-function toggleCourseDetails(courseDiv) {
-    if (courseDiv.classList.contains('active')) {
-        courseDiv.classList.remove('active');
-        openCourses = openCourses.filter(c => c !== courseDiv);
-    } else {
-        if (openCourses.length >= 3) {
-            openCourses[0].classList.remove('active');
-            openCourses.shift();
         }
-        courseDiv.classList.add('active');
-        openCourses.push(courseDiv);
-    }
-    
-    const details = courseDiv.querySelector('.details');
-    if (details) {
-        details.style.backgroundColor = getComputedStyle(courseDiv).backgroundColor;
-    }
-}
-
-function changeStatus(courseId, status) {
-    const courseDiv = document.getElementById(`course-${courseId}`);
-    const course = careers[currentCareer].find(c => c.id === courseId);
-
-    if ((status === 'final-aprobado' || status === 'ingreso-aprobado') && !allCorrelativesApproved(course)) {
-        alert('No se puede aprobar. Todas las correlativas deben estar aprobadas.');
-        return;
-    }
-
-    courseDiv.className = `course ${status}`;
-    updateCourseAvailability();
-    updateCorrelativeStatus(courseId, status);
-
-    const details = courseDiv.querySelector('.details');
-    if (details && courseDiv.classList.contains('active')) {
-        details.style.backgroundColor = getComputedStyle(courseDiv).backgroundColor;
-    }
-}
-
-function allCorrelativesApproved(course) {
-    return course.correlatives.every(corrId => {
-        const corrDiv = document.getElementById(`course-${corrId}`);
-        return corrDiv.classList.contains('final-aprobado') || corrDiv.classList.contains('ingreso-aprobado') || corrDiv.classList.contains('cursada-aprobada');
-    });
-}
-
-function updateCorrelativeStatus(courseId, status) {
-    const course = careers[currentCareer].find(c => c.id === courseId);
-    careers[currentCareer].filter(c => c.correlatives.includes(courseId)).forEach(correlative => {
-        const correlativeDiv = document.getElementById(`course-${correlative.id}`);
-        if (status === 'sin-cursada' || status === 'sin-ingreso') {
-            correlativeDiv.classList.remove('final-aprobado', 'ingreso-aprobado', 'cursada-aprobada');
-            correlativeDiv.classList.add('sin-cursada');
-            updateCorrelativeStatus(correlative.id, 'sin-cursada');
+        
+        function updateCourseAvailability() {
+            const approvedCourses = getApprovedCourses();
+            const fifthYearEnabled = checkFifthYearEnabled(approvedCourses);
+            const thirdYearAndAboveEnabled = checkThirdYearAndAboveEnabled(approvedCourses);
+        
+            careers[currentCareer].forEach(course => {
+                const courseDiv = document.getElementById(`course-${course.id}`);
+                const allCorrelativesApproved = course.correlatives.every(corrId => {
+                    const corrDiv = document.getElementById(`course-${corrId}`);
+                    return corrDiv.classList.contains('final-aprobado') || corrDiv.classList.contains('ingreso-aprobado');
+                });
+        
+                const isFifthYear = course.year === 5;
+                const isThirdYearOrAbove = course.year >= 3;
+                const isMateria = course.mix !== 'T' && course.mix !== 'I';
+        
+                if (!allCorrelativesApproved || 
+                    (isFifthYear && isMateria && !fifthYearEnabled) || 
+                    (isThirdYearOrAbove && isMateria && !thirdYearAndAboveEnabled)) {
+                    courseDiv.classList.add('disabled');
+                } else {
+                    courseDiv.classList.remove('disabled');
+                }
+        
+                const statusButtons = courseDiv.querySelector('.status-buttons');
+                if (!allCorrelativesApproved || 
+                    (isFifthYear && isMateria && !fifthYearEnabled) || 
+                    (isThirdYearOrAbove && isMateria && !thirdYearAndAboveEnabled)) {
+                    statusButtons.style.display = 'none';
+                } else {
+                    statusButtons.style.display = 'block';
+                }
+            });
         }
-    });
-}
-
-function updateCourseAvailability() {
-    const approvedCourses = getApprovedCourses();
-    const thirdYearAndAboveEnabled = checkThirdYearAndAboveEnabled(approvedCourses);
-
-    careers[currentCareer].forEach(course => {
-        const courseDiv = document.getElementById(`course-${course.id}`);
-        const allCorrelativesApproved = course.correlatives.every(corrId => {
-            const corrDiv = document.getElementById(`course-${corrId}`);
-            return corrDiv.classList.contains('final-aprobado') || corrDiv.classList.contains('cursada-aprobada') || corrDiv.classList.contains('ingreso-aprobado');
-        });
-
-        const isThirdYearOrAbove = course.year >= 3;
-        const isMateria = course.mix !== 'T' && course.mix !== 'I';
-
-        if (!allCorrelativesApproved || (isThirdYearOrAbove && isMateria && !thirdYearAndAboveEnabled)) {
-            courseDiv.classList.add('disabled');
-        } else {
-            courseDiv.classList.remove('disabled');
+        
+        function getApprovedCourses() {
+            const approvedCourses = {
+                firstTwoYears: 0,
+                total: 0,
+                materia: 0,
+                taller: 0
+            };
+        
+            careers[currentCareer].forEach(course => {
+                const courseDiv = document.getElementById(`course-${course.id}`);
+                if (courseDiv.classList.contains('final-aprobado') || courseDiv.classList.contains('ingreso-aprobado')) {
+                    approvedCourses.total++;
+                    if (course.year <= 2) {
+                        approvedCourses.firstTwoYears++;
+                    }
+                    if (course.mix === 'T') {
+                        approvedCourses.taller++;
+                    } else if (course.mix !== 'I') {
+                        approvedCourses.materia++;
+                    }
+                }
+            });
+        
+            return approvedCourses;
         }
-
-        const statusButtons = courseDiv.querySelector('.status-buttons');
-        if (!allCorrelativesApproved || (isThirdYearOrAbove && isMateria && !thirdYearAndAboveEnabled)) {
-            statusButtons.style.display = 'none';
-        } else {
-            statusButtons.style.display = 'block';
+        
+        function checkFifthYearEnabled(approvedCourses) {
+            const totalFirstTwoYearsCourses = careers[currentCareer].filter(course => course.year <= 2).length;
+            return approvedCourses.firstTwoYears === totalFirstTwoYearsCourses;
         }
-    });
-}
-
-function getApprovedCourses() {
-    const approvedCourses = {
-        materia: 0,
-        taller: 0
-    };
-
-    careers[currentCareer].forEach(course => {
-        const courseDiv = document.getElementById(`course-${course.id}`);
-        if (courseDiv.classList.contains('final-aprobado')) {
-            if (course.mix === 'T') {
-                approvedCourses.taller++;
-            } else if (course.mix !== 'I') {
-                approvedCourses.materia++;
+        
+        function checkThirdYearAndAboveEnabled(approvedCourses) {
+            return (
+                (approvedCourses.materia >= 12) ||
+                (approvedCourses.materia >= 11 && approvedCourses.taller >= 1) ||
+                (approvedCourses.materia >= 10 && approvedCourses.taller >= 2) ||
+                (approvedCourses.materia >= 9 && approvedCourses.taller >= 3)
+            );
+        }
+        
+        function openModal() {
+            document.getElementById('contactModal').style.display = 'block';
+            document.body.classList.add('blur');
+        }
+        
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+            document.body.classList.remove('blur');
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('contactModal')) {
+                closeModal();
             }
         }
-    });
-
-    return approvedCourses;
-}
-
-function checkThirdYearAndAboveEnabled(approvedCourses) {
-    return (
-        (approvedCourses.materia >= 12) ||
-        (approvedCourses.materia >= 11 && approvedCourses.taller >= 1) ||
-        (approvedCourses.materia >= 10 && approvedCourses.taller >= 2) ||
-        (approvedCourses.materia >= 9 && approvedCourses.taller >= 3)
-    );
-}
-
-
-function openModal() {
-    document.getElementById('contactModal').style.display = 'block';
-    document.body.classList.add('blur');
-}
-
-function closeModal() {
-    document.getElementById('contactModal').style.display = 'none';
-    document.body.classList.remove('blur');
-}
-
-window.onclick = function(event) {
-    if (event.target == document.getElementById('contactModal')) {
-        closeModal();
-    }
-}
-
-function saveChanges() {
-    const courseStates = {};
-    careers[currentCareer].forEach(course => {
-        const courseDiv = document.getElementById(`course-${course.id}`);
-        courseStates[course.id] = courseDiv.className.split(' ')[1];
-    });
-    localStorage.setItem(`${currentCareer}-states`, JSON.stringify(courseStates));
-    alert('Cambios guardados correctamente');
-}
-
-function loadSavedState() {
-    const savedStates = localStorage.getItem(`${currentCareer}-states`);
-    if (savedStates) {
-        const courseStates = JSON.parse(savedStates);
-        Object.keys(courseStates).forEach(courseId => {
-            const courseDiv = document.getElementById(`course-${courseId}`);
-            if (courseDiv) {
-                courseDiv.className = `course ${courseStates[courseId]}`;
+        
+        function saveChanges() {
+            const courseStates = {};
+            careers[currentCareer].forEach(course => {
+                const courseDiv = document.getElementById(`course-${course.id}`);
+                courseStates[course.id] = courseDiv.className.split(' ')[1];
+            });
+            localStorage.setItem(`${currentCareer}-states`, JSON.stringify(courseStates));
+            alert('Cambios guardados correctamente');
+        }
+        
+        function loadSavedState() {
+            const savedStates = localStorage.getItem(`${currentCareer}-states`);
+            if (savedStates) {
+                const courseStates = JSON.parse(savedStates);
+                Object.keys(courseStates).forEach(courseId => {
+                    const courseDiv = document.getElementById(`course-${courseId}`);
+                    if (courseDiv) {
+                        courseDiv.className = `course ${courseStates[courseId]}`;
+                    }
+                });
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year-sections').innerHTML = '<p>Seleccione una carrera para ver su plan de estudios.</p>';
+            
+            const lastCareer = localStorage.getItem('lastCareer');
+            if (lastCareer) {
+                loadCareer(lastCareer);
             }
         });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('year-sections').innerHTML = '<p>Seleccione una carrera para ver su plan de estudios.</p>';
-    
-    const lastCareer = localStorage.getItem('lastCareer');
-    if (lastCareer) {
-        loadCareer(lastCareer);
-    }
-});
