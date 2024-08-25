@@ -49,9 +49,39 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <!-- Nuevo menú tutorial -->
+    <div id="tutorialModal" class="modal">
+        <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>
+        <div class="modal-content tutorial-content">
+            <div id="tutorialTabs">
+                <div class="tutorial-tab" id="tab1">
+                    <h3>Bienvenido a la Planificación de Estudios</h3>
+                    <p>Esta herramienta te ayudará a planificar tu carrera universitaria.</p>
+                </div>
+                <div class="tutorial-tab" id="tab2">
+                    <h3>Instrucciones de Uso</h3>
+                    <p>1. Selecciona tu carrera.</p>
+                    <p>2. Marca las materias que has aprobado.</p>
+                    <p>3. Observa qué materias puedes cursar a continuación.</p>
+                </div>
+                <div class="tutorial-tab" id="tab3">
+                    <h3>Video Tutorial</h3>
+                    <video width="100%" controls>
+                        <source src="video.mp4" type="video/mp4">
+                        Tu navegador no soporta el tag de video.
+                    </video>
+                </div>
+                <div class="tutorial-tab" id="tab4">
+                    <h3>¿Listo para comenzar?</h3>
+                    <label>
+                        <input type="checkbox" id="noShowAgain"> No mostrar de nuevo
+                    </label>
+                    <button onclick="closeTutorial()">Cerrar Tutorial</button>
+                </div>
+            </div>
+        </div>
+        <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
