@@ -494,3 +494,113 @@ body.blur > *:not(.modal) {
         padding: 8px;
     }
 }
+#tutorialModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.tutorial-content {
+    max-width: 600px;
+    width: 80%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fefefe;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.nav-button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#prevButton {
+    left: 20px;
+}
+
+#nextButton {
+    right: 20px;
+}
+
+.nav-button:hover {
+    background-color: #00406e;
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#tutorialTabs {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.tutorial-tab {
+    display: none;
+}
+
+.tutorial-tab.active {
+    display: block;
+}
+
+.tutorial-tab h3 {
+    color: #003366;
+    margin-top: 0;
+}
+
+.tutorial-tab video {
+    max-width: 100%;
+    height: auto;
+}
+
+#tab4 button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#tab4 button:hover {
+    background-color: #00406e;
+}
+
+@media only screen and (max-width: 600px) {
+    .tutorial-content {
+        width: 90%;
+        height: 90vh;
+    }
+
+    .nav-button {
+        padding: 8px 15px;
+        font-size: 16px;
+    }
+
+    #prevButton {
+        left: 5px;
+    }
+
+    #nextButton {
+        right: 5px;
+    }
+}
