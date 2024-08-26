@@ -49,7 +49,6 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 
 .career-buttons {
@@ -57,7 +56,6 @@ nav {
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    
 }
 
 nav button {
@@ -82,6 +80,7 @@ nav button span {
     display: block;
     line-height: 1.2;
 }
+
 #btn-gestion-tecnologica {
     margin-left: 11.5%;
 }
@@ -89,23 +88,21 @@ nav button span {
 #btn-gestion-tecnologica, #btn-economia-empresarial, #btn-administracion, #btn-contador-publico, #btn-save {
     width: 180px;
     justify-items: center;
-    align-items: center ;
+    align-items: center;
 }
-
-
 
 #btn-save {
     background-color: #57da3c;
     color: #ffffff;
     width: 140px;
     position: relative;
-    
 }
 
 nav button.active {
     background-color: #1e90ff;
     color: #ffffff;
 }
+
 nav button:hover {
     background-color: #6cc4ff86;
     color: #ffffff;
@@ -212,6 +209,7 @@ main {
     color: #ffffff;
 }
 
+
 .modal {
     display: none;
     position: fixed;
@@ -220,7 +218,7 @@ main {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     background-color: rgba(0,0,0,0.5);
 }
 
@@ -290,215 +288,12 @@ body.blur > *:not(.modal) {
     transition: filter 0.3s ease;
 }
 
-@media only screen and (max-width: 1200px) {
-    body {
-        font-size: 16px;
-    }
-
-    header {
-        padding: 10px 15px;
-    }
-
-    .header-content {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    #logo, #mensaje {
-        height: 65px;
-    }
-
-    h1 {
-        font-size: 1.8em;
-        position: static;
-        margin: 10px 0;
-        text-align: center;
-    }
-
-    nav {
-        padding: 10px;
-        flex-wrap: wrap;
-    }
-
-    .career-buttons {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-
-    nav button, #btn-save {
-        width: calc(33.33% - 10px);
-        margin: 5px;
-        height: 60px;
-        font-size: 0.9em;
-        white-space: normal;
-    }
-
-    #btn-gestion-tecnologica {
-        margin-left: 5px;
-    }
-
-    #btn-save {
-        width: calc(33.33% - 10px);
-        margin-top: 10px;
-    }
-
-    main {
-        padding: 15px;
-    }
-
-    .year-section, .mix-section {
-        width: calc(50% - 20px);
-        max-width: none;
-    }
-
-    .course h2 {
-        font-size: 1em;
-    }
-
-    .details {
-        font-size: 0.9em;
-    }
-
-    .status-button {
-        padding: 8px;
-        font-size: 0.9em;
-    }
-
-    .modal-content {
-        width: 70%;
-        max-width: 600px;
-    }
-
-    .close {
-        font-size: 28px;
-    }
-
-    .modal-title {
-        font-size: 1.4em;
-    }
-
-    .modal-form input,
-    .modal-form textarea,
-    .modal-form button {
-        font-size: 1em;
-        padding: 10px;
-    }
-}
-
-@media only screen and (max-width: 600px) {
-    body {
-        font-size: 14px;
-    }
-
-    header {
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    .header-content {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    #logo, #mensaje {
-        height: 50px;
-        margin: 5px 0;
-    }
-
-    h1 {
-        font-size: 1.2em;
-        position: static;
-        margin: 10px 0;
-    }
-
-    nav {
-        padding: 5px;
-    }
-
-    .career-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    nav button, #btn-save {
-        width: 100%;
-        margin: 5px 0;
-        height: 50px;
-        padding: 0;
-        font-size: 0.9em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #btn-gestion-tecnologica,
-    #btn-economia-empresarial,
-    #btn-administracion,
-    #btn-contador-publico,
-    #btn-save {
-        width: 100%;
-    }
-
-    nav button span {
-        display: inline;
-        white-space: normal;
-    }
-
-    #btn-gestion-tecnologica {
-        margin-left: 0;
-    }
-
-    main {
-        padding: 10px;
-    }
-
-    .year-section, .mix-section {
-        width: 100%;
-        max-width: none;
-    }
-
-    .course h2 {
-        font-size: 1em;
-    }
-
-    .details {
-        font-size: 0.9em;
-    }
-
-    .status-button {
-        padding: 8px;
-        font-size: 0.8em;
-    }
-
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-        padding: 15px;
-    }
-
-    .close {
-        font-size: 24px;
-        top: 5px;
-        right: 10px;
-    }
-
-    .modal-title {
-        font-size: 1.2em;
-    }
-
-    .modal-form input,
-    .modal-form textarea,
-    .modal-form button {
-        font-size: 1em;
-        padding: 8px;
-    }
-}
 #tutorialModal {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
+}
+
+#tutorialModal.active {
+    display: flex;
 }
 
 .tutorial-content {
@@ -549,25 +344,27 @@ body.blur > *:not(.modal) {
 
 #tutorialTabs {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .tutorial-tab {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
     text-align: center;
+    transition: transform 0.5s ease;
 }
 
 .tutorial-tab.active {
-    display: block;
+    display: flex;
 }
 
 .tutorial-tab h3 {
     color: #003366;
     margin-top: 0;
+    font-size: 1.5em; /* Aumenta el tamaño del título */
 }
 
 .tutorial-tab video {
@@ -589,6 +386,7 @@ body.blur > *:not(.modal) {
 #tab4 button:hover {
     background-color: #00406e;
 }
+
 #tab1, #tab4 {
     justify-content: center;
 }
@@ -615,9 +413,87 @@ body.blur > *:not(.modal) {
 
     #prevButton {
         left: 5px;
+        width: 15%;
+        height: 8%;
     }
 
     #nextButton {
         right: 5px;
+        width: 15%;
+        height: 8%;
+    }
+}
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-content {
+        margin: 10px 0;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        position: static;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    .career-buttons {
+        flex-wrap: wrap;
+    }
+
+    nav button {
+        margin: 5px;
+        width: calc(50% - 10px);
+    }
+
+    #btn-gestion-tecnologica {
+        margin-left: 5px;
+    }
+
+    .year-section, .mix-section {
+        max-width: 100%;
+    }
+
+    .tutorial-content {
+        width: 90%;
+        height: auto;
+        max-height: 90vh;
+    }
+
+    .nav-button {
+        top: auto;
+        bottom: 10px;
+        transform: none;
+    }
+
+    #prevButton {
+        left: 10px;
+    }
+
+    #nextButton {
+        right: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    nav button {
+        width: 100%;
+    }
+
+    .tutorial-content {
+        width: 95%;
+    }
+
+    .tutorial-tab h3 {
+        font-size: 1.2em;
+    }
+
+    .tutorial-tab p {
+        font-size: 0.9em;
     }
 }
