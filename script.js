@@ -491,8 +491,8 @@ let currentTab = 1;
 
 function showTutorialTab(tabNumber) {
     const tabs = document.querySelectorAll('.tutorial-tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    document.getElementById(`tab${tabNumber}`).classList.add('active');
+    tabs.forEach(tab => tab.style.display = 'none');
+    document.getElementById(`tab${tabNumber}`).style.display = 'block';
 
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
