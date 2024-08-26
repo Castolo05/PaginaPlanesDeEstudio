@@ -531,11 +531,11 @@ body.blur > *:not(.modal) {
 }
 
 #prevButton {
-    left: 20px;
+    left: 26%;
 }
 
 #nextButton {
-    right: 20px;
+    right: 26%;
 }
 
 .nav-button:hover {
@@ -553,7 +553,12 @@ body.blur > *:not(.modal) {
 }
 
 .tutorial-tab {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
 }
 
 .tutorial-tab.active {
@@ -583,6 +588,18 @@ body.blur > *:not(.modal) {
 
 #tab4 button:hover {
     background-color: #00406e;
+}
+#tab1, #tab4 {
+    justify-content: center;
+}
+
+#tab4 label {
+    margin-bottom: 20px;
+}
+
+#tab4 button {
+    margin-top: 20px;
+    align-items: center;
 }
 
 @media only screen and (max-width: 600px) {
