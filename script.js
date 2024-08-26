@@ -435,64 +435,26 @@ function loadSavedState() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('year-sections').innerHTML = '<p>Seleccione una carrera para ver su plan de estudios.</p>';
-
-    const lastCareer = localStorage.getItem('lastCareer');
-    if (lastCareer) {
-        loadCareer(lastCareer);
-    }
-});
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-function closeTutorial() {
-    document.getElementById("tutorialModal").style.display = "none";
-    document.body.classList.remove('blur');
-    if (document.getElementById("noShowAgain").checked) {
-        localStorage.setItem("tutorialShown", "true");
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('year-sections').innerHTML = '<p>Seleccione una carrera para ver su plan de estudios.</p>';
-
-    const lastCareer = localStorage.getItem('lastCareer');
-    if (lastCareer) {
-        loadCareer(lastCareer);
-    }
-
-    // Mostrar el tutorial si no se ha mostrado antes
-    if (localStorage.getItem("tutorialShown") !== "true") {
-        document.getElementById("tutorialModal").style.display = "block";
-        document.body.classList.add('blur');
-        document.getElementById("defaultOpen").click();
-    }
-});
-
-window.onclick = function(event) {
-    if (event.target == document.getElementById('contactModal')) {
-        closeModal();
-    }
-}
-// Funciones para el menú tutorial
+// Funciones para el tutorial
 let currentTab = 1;
+
+function showTutorial() {
+    document.getElementById("tutorialModal").style.display = "flex";
+    document.body.classList.add('blur');
+    document.body.style.overflow = 'hidden';
+    showTutorialTab(1);
+}
+
 
 function showTutorialTab(tabNumber) {
     const tabs = document.querySelectorAll('.tutorial-tab');
-    tabs.forEach(tab => tab.style.display = 'none');
-    document.getElementById(`tab${tabNumber}`).style.display = 'block';
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+        tab.classList.remove('active');
+    });
+    const currentTabElement = document.getElementById(`tab${tabNumber}`);
+    currentTabElement.style.display = 'flex';
+    currentTabElement.classList.add('active');
 
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
@@ -515,6 +477,7 @@ function closeTutorial() {
     }
 }
 
+// Evento DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('year-sections').innerHTML = '<p>Seleccione una carrera para ver su plan de estudios.</p>';
 
@@ -523,11 +486,15 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCareer(lastCareer);
     }
 
-    // Mostrar el tutorial si no se ha mostrado antes
+    // Mostrar el tutorial solo si no se ha mostrado antes
     if (localStorage.getItem("tutorialShown") !== "true") {
-        document.getElementById("tutorialModal").style.display = "flex";
-        document.body.classList.add('blur');
-        document.body.style.overflow = 'hidden';
-        showTutorialTab(1);
+        showTutorial();
     }
 });
+
+// Manejador de eventos para el botón de cerrar tutorial
+document.getElementById('closeTutorialButton').addEventListener('click', closeTutorial);
+
+// Manejadores de eventos para los botones de navegación del tutorial
+document.getElementById('prevButton').addEventListener('click', () => changeTutorialTab(-1));
+document.getElementById('nextButton').addEventListener('click', () => changeTutorialTab(1));
