@@ -51,28 +51,29 @@
 
     <!-- Nuevo menú tutorial -->
     <div id="tutorialModal" class="modal">
-        <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>
+        <!-- <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>-->
         <div class="modal-content tutorial-content">
             <div id="tutorialTabs">
                 <div class="tutorial-tab" id="tab1">
-                    <h3>Bienvenido a la Planificación de Estudios</h3>
-                    <p>Esta herramienta te ayudará a planificar tu carrera universitaria.</p>
+                    <h3>Bienvenido al plan de estudios interactivo.</h3>
+                    <p>Te explicaremos su modo de uso.</p>
                 </div>
                 <div class="tutorial-tab" id="tab2">
-                    <h3>Instrucciones de Uso</h3>
-                    <p>1. Selecciona tu carrera.</p>
-                    <p>2. Marca las materias que has aprobado.</p>
-                    <p>3. Observa qué materias puedes cursar a continuación.</p>
+                    <h3>Para entender que es esto.</h3>
+                    <p>Creamos un plan de estudios interactivo para los estudiantes que esten cursando en la FCE</p>
+                    <p>La idea es que sirva como forma de ver las correlatividades de forma no tan engorrosa como se venia haciendo hasta la actualidad.</p>
+                    <p>Ademas de servir como forma de llevar el seguimiento propio de la carrera y tambien de ver las materias que cada uno tiene permitido cursar.</p>
+                    <p>La web tiene una opcion para guardar la informacion que cada uno añadio a su plan de estudios, pero todos los datos se alojan en el propio almacenamiento del navegador. Por lo que nadie tiene acceso a datos o informacion personal de ningun usuario.</p>
                 </div>
                 <div class="tutorial-tab" id="tab3">
-                    <h3>Video Tutorial</h3>
+                    <h3>Solo indica tu estado actual de la materia/taller y se habilitarán las materias correspondientes.</h3>
                     <video width="100%" controls>
                         <source src="video.mp4" type="video/mp4">
                         Tu navegador no soporta el tag de video.
                     </video>
                 </div>
                 <div class="tutorial-tab" id="tab4">
-                    <h3>¿Listo para comenzar?</h3>
+                    <h2>¿Listo para comenzar?</h2>
                     <label>
                         <input type="checkbox" id="noShowAgain"> No mostrar de nuevo
                     </label>
@@ -80,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>
+       <!-- <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>-->
     </div>
 
     <script src="script.js"></script>
