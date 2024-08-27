@@ -9,12 +9,39 @@
 </head>
 <body>
     <header>
-        <img id="logo" src="Logo.png" alt="Logo de la Universidad" onclick="window.open('https://www.econ.unicen.edu.ar/', '_blank')">
+        <img id="logo" src="enlace.png" alt="enlaces de">
         <div class="header-content">
             <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
         </div>
-        <img id="mensaje" src="mensaje.png" alt="Mensaje" onclick="window.open('https://linktr.ee/cece_franjamorada', '_blank')">
+        <img id="mensaje" src="pregunta.png" alt="Mensaje" onclick="toggleFAQ()">
     </header>
+
+    <div id="faqModal" class="modal">
+      <div class="modal-content">
+        <h2>Preguntas Frecuentes</h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(1)">¿Que necesito para poder cursar el 3er año?</div>
+            <div class="faq-answer" id="answer1">Para cursar 3ro necesitas tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(2)">¿Que necesito para cursar 5to año?</div>
+            <div class="faq-answer" id="answer2">Para cursar 5to necesitas tener completos los primeros dos años de la carrera (incluyendo talleres).</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(3)">¿Como puedo acceder a mas información sobre mi carrera?</div>
+            <div class="faq-answer" id="answer3">En la seccion de "enlaces de interes" encontraras links a paginas oficiales y no oficiales las cuales te daran toda la información que necesitas.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(4)">¿Como se protege la privacidad de mis datos?</div>
+            <div class="faq-answer" id="answer4">La web tiene la posibilidad de guardar la informacion que cada uno añadio a su plan de estudios, pero todos los datos se alojan en el propio almacenamiento del navegador. Por lo que nadie tiene acceso a datos o informacion personal de ningun usuario.</div>
+          </div>
+        </div>
+        <span class="close" onclick="toggleFAQ()">&times;</span>
+      </div>
+    </div>
+
+
     <nav>
         <div class="career-buttons">
             <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
@@ -50,11 +77,11 @@
                     <p>Creamos un plan de estudios interactivo para los estudiantes que esten cursando en la FCE</p>
                     <p>La idea es que sirva como forma de ver las correlatividades de forma no tan engorrosa como se venia haciendo hasta la actualidad.</p>
                     <p>Ademas de servir como forma de llevar el seguimiento propio de la carrera y tambien de ver las materias que cada uno tiene permitido cursar.</p>
-                    <p>La web tiene una opcion para guardar la informacion que cada uno añadio a su plan de estudios, pero todos los datos se alojan en el propio almacenamiento del navegador. Por lo que nadie tiene acceso a datos o informacion personal de ningun usuario.</p>
+                    <p><b>Importante: Dejar en claro que este es un proyecto personal totalmente desligado e independiente de la facultad/centro de estudiantes.</b></p>
                 </div>
                 <div class="tutorial-tab" id="tab3">
                     <h3>Solo indica tu estado actual de la materia/taller y se habilitarán las materias correspondientes.</h3>
-                    <video width="100%" controls>
+                    <video width="100%" loop muted autoplay playsinline>
                         <source src="video.mp4" type="video/mp4">
                         Tu navegador no soporta el tag de video.
                     </video>
