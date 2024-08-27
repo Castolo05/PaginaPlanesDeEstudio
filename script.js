@@ -536,3 +536,40 @@ function toggleFAQ() {
     }
   }
 
+  function toggleLinksModal() {
+    var modal = document.getElementById("linksModal");
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
+  }
+  
+  function openTab(evt, tabName) {
+    var i, tabContent, tabButtons;
+    tabContent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabContent.length; i++) {
+      tabContent[i].style.display = "none";
+    }
+    tabButtons = document.getElementsByClassName("tab-button");
+    for (i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  
+  // Modificar la función window.onclick para incluir el nuevo modal
+  window.onclick = function(event) {
+    var faqModal = document.getElementById("faqModal");
+    var linksModal = document.getElementById("linksModal");
+    if (event.target == faqModal) {
+      faqModal.style.display = "none";
+    }
+    if (event.target == linksModal) {
+      linksModal.style.display = "none";
+    }
+  }
+
+
+
+
+
+
+  
