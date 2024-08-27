@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <img id="logo" src="enlace.png" alt="enlaces de">
+      <img id="logo" src="enlace.png" alt="enlaces de interes" onclick="toggleLinksModal()">
         <div class="header-content">
             <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
         </div>
@@ -41,6 +41,47 @@
       </div>
     </div>
 
+    <div id="linksModal" class="modal">
+      <div class="modal-content links-modal-content">
+        <h2>Enlaces de Interés</h2>
+        <div class="tabs">
+          <button class="tab-button active" onclick="openTab(event, 'oficiales')">Oficiales</button>
+          <button class="tab-button" onclick="openTab(event, 'noOficiales')">No Oficiales</button>
+        </div>
+        <div id="oficiales" class="tab-content active">
+          <div class="link-item">
+            <a href="https://www.econ.unicen.edu.ar/" target="_blank">Facultad de Ciencias Económicas</a>
+            <p>Sitio web oficial de la Facultad de Ciencias Económicas. Aqui encontraras información especifica de cada carrera ademas de los planes de estudio en PDF.</p>
+          </div>
+          <div class="link-item">
+            <a href="https://whatsapp.com/channel/0029VaYNDmj84OmKWJkiOn3v" target="_blank">Canal de Whatsapp de cartelera virtual</a>
+            <p>Canal de Whatsapp sobre avisos relacionados a la Facultad de Ciencias Economicas.</p>
+          </div>
+          <div class="link-item">
+            <a href="https://www.instagram.com/agustinabanchiero?igsh=MTg4bnF6cWh5ajhnZQ==" target="_blank">Instagram de la Facultad</a>
+            <p>Instagram oficial de la Facultad.</p>
+          </div>
+        </div>
+        <div id="noOficiales" class="tab-content">
+
+          <div class="link-item">
+            <a href="https://linktr.ee/cece_franjamorada" target="_blank">Linktree Oficial de Franja Morada FCE</a>
+            <p>Web con enlaces de interes para los estudiantes.</p>
+          </div>
+
+          <div class="link-item">
+            <a href="https://www.instagram.com/cecefranjamoradatandil/" target="_blank">Instagram de Franja Morada Economicas</a>
+            <p>Cuenta oficial del centro de estudiantes de la FCE.</p>
+          </div>
+          
+          <div class="link-item">
+            <a href="https://drive.google.com/drive/folders/1es3w6E7UfTKW-zDkEHdbnXOpGFDxIwW9?usp=sharing&pli=1" target="_blank">Nube Morada</a>
+            <p>Drive con resumenes y contenido de diversas materias.</p>
+          </div>
+        </div>
+        <span class="close" onclick="toggleLinksModal()">&times;</span>
+      </div>
+    </div>
 
     <nav>
         <div class="career-buttons">
@@ -99,5 +140,7 @@
     </div>
 
     <script src="script.js"></script>
+
+    
 </body>
 </html>
