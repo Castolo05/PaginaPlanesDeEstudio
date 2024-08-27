@@ -451,10 +451,21 @@ function showTutorialTab(tabNumber) {
     tabs.forEach(tab => {
         tab.style.display = 'none';
         tab.classList.remove('active');
+        // Pausa todos los videos cuando se oculta la pestaña
+        const video = tab.querySelector('video');
+        if (video) {
+            video.pause();
+        }
     });
     const currentTabElement = document.getElementById(`tab${tabNumber}`);
     currentTabElement.style.display = 'flex';
     currentTabElement.classList.add('active');
+
+    // Reproduce el video si existe en la pestaña actual
+    const currentVideo = currentTabElement.querySelector('video');
+    if (currentVideo) {
+        currentVideo.play();
+    }
 
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
@@ -498,3 +509,30 @@ document.getElementById('closeTutorialButton').addEventListener('click', closeTu
 // Manejadores de eventos para los botones de navegación del tutorial
 document.getElementById('prevButton').addEventListener('click', () => changeTutorialTab(-1));
 document.getElementById('nextButton').addEventListener('click', () => changeTutorialTab(1));
+
+function toggleFAQ() {
+    var modal = document.getElementById("faqModal");
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
+  }
+  
+  function toggleAnswer(id) {
+    var answer = document.getElementById("answer" + id);
+    var allAnswers = document.getElementsByClassName("faq-answer");
+    
+    for (var i = 0; i < allAnswers.length; i++) {
+      if (allAnswers[i] !== answer) {
+        allAnswers[i].style.display = "none";
+      }
+    }
+    
+    answer.style.display = answer.style.display === "block" ? "none" : "block";
+  }
+  
+  // Cerrar el modal si se hace clic fuera de él
+  window.onclick = function(event) {
+    var modal = document.getElementById("faqModal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
