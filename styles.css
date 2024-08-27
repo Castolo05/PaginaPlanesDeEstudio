@@ -11,16 +11,14 @@ header {
     color: white;
     padding: 10px 20px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 .header-content {
-    display: flex;
-    align-items: center;
-    flex-grow: 0;
-    margin: 0 auto;
+    flex-grow: 1;
+    text-align: center;
 }
 
 #logo, #mensaje {
@@ -30,17 +28,21 @@ header {
     transition: transform 0.3s ease;
 }
 
+#logo {
+    order: -1; /* Coloca el logo a la izquierda */
+}
+
+#mensaje {
+    order: 1; /* Coloca el mensaje a la derecha */
+}
+
 #logo:hover, #mensaje:hover {
     transform: scale(1.05);
 }
 
 h1 {
-    text-align: center;
     margin: 0;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
+    font-size: 2em;
 }
 
 nav {
@@ -425,17 +427,19 @@ body.blur > *:not(.modal) {
 }
 @media screen and (max-width: 768px) {
     header {
-        flex-direction: column;
-        align-items: center;
+        padding: 5px 10px;
     }
 
     .header-content {
         margin: 10px 0;
     }
 
+    #logo, #mensaje {
+        height: 50px; /* Reduce el tamaño para pantallas más pequeñas */
+    }
+
     h1 {
         font-size: 1.5em;
-        position: static;
     }
 
     nav {
@@ -621,3 +625,56 @@ body.blur > *:not(.modal) {
   font-size: 14px;
   color: #666;
 }  
+
+.links-modal-content {
+    max-width: 600px;
+  }
+  
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .tab-button {
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  .tab-button:hover {
+    background-color: #ddd;
+  }
+  
+  .tab-button.active {
+    background-color: #ccc;
+  }
+  
+  .tab-content {
+    display: none;
+    padding: 20px;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  .link-item {
+    margin-bottom: 15px;
+  }
+  
+  .link-item a {
+    font-size: 18px;
+    color: #003366;
+    text-decoration: none;
+  }
+  
+  .link-item p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
