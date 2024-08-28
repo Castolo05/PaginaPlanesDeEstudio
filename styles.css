@@ -410,37 +410,35 @@ body.blur > *:not(.modal) {
 }
 
 /* Media queries para diferentes tamaños de pantalla */
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media only screen and (max-width: 600px) {
+    .tutorial-content {
+        width: 90%;
+        height: 90vh;
+    }
+
     .nav-button {
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
+        padding: 8px 15px;
+        font-size: 16px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
     }
 
     #prevButton {
-        left: 20px;
+        left: -15px;
+        width: 40px;
+        height: 40px;
     }
 
     #nextButton {
-        right: 20px;
+        right: -15px;
+        width: 40px;
+        height: 40px;
     }
 }
 
-@media screen and (min-width: 481px) and (max-width: 767px) {
-    .nav-button {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-    }
-
-    #prevButton {
-        left: 15px;
-    }
-
-    #nextButton {
-        right: 15px;
-    }
-
+@media screen and (max-width: 768px) {
     header {
         padding: 5px 10px;
     }
@@ -484,6 +482,22 @@ body.blur > *:not(.modal) {
         width: 90%;
         height: auto;
         max-height: 90vh;
+        position: relative;
+    }
+
+    .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+    }
+
+    #prevButton {
+        left: -15px;
+    }
+
+    #nextButton {
+        right: -15px;
     }
 
     #btn-save {
@@ -491,6 +505,38 @@ body.blur > *:not(.modal) {
     }
 }
 
+@media screen and (max-width: 480px) {
+    nav button {
+        width: 100%;
+    }
+
+    .tutorial-content {
+        width: 95%;
+    }
+
+    .tutorial-tab h3 {
+        font-size: 1.2em;
+    }
+
+    .tutorial-tab p {
+        font-size: 0.9em;
+    }
+
+    .nav-button {
+        width: 30px;
+        height: 30px;
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    #prevButton {
+        left: -10px;
+    }
+
+    #nextButton {
+        right: -10px;
+    }
+}
 @media screen and (max-width: 480px) {
     .nav-button {
         width: 35px;
