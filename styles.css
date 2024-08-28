@@ -29,11 +29,11 @@ header {
 }
 
 #logo {
-    order: -1;
+    order: -1; /* Coloca el logo a la izquierda */
 }
 
 #mensaje {
-    order: 1;
+    order: 1; /* Coloca el mensaje a la derecha */
 }
 
 #logo:hover, #mensaje:hover {
@@ -211,6 +211,7 @@ main {
     color: #ffffff;
 }
 
+
 .modal {
     display: none;
     position: fixed;
@@ -312,36 +313,30 @@ body.blur > *:not(.modal) {
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-/* Estilos modificados para los botones de navegación */
 .nav-button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 10;
-    background-color: rgba(10, 219, 45);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.nav-button:hover {
-    background-color: rgb(0, 102, 9);
 }
 
 #prevButton {
-    left: 10px;
+    left: 26%;
 }
 
 #nextButton {
-    right: 10px;
+    right: 26%;
+}
+
+.nav-button:hover {
+    background-color: #00406e;
 }
 
 .nav-button:disabled {
@@ -371,10 +366,8 @@ body.blur > *:not(.modal) {
 .tutorial-tab h3 {
     color: #003366;
     margin-top: 0;
-    font-size: 1.5em;
+    font-size: 1.5em; /* Aumenta el tamaño del título */
 }
-
-
 
 .tutorial-tab video {
     max-width: 100%;
@@ -409,7 +402,6 @@ body.blur > *:not(.modal) {
     align-items: center;
 }
 
-/* Media queries para diferentes tamaños de pantalla */
 @media only screen and (max-width: 600px) {
     .tutorial-content {
         width: 90%;
@@ -419,25 +411,20 @@ body.blur > *:not(.modal) {
     .nav-button {
         padding: 8px 15px;
         font-size: 16px;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
     }
 
     #prevButton {
-        left: -15px;
-        width: 40px;
-        height: 40px;
+        left: 5px;
+        width: 15%;
+        height: 8%;
     }
 
     #nextButton {
-        right: -15px;
-        width: 40px;
-        height: 40px;
+        right: 5px;
+        width: 15%;
+        height: 8%;
     }
 }
-
 @media screen and (max-width: 768px) {
     header {
         padding: 5px 10px;
@@ -448,7 +435,7 @@ body.blur > *:not(.modal) {
     }
 
     #logo, #mensaje {
-        height: 50px;
+        height: 50px; /* Reduce el tamaño para pantallas más pequeñas */
     }
 
     h1 {
@@ -466,10 +453,25 @@ body.blur > *:not(.modal) {
 
     nav button {
         margin: 5px auto;
+        width: calc(100% - 20px); /* 10px de margen a cada lado */
+    }
+
+    #btn-gestion-tecnologica {
+        margin-left: auto;
         width: calc(100% - 20px);
     }
 
-    #btn-gestion-tecnologica, #btn-contador-publico, #btn-administracion, #btn-economia-empresarial {
+    #btn-contador-publico {
+        margin-left: auto;
+        width: calc(100% - 20px);
+    }
+
+    #btn-administracion {
+        margin-left: auto;
+        width: calc(100% - 20px);
+    }
+
+    #btn-economia-empresarial {
         margin-left: auto;
         width: calc(100% - 20px);
     }
@@ -482,24 +484,21 @@ body.blur > *:not(.modal) {
         width: 90%;
         height: auto;
         max-height: 90vh;
-        position: relative;
     }
 
     .nav-button {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
+        top: auto;
+        bottom: 10px;
+        transform: none;
     }
 
     #prevButton {
-        left: -15px;
+        left: 10px;
     }
 
     #nextButton {
-        right: -15px;
+        right: 10px;
     }
-
     #btn-save {
         width: calc(100% - 20px);
     }
@@ -521,70 +520,7 @@ body.blur > *:not(.modal) {
     .tutorial-tab p {
         font-size: 0.9em;
     }
-
-    .nav-button {
-        width: 30px;
-        height: 30px;
-        padding: 5px;
-        font-size: 14px;
-    }
-
-    #prevButton {
-        left: -10px;
-    }
-
-    #nextButton {
-        right: -10px;
-    }
 }
-@media screen and (max-width: 480px) {
-    .nav-button {
-        width: 35px;
-        height: 35px;
-        font-size: 16px;
-    }
-
-    #prevButton {
-        left: 5px;
-    }
-
-    #nextButton {
-        right: 5px;
-    }
-
-    nav button {
-        width: 100%;
-    }
-
-    .tutorial-content {
-        width: 95%;
-    }
-
-    .tutorial-tab h3 {
-        font-size: 1.2em;
-    }
-
-    .tutorial-tab p {
-        font-size: 0.9em;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .nav-button {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
-    }
-
-    #prevButton {
-        left: 2px;
-    }
-
-    #nextButton {
-        right: 2px;
-    }
-}
-
 #faqModal {
     display: none;
     position: fixed;
@@ -595,35 +531,111 @@ body.blur > *:not(.modal) {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-}
-
-.faq-item {
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .faq-item {
     margin-bottom: 10px;
-}
-
-.faq-question {
+  }
+  
+  .faq-question {
     background-color: #f1f1f1;
     padding: 10px;
     cursor: pointer;
-}
-
-.faq-answer {
+  }
+  
+  .faq-answer {
     display: none;
     padding: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
-}
+  }
 
 .links-modal-content {
-    max-width: 600px;
+  max-width: 600px;
 }
 
 .tabs {
-    display: flex;
-    border-bottom: 1px solid #ccc;
+  display: flex;
+  border-bottom: 1px solid #ccc;
 }
 
 .tab-button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-button.active {
+  background-color: #ccc;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.link-item {
+  margin-bottom: 15px;
+}
+
+.link-item a {
+  font-size: 18px;
+  color: #003366;
+  text-decoration: none;
+}
+
+.link-item p {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #666;
+}  
+
+.links-modal-content {
+    max-width: 600px;
+  }
+  
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .tab-button {
     background-color: inherit;
     border: none;
     outline: none;
@@ -631,67 +643,38 @@ body.blur > *:not(.modal) {
     padding: 10px 20px;
     transition: 0.3s;
     font-size: 17px;
-}
-
-.tab-button:hover {
+  }
+  
+  .tab-button:hover {
     background-color: #ddd;
-}
-
-.tab-button.active {
+  }
+  
+  .tab-button.active {
     background-color: #ccc;
-}
-
-.tab-content {
+  }
+  
+  .tab-content {
     display: none;
     padding: 20px;
-}
-
-.tab-content.active {
+  }
+  
+  .tab-content.active {
     display: block;
-}
-
-.link-item {
+  }
+  
+  .link-item {
     margin-bottom: 15px;
-}
-
-.link-item a {
+  }
+  
+  .link-item a {
     font-size: 18px;
     color: #003366;
     text-decoration: none;
-}
-
-.link-item p {
+  }
+  
+  .link-item p {
     margin: 5px 0 0 0;
     font-size: 14px;
     color: #666;
-}
-
-@media screen and (min-width: 1025px) {
-    
-    #prevButton {
-        left: 18%;
-        width: 70px;
-        height: 70px;
-    }
-
-    #nextButton {
-        right: 18%;
-        width: 70px;
-        height: 70px;
-    }
-}
-
-@media screen and (min-width: 1280px) {
-    
-    #prevButton {
-        left: 25%;
-        width: 70px;
-        height: 70px;
-    }
-
-    #nextButton {
-        right: 25%;
-        width: 70px;
-        height: 70px;
-    }
-}
+  }
+  
