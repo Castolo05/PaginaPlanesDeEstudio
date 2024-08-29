@@ -325,6 +325,7 @@ body.blur > *:not(.modal) {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 1;
 }
 
 #prevButton {
@@ -402,29 +403,7 @@ body.blur > *:not(.modal) {
     align-items: center;
 }
 
-@media only screen and (max-width: 600px) {
-    .tutorial-content {
-        width: 90%;
-        height: 90vh;
-    }
 
-    .nav-button {
-        padding: 8px 15px;
-        font-size: 16px;
-    }
-
-    #prevButton {
-        left: 5px;
-        width: 15%;
-        height: 8%;
-    }
-
-    #nextButton {
-        right: 5px;
-        width: 15%;
-        height: 8%;
-    }
-}
 @media screen and (max-width: 768px) {
     header {
         padding: 5px 10px;
@@ -488,17 +467,11 @@ body.blur > *:not(.modal) {
 
     .nav-button {
         top: auto;
-        bottom: 10px;
+        z-index: 1;
         transform: none;
     }
 
-    #prevButton {
-        left: 10px;
-    }
 
-    #nextButton {
-        right: 10px;
-    }
     #btn-save {
         width: calc(100% - 20px);
     }
@@ -507,6 +480,7 @@ body.blur > *:not(.modal) {
 @media screen and (max-width: 480px) {
     nav button {
         width: 100%;
+        z-index: 1;
     }
 
     .tutorial-content {
@@ -678,3 +652,125 @@ body.blur > *:not(.modal) {
     color: #666;
   }
   
+
+
+/* Dispositivos muy pequeños */
+@media screen and (max-width: 1500px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 25%;
+    }
+
+    #nextButton {
+        right: 25%;
+    }
+}  
+
+@media screen and (max-width: 1400px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 20%;
+    }
+
+    #nextButton {
+        right: 20%;
+    }
+}  
+
+@media screen and (max-width: 1300px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 18%;
+    }
+
+    #nextButton {
+        right: 18%;
+    }
+}  
+
+@media screen and (max-width: 1200px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 15%;
+    }
+
+    #nextButton {
+        right: 15%;
+    }
+}  
+
+@media screen and (max-width: 1100px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 12%;
+    }
+
+    #nextButton {
+        right: 12%;
+    }
+}  
+
+@media screen and (max-width: 900px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 8%;
+    }
+
+    #nextButton {
+        right: 8%;
+    }
+} 
+
+@media screen and (max-width: 700px) {
+    .nav-button {
+        width: 50px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #prevButton {
+        left: 3%;
+    }
+
+    #nextButton {
+        right: 3%;
+    }
+} 
+
+
+
+.derechos{
+    bottom: 5px;
+    text-align: center;
+    color: #c2c3c2;
+}
