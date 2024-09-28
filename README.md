@@ -1,1 +1,0 @@
-Al momento de realizar este proyecyo no cuento con habilidades y/o conocimientos de programación suficientes y fue realizada en mayor medida por herramientas de inteligencia artificial. Fue un proyecto con el objetivo de probar el potencial de las capacidades de estas herramientas en areas de las cuales sus usuarios no tienen conocimiento. 
