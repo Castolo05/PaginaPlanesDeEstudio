@@ -237,7 +237,8 @@ function getApprovedCourses() {
 
     careers[currentCareer].forEach(course => {
         const courseDiv = document.getElementById(`course-${course.id}`);
-        if (courseDiv.classList.contains('final-aprobado')) {
+        // Se cuenta como aprobada si tiene 'final-aprobado' o 'ingreso-aprobado'
+        if (courseDiv.classList.contains('final-aprobado') || courseDiv.classList.contains('ingreso-aprobado')) {
             if (course.mix === 'T') {
                 approvedCourses.taller++;
             } else if (course.mix !== 'I') {
@@ -248,6 +249,7 @@ function getApprovedCourses() {
 
     return approvedCourses;
 }
+
 
 function checkThirdYearAndAboveEnabled(approvedCourses) {
     return (
