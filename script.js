@@ -34,64 +34,45 @@ function loadCareer(careerName) {
     for (let year = 1; year <= maxYear; year++) {
         const yearSection = document.createElement('div');
         yearSection.className = 'year-section';
-        yearSection.innerHTML = `<div class="year-title">${yearNames[year-1]} Año</div><div class="course-grid"></div>`;
-        const courseGrid = yearSection.querySelector('.course-grid');
-
-        careers[careerName].filter(course => course.year === year).forEach(course => {
-            const courseDiv = document.createElement('div');
-            courseDiv.className = 'course sin-cursada';
-            courseDiv.id = `course-${course.id}`;
-
-            let statusButtons = `
-                <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
-                <button class="status-button cursada-aprobada" onclick="changeStatus('${course.id}', 'cursada-aprobada')">Cursada Aprobada</button>
-                <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
-            `;
-
-            if (course.id === 'L0000') {
-                statusButtons = `
-                    <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'ingreso-aprobado')">Ingreso Aprobado</button>
-                    <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-ingreso')">Sin Ingreso</button>
-                `;
-            } else if (course.mix === 'T') {
-                statusButtons = `
-                    <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
-                    <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
-                `;
-            }
-
-            courseDiv.innerHTML = `
-                <h2>${course.name}</h2>
-                <div class="details">
-                    <h3>Correlativas necesarias:</h3>
-                    <ul class="correlatives">
-                        ${course.correlatives.includes('all') ? '<li>Todas las materias anteriores</li>' : 
-                          (course.correlatives.length ? course.correlatives.map(corrId => `<li>- ${careers[currentCareer].find(c => c.id === corrId).name}</li>`).join('') : '<li>Ninguna</li>')}
-                    </ul>
-                    <h3>Es correlativa para:</h3>
-                    <ul class="is-correlative-for">
-                        ${careers[currentCareer].filter(c => c.correlatives.includes(course.id)).length ? careers[currentCareer].filter(c => c.correlatives.includes(course.id)).map(c => `<li>- ${c.name}</li>`).join('') : '<li>Ninguna</li>'}
-                    </ul>
-                    <div class="status-buttons">
-                        ${statusButtons}
-                    </div>
-                </div>
-            `;
-            courseGrid.appendChild(courseDiv);
-
-            courseDiv.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('status-button')) {
-                    toggleCourseDetails(courseDiv);
-                }
-            });
-        });
-
+        yearSection.innerHTML = `<div class="year-title">${yearNames[year - 1]} Año</div>`;
+    
+        const allCourses = careers[careerName].filter(c => c.year === year);
+    
+        if (year >= 3) {
+            // Para años 3 y superiores, separar por cuatrimestres
+            const courseGridA = document.createElement('div');
+            const courseGridB = document.createElement('div');
+            const courseGridOther = document.createElement('div');
+            courseGridA.className = 'course-grid';
+            courseGridB.className = 'course-grid';
+            courseGridOther.className = 'course-grid';
+        
+            const mixA = allCourses.filter(c => c.mix === 'A').sort((a, b) => a.name.localeCompare(b.name));
+            const mixB = allCourses.filter(c => c.mix === 'B').sort((a, b) => a.name.localeCompare(b.name));
+            const others = allCourses.filter(c => c.mix !== 'A' && c.mix !== 'B');
+        
+            mixA.forEach(course => courseGridA.appendChild(createCourseDiv(course)));
+            mixB.forEach(course => courseGridB.appendChild(createCourseDiv(course)));
+            others.forEach(course => courseGridOther.appendChild(createCourseDiv(course)));
+        
+            if (courseGridA.children.length) yearSection.appendChild(courseGridA);
+            if (courseGridB.children.length) yearSection.appendChild(courseGridB);
+            if (courseGridOther.children.length) yearSection.appendChild(courseGridOther);
+        } else {
+            // Para años 1 y 2, mostrar todos los cursos juntos
+            const combinedGrid = document.createElement('div');
+            combinedGrid.className = 'course-grid';
+            allCourses.forEach(course => combinedGrid.appendChild(createCourseDiv(course)));
+            yearSection.appendChild(combinedGrid);
+        }
+    
         yearSections.appendChild(yearSection);
     }
-
+    
     loadSavedState();
     updateCourseAvailability();
 }
+
 
 // Llama a loadCareerData antes de cargar cualquier carrera
 loadCareerData().then(() => {
@@ -477,3 +458,153 @@ function updateCorrelativeStatus(courseId, status) {
         }
     });
 }
+function createCourseDiv(course) {
+    const courseDiv = document.createElement('div');
+    courseDiv.className = 'course sin-cursada';
+    courseDiv.id = `course-${course.id}`;
+
+    let statusButtons = `
+        <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
+        <button class="status-button cursada-aprobada" onclick="changeStatus('${course.id}', 'cursada-aprobada')">Cursada Aprobada</button>
+        <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
+    `;
+
+    if (course.id === 'L0000') {
+        statusButtons = `
+            <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'ingreso-aprobado')">Ingreso Aprobado</button>
+            <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-ingreso')">Sin Ingreso</button>
+        `;
+    } else if (course.mix === 'T') {
+        statusButtons = `
+            <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
+            <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
+        `;
+    }
+
+    const correlativas = course.correlatives.includes('all')
+        ? '<li>Todas las materias anteriores</li>'
+        : (course.correlatives.length
+            ? course.correlatives.map(corrId => `<li>- ${careers[currentCareer].find(c => c.id === corrId).name}</li>`).join('')
+            : '<li>Ninguna</li>');
+
+    const isCorrelativeFor = careers[currentCareer].filter(c => c.correlatives.includes(course.id));
+    const correlativaPara = isCorrelativeFor.length
+        ? isCorrelativeFor.map(c => `<li>- ${c.name}</li>`).join('')
+        : '<li>Ninguna</li>';
+
+    courseDiv.innerHTML = `
+        <h2>${course.name}</h2>
+        <div class="details">
+            <h3>Correlativas necesarias:</h3>
+            <ul class="correlatives">${correlativas}</ul>
+            <h3>Es correlativa para:</h3>
+            <ul class="is-correlative-for">${correlativaPara}</ul>
+            <div class="status-buttons">${statusButtons}</div>
+        </div>
+    `;
+
+    courseDiv.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('status-button')) toggleCourseDetails(courseDiv);
+    });
+
+    return courseDiv;
+}
+// Inserta esta función dentro de script.js
+function createCourseDiv(course) {
+    const courseDiv = document.createElement('div');
+    courseDiv.className = 'course sin-cursada';
+    courseDiv.id = `course-${course.id}`;
+
+    let statusButtons = `
+        <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
+        <button class="status-button cursada-aprobada" onclick="changeStatus('${course.id}', 'cursada-aprobada')">Cursada Aprobada</button>
+        <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
+    `;
+
+    if (course.id === 'L0000') {
+        statusButtons = `
+            <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'ingreso-aprobado')">Ingreso Aprobado</button>
+            <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-ingreso')">Sin Ingreso</button>
+        `;
+    } else if (course.mix === 'T') {
+        statusButtons = `
+            <button class="status-button final-aprobado" onclick="changeStatus('${course.id}', 'final-aprobado')">Final Aprobado</button>
+            <button class="status-button sin-cursada" onclick="changeStatus('${course.id}', 'sin-cursada')">Sin Cursada</button>
+        `;
+    }
+
+    const correlativas = course.correlatives.includes('all')
+        ? '<li>Todas las materias anteriores</li>'
+        : (course.correlatives.length
+            ? course.correlatives.map(corrId => `<li>- ${careers[currentCareer].find(c => c.id === corrId).name}</li>`).join('')
+            : '<li>Ninguna</li>');
+
+    const isCorrelativeFor = careers[currentCareer].filter(c => c.correlatives.includes(course.id));
+    const correlativaPara = isCorrelativeFor.length
+        ? isCorrelativeFor.map(c => `<li>- ${c.name}</li>`).join('')
+        : '<li>Ninguna</li>';
+
+    let mixLabel = '';
+    if (course.year >= 3) {
+        if (course.mix === 'A') {
+            mixLabel = '<span class="cuatri cuatri-a">1C - </span>';
+        } else if (course.mix === 'B') {
+            mixLabel = '<span class="cuatri cuatri-b">2C - </span>';
+        }
+    }
+
+    courseDiv.innerHTML = `
+        <h2>${mixLabel}${course.name}</h2>
+        <div class="details">
+            <h3>Correlativas necesarias:</h3>
+            <ul class="correlatives">${correlativas}</ul>
+            <h3>Es correlativa para:</h3>
+            <ul class="is-correlative-for">${correlativaPara}</ul>
+            <div class="status-buttons">${statusButtons}</div>
+        </div>
+    `;
+
+    courseDiv.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('status-button')) toggleCourseDetails(courseDiv);
+    });
+
+    return courseDiv;
+}
+
+// Función para alternar entre modo oscuro y claro
+function toggleDarkMode() {
+    const currentStylesheet = document.querySelector('link[rel="stylesheet"]');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    
+    // Verifica qué modo está activo actualmente
+    const isDarkMode = currentStylesheet.getAttribute('href') === 'styles_oscuro.css';
+    
+    if (isDarkMode) {
+        // Cambiar a modo claro
+        currentStylesheet.setAttribute('href', 'styles.css');
+        darkModeToggle.setAttribute('src', 'media/modo_oscuro.png');
+        darkModeToggle.setAttribute('alt', 'Cambiar a modo oscuro');
+        // Guardar preferencia en localStorage
+        localStorage.setItem('darkMode', 'false');
+    } else {
+        // Cambiar a modo oscuro
+        currentStylesheet.setAttribute('href', 'styles_oscuro.css');
+        darkModeToggle.setAttribute('src', 'media/modo_claro.png');
+        darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
+        // Guardar preferencia en localStorage
+        localStorage.setItem('darkMode', 'true');
+    }
+}
+
+// Verificar la preferencia guardada al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const prefersDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (prefersDarkMode) {
+        // Iniciar en modo oscuro si es la preferencia guardada
+        document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'styles_oscuro.css');
+        darkModeToggle.setAttribute('src', 'media/modo_claro.png');
+        darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
+    }
+});

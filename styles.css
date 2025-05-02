@@ -7,36 +7,45 @@ body {
 }
 
 header {
-    background-color: #003366;
-    color: white;
-    padding: 10px 20px;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
 }
 
 .header-content {
     flex-grow: 1;
     text-align: center;
+    padding: 0 10px;
 }
 
-#logo, #mensaje {
+#logo, #mensaje, #dark-mode-toggle {
     height: 75px;
-    margin: 0;
+    flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.3s ease;
+    width: 75px; /* Ancho fijo */
 }
 
 #logo {
-    order: -1; /* Coloca el logo a la izquierda */
+    order: 0;
+    margin-right: 10px;
+}
+
+#dark-mode-toggle {
+    order: 1;
+    margin: 0 10px;
 }
 
 #mensaje {
-    order: 1; /* Coloca el mensaje a la derecha */
+    order: 2;
+    margin-left: 10px;
 }
 
-#logo:hover, #mensaje:hover {
+#logo:hover, #mensaje:hover, #dark-mode-toggle:hover {
     transform: scale(1.05);
 }
 
@@ -406,20 +415,26 @@ body.blur > *:not(.modal) {
 
 @media screen and (max-width: 768px) {
     header {
-        padding: 5px 10px;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 5px;
     }
 
     .header-content {
-        margin: 10px 0;
+        margin: 0;
+        padding: 0 5px;
     }
 
-    #logo, #mensaje {
-        height: 50px; /* Reduce el tamaño para pantallas más pequeñas */
+    #logo, #mensaje, #dark-mode-toggle {
+        height: 50px;
+        width: 50px;
+        margin: 0 5px;
     }
 
     h1 {
         font-size: 1.5em;
     }
+    
 
     nav {
         flex-direction: column;
@@ -478,6 +493,20 @@ body.blur > *:not(.modal) {
 }
 
 @media screen and (max-width: 480px) {
+    header {
+        padding: 3px;
+    }
+
+    #logo, #mensaje, #dark-mode-toggle {
+        height: 40px;
+        width: 40px;
+        margin: 0 3px;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+    
     nav button {
         width: 100%;
         z-index: 1;
@@ -774,3 +803,12 @@ body.blur > *:not(.modal) {
     text-align: center;
     color: #c2c3c2;
 }
+.cuatri {
+    font-weight: bold;
+  }
+  .cuatri-a {
+    color: #bebebe;
+  }
+  .cuatri-b {
+    color: #bebebe;
+  }  
