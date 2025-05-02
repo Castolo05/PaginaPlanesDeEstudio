@@ -24,12 +24,12 @@ header {
 
 #logo, #mensaje, #dark-mode-toggle {
     height: 60px;
+    width: 60px;
+    max-width: 60px;
+    max-height: 60px;
     flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.3s ease;
-    width: 60px; /* Ancho fijo reducido */
-    max-width: 60px; /* Añadir máximo */
-    max-height: 60px; /* Añadir máximo */
 }
 
 #logo {
@@ -98,10 +98,8 @@ nav button span {
     margin-left: 11.5%;
 }
 
-#btn-gestion-tecnologica, #btn-economia-empresarial, #btn-administracion, #btn-contador-publico, #btn-save {
+#btn-gestion-tecnologica, #btn-economia-empresarial, #btn-administracion, #btn-contador-publico {
     width: 180px;
-    justify-items: center;
-    align-items: center;
 }
 
 #btn-save {
@@ -222,7 +220,6 @@ main {
     color: #ffffff;
 }
 
-
 .modal {
     display: none;
     position: fixed;
@@ -337,6 +334,8 @@ body.blur > *:not(.modal) {
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
+    width: 50px;
+    height: 40px;
 }
 
 #prevButton {
@@ -378,7 +377,7 @@ body.blur > *:not(.modal) {
 .tutorial-tab h3 {
     color: #003366;
     margin-top: 0;
-    font-size: 1.5em; /* Aumenta el tamaño del título */
+    font-size: 1.5em;
 }
 
 .tutorial-tab video {
@@ -414,118 +413,6 @@ body.blur > *:not(.modal) {
     align-items: center;
 }
 
-
-@media screen and (max-width: 768px) {
-    header {
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        padding: 5px;
-    }
-
-    .header-content {
-        margin: 0;
-        padding: 0 5px;
-    }
-
-    #logo, #mensaje, #dark-mode-toggle {
-        height: 50px;
-        width: 50px;
-        margin: 0 5px;
-    }
-
-    h1 {
-        font-size: 1.5em;
-    }
-    
-
-    nav {
-        flex-direction: column;
-    }
-
-    .career-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    nav button {
-        margin: 5px auto;
-        width: calc(100% - 20px); /* 10px de margen a cada lado */
-    }
-
-    #btn-gestion-tecnologica {
-        margin-left: auto;
-        width: calc(100% - 20px);
-    }
-
-    #btn-contador-publico {
-        margin-left: auto;
-        width: calc(100% - 20px);
-    }
-
-    #btn-administracion {
-        margin-left: auto;
-        width: calc(100% - 20px);
-    }
-
-    #btn-economia-empresarial {
-        margin-left: auto;
-        width: calc(100% - 20px);
-    }
-
-    .year-section, .mix-section {
-        max-width: 100%;
-    }
-
-    .tutorial-content {
-        width: 90%;
-        height: auto;
-        max-height: 90vh;
-    }
-
-    .nav-button {
-        top: auto;
-        z-index: 1;
-        transform: none;
-    }
-
-
-    #btn-save {
-        width: calc(100% - 20px);
-    }
-}
-
-@media screen and (max-width: 480px) {
-    header {
-        padding: 3px;
-    }
-
-    #logo, #mensaje, #dark-mode-toggle {
-        height: 40px;
-        width: 40px;
-        margin: 0 3px;
-    }
-
-    h1 {
-        font-size: 1.2em;
-    }
-    
-    nav button {
-        width: 100%;
-        z-index: 1;
-    }
-
-    .tutorial-content {
-        width: 95%;
-    }
-
-    .tutorial-tab h3 {
-        font-size: 1.2em;
-    }
-
-    .tutorial-tab p {
-        font-size: 0.9em;
-    }
-}
 #faqModal {
     display: none;
     position: fixed;
@@ -536,111 +423,59 @@ body.blur > *:not(.modal) {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
-  }
-  
-  .close {
+}
+
+.close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-  }
-  
-  .close:hover,
-  .close:focus {
+}
+
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-  
-  .faq-item {
+}
+
+.faq-item {
     margin-bottom: 10px;
-  }
-  
-  .faq-question {
+}
+
+.faq-question {
     background-color: #f1f1f1;
     padding: 10px;
     cursor: pointer;
-  }
-  
-  .faq-answer {
+}
+
+.faq-answer {
     display: none;
     padding: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
-  }
-
-.links-modal-content {
-  max-width: 600px;
 }
-
-.tabs {
-  display: flex;
-  border-bottom: 1px solid #ccc;
-}
-
-.tab-button {
-  background-color: inherit;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 10px 20px;
-  transition: 0.3s;
-  font-size: 17px;
-}
-
-.tab-button:hover {
-  background-color: #ddd;
-}
-
-.tab-button.active {
-  background-color: #ccc;
-}
-
-.tab-content {
-  display: none;
-  padding: 20px;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-.link-item {
-  margin-bottom: 15px;
-}
-
-.link-item a {
-  font-size: 18px;
-  color: #003366;
-  text-decoration: none;
-}
-
-.link-item p {
-  margin: 5px 0 0 0;
-  font-size: 14px;
-  color: #666;
-}  
 
 .links-modal-content {
     max-width: 600px;
-  }
-  
-  .tabs {
+}
+
+.tabs {
     display: flex;
     border-bottom: 1px solid #ccc;
-  }
-  
-  .tab-button {
+}
+
+.tab-button {
     background-color: inherit;
     border: none;
     outline: none;
@@ -648,55 +483,163 @@ body.blur > *:not(.modal) {
     padding: 10px 20px;
     transition: 0.3s;
     font-size: 17px;
-  }
-  
-  .tab-button:hover {
+}
+
+.tab-button:hover {
     background-color: #ddd;
-  }
-  
-  .tab-button.active {
+}
+
+.tab-button.active {
     background-color: #ccc;
-  }
-  
-  .tab-content {
+}
+
+.tab-content {
     display: none;
     padding: 20px;
-  }
-  
-  .tab-content.active {
+}
+
+.tab-content.active {
     display: block;
-  }
-  
-  .link-item {
+}
+
+.link-item {
     margin-bottom: 15px;
-  }
-  
-  .link-item a {
+}
+
+.link-item a {
     font-size: 18px;
     color: #003366;
     text-decoration: none;
-  }
-  
-  .link-item p {
+}
+
+.link-item p {
     margin: 5px 0 0 0;
     font-size: 14px;
     color: #666;
-  }
-  
+}
 
+.derechos {
+    bottom: 5px;
+    text-align: center;
+    color: #c2c3c2;
+}
 
-/* Dispositivos muy pequeños */
+.cuatri {
+    font-weight: bold;
+}
+
+.cuatri-a, .cuatri-b {
+    color: #bebebe;
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 5px;
+    }
+    
+    .header-content {
+        margin: 0;
+        padding: 0 5px;
+    }
+    
+    #logo, #mensaje, #dark-mode-toggle {
+        height: 50px;
+        width: 50px;
+        margin: 0 5px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    nav {
+        flex-direction: column;
+    }
+    
+    .career-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    nav button {
+        margin: 5px auto;
+        width: calc(100% - 20px);
+    }
+    
+    #btn-gestion-tecnologica, 
+    #btn-contador-publico, 
+    #btn-administracion, 
+    #btn-economia-empresarial,
+    #btn-save {
+        margin-left: auto;
+        width: calc(100% - 20px);
+    }
+    
+    .year-section, .mix-section {
+        max-width: 100%;
+    }
+    
+    .tutorial-content {
+        width: 90%;
+        height: auto;
+        max-height: 90vh;
+    }
+    
+    .nav-button {
+        top: auto;
+        transform: none;
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    header {
+        padding: 3px;
+    }
+    
+    #logo, #mensaje, #dark-mode-toggle {
+        height: 40px;
+        width: 40px;
+        margin: 0 3px;
+    }
+    
+    h1 {
+        font-size: 1.2em;
+    }
+    
+    nav button {
+        width: 100%;
+        z-index: 1;
+        font-size: 12px;
+        height: 45px;
+    }
+    
+    .tutorial-content {
+        width: 95%;
+    }
+    
+    .tutorial-tab h3 {
+        font-size: 1.2em;
+    }
+    
+    .tutorial-tab p {
+        font-size: 0.9em;
+    }
+}
+
 @media screen and (max-width: 1500px) {
     .nav-button {
         width: 50px;
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 25%;
     }
-
+    
     #nextButton {
         right: 25%;
     }
@@ -708,11 +651,11 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 20%;
     }
-
+    
     #nextButton {
         right: 20%;
     }
@@ -724,11 +667,11 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 18%;
     }
-
+    
     #nextButton {
         right: 18%;
     }
@@ -740,11 +683,11 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 15%;
     }
-
+    
     #nextButton {
         right: 15%;
     }
@@ -756,11 +699,11 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 12%;
     }
-
+    
     #nextButton {
         right: 12%;
     }
@@ -772,11 +715,11 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 8%;
     }
-
+    
     #nextButton {
         right: 8%;
     }
@@ -788,29 +731,12 @@ body.blur > *:not(.modal) {
         height: 40px;
         font-size: 20px;
     }
-
+    
     #prevButton {
         left: 3%;
     }
-
+    
     #nextButton {
         right: 3%;
     }
-} 
-
-
-
-.derechos{
-    bottom: 5px;
-    text-align: center;
-    color: #c2c3c2;
 }
-.cuatri {
-    font-weight: bold;
-  }
-  .cuatri-a {
-    color: #bebebe;
-  }
-  .cuatri-b {
-    color: #bebebe;
-  }  

@@ -23,13 +23,11 @@ header {
 }
 
 #logo, #mensaje, #dark-mode-toggle {
-    height: 60px;
+    height: 75px;
     flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.3s ease;
-    width: 60px; /* Ancho fijo reducido */
-    max-width: 60px; /* Añadir máximo */
-    max-height: 60px; /* Añadir máximo */
+    width: 75px; /* Ancho fijo */
 }
 
 #logo {
