@@ -572,7 +572,8 @@ body.blur > *:not(.modal) {
     #btn-contador-publico, 
     #btn-administracion, 
     #btn-economia-empresarial,
-    #btn-save {
+    #btn-save,
+    #btn-download-pdf {
         margin-left: auto;
         width: calc(100% - 20px);
     }
@@ -609,7 +610,7 @@ body.blur > *:not(.modal) {
         font-size: 1.2em;
     }
     
-    nav button {
+    nav button, #btn-download-pdf {
         width: 100%;
         z-index: 1;
         font-size: 12px;
@@ -740,7 +741,7 @@ body.blur > *:not(.modal) {
         right: 3%;
     }
 }
-/* Añadir a styles.css y styles_oscuro.css */
+/* Estilo original del botón de descarga PDF */
 #btn-download-pdf {
     background-color: #b7d618;
     color: white;
@@ -750,7 +751,11 @@ body.blur > *:not(.modal) {
     cursor: pointer;
     margin-left: 10px;
     margin-right: 10px;
-    
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 #btn-download-pdf:hover {
