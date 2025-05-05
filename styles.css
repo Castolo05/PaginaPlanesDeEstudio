@@ -572,12 +572,16 @@ body.blur > *:not(.modal) {
     #btn-contador-publico, 
     #btn-administracion, 
     #btn-economia-empresarial,
-    #btn-save,
-    #btn-download-pdf {
-        margin-left: auto;
-        width: calc(100% - 20px);
-    }
+    #btn-save{
     
+        margin-left: auto;
+        width: calc(100% - 20px)
+    }
+
+    #btn-download-pdf {
+    width: calc(100% - 20px)
+    }
+
     .year-section, .mix-section {
         max-width: 100%;
     }
@@ -749,13 +753,14 @@ body.blur > *:not(.modal) {
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    
 }
 
 #btn-download-pdf:hover {
