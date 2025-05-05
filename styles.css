@@ -749,8 +749,8 @@ body.blur > *:not(.modal) {
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
     height: 50px;
     display: flex;
     align-items: center;

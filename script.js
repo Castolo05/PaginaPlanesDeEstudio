@@ -25,6 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('nextButton').addEventListener('click', function() {
         changeTutorialTab(1);
     });
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const prefersDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    if (prefersDarkMode) {
+        // Iniciar en modo oscuro si es la preferencia guardada
+        document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'styles_oscuro.css');
+        darkModeToggle.setAttribute('src', 'media/modo_claro.png');
+        darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
+    }
 });
 
 function showTutorial() {
@@ -655,18 +664,6 @@ function toggleDarkMode() {
     }
 }
 
-// Verificar la preferencia guardada al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const prefersDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    if (prefersDarkMode) {
-        // Iniciar en modo oscuro si es la preferencia guardada
-        document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'styles_oscuro.css');
-        darkModeToggle.setAttribute('src', 'media/modo_claro.png');
-        darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
-    }
-});
 // Función para descargar el plan de estudios como PDF
 function downloadPlanPDF() {
     const { jsPDF } = window.jspdf;
