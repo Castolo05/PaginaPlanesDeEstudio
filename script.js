@@ -814,7 +814,7 @@ function downloadPlanPDF() {
         // Marca de agua de copyright
         doc.setFontSize(8);
         doc.setTextColor(200, 200, 200); // Color muy claro para simular marca de agua
-        doc.text("Copyright © 2024 PEFCE - Fausto Guaita Lara", pageWidth / 2, 
+        doc.text("Copyright © 2024 PEFCE - FGL", pageWidth / 2, 
             doc.internal.pageSize.getHeight() - 5, { align: 'center' });
         
         // Fecha de generación (discreta en la esquina)
