@@ -740,3 +740,18 @@ body.blur > *:not(.modal) {
         right: 3%;
     }
 }
+/* Añadir a styles.css y styles_oscuro.css */
+#btn-download-pdf {
+    background-color: #b7d618;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    
+}
+
+#btn-download-pdf:hover {
+    background-color: #8e9834;
+}

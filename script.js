@@ -667,3 +667,176 @@ document.addEventListener('DOMContentLoaded', function() {
         darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
     }
 });
+// Función para descargar el plan de estudios como PDF
+function downloadPlanPDF() {
+    const { jsPDF } = window.jspdf;
+    
+    // Crear nuevo documento PDF con márgenes reducidos
+    const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        margins: {
+            top: 10,
+            right: 10,
+            bottom: 10,
+            left: 10
+        }
+    });
+    
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // Configurar estilos para el título
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16); // Título más grande
+    
+    // Añadir título de la carrera
+    const careerTitle = getCareerTitle(currentCareer);
+    doc.text(careerTitle, pageWidth / 2, 15, { align: 'center' });
+    
+    // Subtítulo actualizado
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.text("Plan de estudios interactivo FCE", pageWidth / 2, 22, { align: 'center' });
+    
+    // Variables para control de posición
+    let yPosition = 30;
+    const yearNames = ['1er', '2do', '3er', '4to', '5to'];
+    
+    // Crear un arreglo para almacenar todas las materias organizadas por año
+    let allTableData = [];
+    
+    // Iterar por cada año para recolectar los datos
+    for (let year = 1; year <= 5; year++) {
+        // Verificar si hay materias en este año
+        const yearCourses = careers[currentCareer].filter(c => c.year === year);
+        if (yearCourses.length === 0) continue;
+        
+        // Añadir encabezado del año a la tabla
+        allTableData.push([{content: `${yearNames[year-1]} Año`, colSpan: 3, styles: {fontStyle: 'bold', fillColor: [220, 220, 220], halign: 'center'}}]);
+        
+        // Ordenar materias como en el sitio web
+        const sortedCourses = [...yearCourses];
+        if (year >= 3) {
+            // Para años 3 y superiores, agrupar por cuatrimestre
+            const mixA = yearCourses.filter(c => c.mix === 'A');
+            const mixB = yearCourses.filter(c => c.mix === 'B');
+            const others = yearCourses.filter(c => c.mix !== 'A' && c.mix !== 'B');
+            sortedCourses.length = 0;
+            sortedCourses.push(...mixA, ...mixB, ...others);
+        }
+        
+        // Procesar cada materia
+        for (const course of sortedCourses) {
+            let courseName = course.name;
+            if (year >= 3) {
+                if (course.mix === 'A') {
+                    courseName = "1C - " + courseName;
+                } else if (course.mix === 'B') {
+                    courseName = "2C - " + courseName;
+                }
+            }
+            
+            // Obtener estado de la materia
+            const courseDiv = document.getElementById(`course-${course.id}`);
+            let status = courseDiv.className.split(' ')[1];
+            let displayStatus = "";
+            let cellColor = null;
+            
+            // Manejar el caso especial de "Introducción a la Vida Universitaria"
+            // O cualquier materia con ID L0000 (curso de ingreso)
+            if (course.id === 'L0000' || course.name.includes("Introducción a la Vida Universitaria")) {
+                if (status === 'final-aprobado' || status === 'ingreso-aprobado') {
+                    displayStatus = "Ingreso Aprobado";
+                    cellColor = [144, 238, 144]; // Verde claro
+                }
+            } else {
+                // Para el resto de materias
+                switch (status) {
+                    case 'final-aprobado':
+                        displayStatus = "Final Aprobado";
+                        cellColor = [144, 238, 144]; // Verde claro
+                        break;
+                    case 'ingreso-aprobado':
+                        displayStatus = "Ingreso Aprobado";
+                        cellColor = [144, 238, 144]; // Verde claro
+                        break;
+                    case 'cursada-aprobada':
+                        displayStatus = "Cursada Aprobada";
+                        cellColor = [173, 216, 230]; // Azul claro
+                        break;
+                    case 'sin-cursada':
+                    case 'sin-ingreso':
+                        displayStatus = ""; // Sin texto para materias sin cursada
+                        cellColor = null; // Color blanco por defecto
+                        break;
+                    default:
+                        displayStatus = "";
+                        cellColor = null;
+                }
+            }
+            
+            // Añadir a la tabla con estilo condicional
+            allTableData.push([
+                {content: courseName, styles: {}},
+                {content: displayStatus, styles: cellColor ? {fillColor: cellColor} : {}},
+                {content: "", styles: {}}
+            ]);
+        }
+    }
+
+    // Crear la tabla con todos los datos
+    doc.autoTable({
+        startY: yPosition,
+        head: [['Materia', 'Estado', 'Nota']],
+        body: allTableData,
+        theme: 'grid',
+        headStyles: {
+            fillColor: [66, 66, 66],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            halign: 'center'
+        },
+        styles: {
+            fontSize: 8,
+            cellPadding: 2
+        },
+        columnStyles: {
+            0: { cellWidth: 100 },
+            1: { cellWidth: 40, halign: 'center' },
+            2: { cellWidth: 20 } // Columna Nota más angosta
+        },
+        margin: { left: 20, right: 20 } // Ajustados márgenes para centrar mejor
+    });
+    
+    // Añadir marca de agua de copyright
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        
+        // Marca de agua de copyright
+        doc.setFontSize(8);
+        doc.setTextColor(200, 200, 200); // Color muy claro para simular marca de agua
+        doc.text("Copyright © 2024 PEFCE - Fausto Guaita Lara", pageWidth / 2, 
+            doc.internal.pageSize.getHeight() - 5, { align: 'center' });
+        
+        // Fecha de generación (discreta en la esquina)
+        const today = new Date();
+        doc.setFontSize(7);
+        doc.text(`Generado: ${today.toLocaleDateString()}`, 15, doc.internal.pageSize.getHeight() - 5);
+    }
+    
+    // Guardar el PDF
+    doc.save(`Plan_${currentCareer}.pdf`);
+}
+
+// Función auxiliar para obtener el título de la carrera
+function getCareerTitle(careerName) {
+    const titles = {
+        'gestion-tecnologica': 'Licenciatura en Gestión Tecnológica',
+        'economia-empresarial': 'Licenciatura en Economía Empresarial',
+        'contador-publico': 'Contador Público',
+        'administracion': 'Licenciatura en Administración'
+    };
+    return titles[careerName] || 'Plan de Estudios';
+}
