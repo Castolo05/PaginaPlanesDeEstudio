@@ -755,6 +755,7 @@ body.blur > *:not(.modal) {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    margin-right: 10px;
     
 }
 
