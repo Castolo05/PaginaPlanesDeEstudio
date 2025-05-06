@@ -301,133 +301,6 @@ main {
     background-color: #16213e;
 }
 
-body.blur > *:not(.modal) {
-    filter: blur(5px);
-    transition: filter 0.3s ease;
-}
-
-#tutorialModal {
-    align-items: center;
-}
-
-#tutorialModal.active {
-    display: flex;
-}
-
-.tutorial-content {
-    max-width: 600px;
-    width: 80%;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #282c34;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-
-.nav-button {
-    background-color: #0f3460;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-}
-
-#prevButton {
-    left: 26%;
-}
-
-#nextButton {
-    right: 26%;
-}
-
-.nav-button:hover {
-    background-color: #16213e;
-}
-
-.nav-button:disabled {
-    background-color: #444444;
-    cursor: not-allowed;
-}
-
-#tutorialTabs {
-    flex-grow: 1;
-    overflow: hidden;
-}
-
-.tutorial-tab {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.5s ease;
-}
-
-.tutorial-tab.active {
-    display: flex;
-}
-
-.tutorial-tab h3 {
-    color: #64b5f6;
-    margin-top: 0;
-    font-size: 1.5em;
-}
-
-.tutorial-tab p {
-    color: #e0e0e0;
-}
-
-.tutorial-tab video {
-    max-width: 100%;
-    height: auto;
-}
-
-#tab4 button {
-    background-color: #0f3460;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-#tab4 button:hover {
-    background-color: #16213e;
-}
-
-#tab1, #tab4 {
-    justify-content: center;
-}
-
-#tab4 label {
-    margin-bottom: 20px;
-    color: #e0e0e0;
-}
-
-#tab4 input[type="checkbox"] {
-    accent-color: #0f3460;
-}
-
-#tab4 button {
-    margin-top: 20px;
-    align-items: center;
-}
-
 #faqModal {
     display: none;
     position: fixed;
@@ -609,19 +482,8 @@ body.blur > *:not(.modal) {
         max-width: 100%;
     }
     
-    .tutorial-content {
-        width: 90%;
-        height: auto;
-        max-height: 90vh;
-    }
-    
-    .nav-button {
-        top: auto;
-        transform: none;
-        z-index: 1;
-    }
-}
 
+}
 @media screen and (max-width: 480px) {
     header {
         padding: 3px;
@@ -637,26 +499,13 @@ body.blur > *:not(.modal) {
         font-size: 1.2em;
     }
     
-    nav button, #btn-download-pdf {
+    #btn-download-pdf {
         width: 100%;
         z-index: 1;
         font-size: 12px;
         height: 45px;
     }
-    
-    .tutorial-content {
-        width: 95%;
-    }
-    
-    .tutorial-tab h3 {
-        font-size: 1.2em;
-    }
-    
-    .tutorial-tab p {
-        font-size: 0.9em;
-    }
 }
-
 @media screen and (max-width: 1500px) {
     .nav-button {
         width: 50px;
@@ -766,5 +615,225 @@ body.blur > *:not(.modal) {
     
     #nextButton {
         right: 3%;
+    }
+}
+
+/* Estilos para el modal del tutorial - Modo Oscuro */
+#tutorialModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.tutorial-content {
+    background-color: #1a1a1a;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 70%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.3s ease;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+/* Estilos para las pestañas del tutorial */
+.tutorial-tab {
+    display: none;
+    text-align: center;
+    padding: 10px;
+}
+
+.tutorial-tab h2, .tutorial-tab h3 {
+    color: #ffffff; /* Azul claro */
+    margin-bottom: 20px;
+}
+
+.tutorial-tab p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #bbbbbb;
+}
+
+.tutorial-tab video {
+    max-width: 82%;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    margin: 15px 0;
+    background-color: #111;
+    border: 1px solid #333;
+}
+
+/* Estilos para los botones de navegación */
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(40, 40, 40, 0.7);
+    border: 1px solid #444;
+    color: #e0e0e0;
+    padding: 15px 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.nav-button:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    color: #fcfcfc;
+}
+
+#prevButton {
+    left: 20px;
+}
+
+#nextButton {
+    right: 20px;
+}
+
+/* Estilos para el botón de cierre y el checkbox */
+#tutorialModal button {
+    padding: 10px 20px;
+    background-color: #1e478f; /* Azul más saturado */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+#tutorialModal button:hover {
+    background-color: #073263;
+    box-shadow: 0 0 8px rgba(41, 121, 255, 0.5);
+}
+
+#tutorialModal label {
+    display: block;
+    margin: 15px 0;
+    font-size: 16px;
+    color: #bbbbbb;
+}
+
+#noShowAgain {
+    margin-right: 8px;
+    vertical-align: middle;
+    accent-color: #000000; /* Colorear el checkbox */
+}
+
+/* Animación para el modal */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos específicos para cada pestaña */
+#tab1 {
+    padding: 30px 20px;
+}
+
+#tab1 h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+#tab2 p {
+    text-align: left;
+    padding: 0 20px;
+}
+
+#tab2 p b {
+    color: #ff6e6e; /* Rojo más suave para los textos importantes */
+}
+
+#tab3 {
+    padding: 20px;
+}
+
+#tab4 {
+    padding: 30px 20px;
+}
+
+#tab4 h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+/* Scrollbar personalizada para el modo oscuro */
+.tutorial-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tutorial-content::-webkit-scrollbar-track {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .tutorial-content {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .nav-button {
+        padding: 10px;
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    #prevButton {
+        left: 10px;
+    }
+    
+    #nextButton {
+        right: 10px;
+    }
+    
+    .tutorial-tab h3 {
+        font-size: 20px;
+    }
+    
+    .tutorial-tab p {
+        font-size: 14px;
     }
 }

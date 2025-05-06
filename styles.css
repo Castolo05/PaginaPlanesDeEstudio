@@ -293,125 +293,6 @@ main {
     background-color: #00406e;
 }
 
-body.blur > *:not(.modal) {
-    filter: blur(5px);
-    transition: filter 0.3s ease;
-}
-
-#tutorialModal {
-    align-items: center;
-}
-
-#tutorialModal.active {
-    display: flex;
-}
-
-.tutorial-content {
-    max-width: 600px;
-    width: 80%;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #fefefe;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.nav-button {
-    background-color: #003366;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-    width: 50px;
-    height: 40px;
-}
-
-#prevButton {
-    left: 26%;
-}
-
-#nextButton {
-    right: 26%;
-}
-
-.nav-button:hover {
-    background-color: #00406e;
-}
-
-.nav-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-#tutorialTabs {
-    flex-grow: 1;
-    overflow: hidden;
-}
-
-.tutorial-tab {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.5s ease;
-}
-
-.tutorial-tab.active {
-    display: flex;
-}
-
-.tutorial-tab h3 {
-    color: #003366;
-    margin-top: 0;
-    font-size: 1.5em;
-}
-
-.tutorial-tab video {
-    max-width: 100%;
-    height: auto;
-}
-
-#tab4 button {
-    background-color: #003366;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-#tab4 button:hover {
-    background-color: #00406e;
-}
-
-#tab1, #tab4 {
-    justify-content: center;
-}
-
-#tab4 label {
-    margin-bottom: 20px;
-}
-
-#tab4 button {
-    margin-top: 20px;
-    align-items: center;
-}
 
 #faqModal {
     display: none;
@@ -765,3 +646,199 @@ body.blur > *:not(.modal) {
         right: 3%;
     }
 }
+
+/* Estilos para el modal del tutorial */
+#tutorialModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.tutorial-content {
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 70%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.3s ease;
+}
+
+/* Estilos para las pestañas del tutorial */
+.tutorial-tab {
+    display: none;
+    text-align: center;
+    padding: 10px;
+}
+
+.tutorial-tab h2, .tutorial-tab h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.tutorial-tab p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.tutorial-tab video {
+    max-width: 82%;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin: 15px 0;
+    background-color: #f0f0f0;
+}
+
+/* Estilos para los botones de navegación */
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    color: #333;
+    padding: 15px 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#prevButton {
+    left: 20px;
+}
+
+#nextButton {
+    right: 20px;
+}
+
+/* Estilos para el botón de cierre y el checkbox */
+#tutorialModal button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+#tutorialModal button:hover {
+    background-color: #1b6b99;
+}
+
+#tutorialModal label {
+    display: block;
+    margin: 15px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+#noShowAgain {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Animación para el modal */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos específicos para cada pestaña */
+#tab1 {
+    padding: 30px 20px;
+}
+
+#tab1 h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+#tab2 p {
+    text-align: left;
+    padding: 0 20px;
+}
+
+#tab2 p b {
+    color: #e74c3c;
+}
+
+#tab3 {
+    padding: 20px;
+}
+
+#tab4 {
+    padding: 30px 20px;
+}
+
+#tab4 h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #3b3b3b;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .tutorial-content {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .nav-button {
+        padding: 10px;
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    #prevButton {
+        left: 10px;
+    }
+    
+    #nextButton {
+        right: 10px;
+    }
+    
+    .tutorial-tab h3 {
+        font-size: 20px;
+    }
+    
+    .tutorial-tab p {
+        font-size: 14px;
+    }
+}
+

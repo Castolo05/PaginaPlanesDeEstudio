@@ -1,6 +1,138 @@
-
+// Variables globales para el tutorial
 let currentTab = 1;
-const totalTabs = 4; // Asegúrate de que este número coincida con el total de tabs que tienes
+const totalTabs = 4;
+
+// Función para comprobar si es la primera visita
+function checkFirstVisit() {
+    // Verificar si el usuario ha elegido no mostrar el tutorial
+    const noShowTutorial = localStorage.getItem('noShowTutorial');
+    
+    // Si no existe la preferencia o es falsa, mostrar el tutorial
+    if (!noShowTutorial) {
+        showTutorial();
+    }
+}
+
+// Función para mostrar el tutorial
+function showTutorial() {
+    const tutorialModal = document.getElementById('tutorialModal');
+    if (tutorialModal) {
+        tutorialModal.style.display = 'flex';
+        resetTutorial();
+    }
+}
+
+// Función para cerrar el tutorial
+function closeTutorial() {
+    const tutorialModal = document.getElementById('tutorialModal');
+    const noShowAgain = document.getElementById('noShowAgain');
+    
+    // Si el checkbox está marcado, guardar preferencia en localStorage
+    if (noShowAgain && noShowAgain.checked) {
+        localStorage.setItem('noShowTutorial', 'true');
+    }
+    
+    if (tutorialModal) {
+        tutorialModal.style.display = 'none';
+    }
+}
+
+// Función para cambiar de pestaña en el tutorial
+function changeTutorialTab(direction) {
+    // Ocultar la pestaña actual
+    document.getElementById(`tab${currentTab}`).style.display = 'none';
+    
+    // Calcular la nueva pestaña
+    currentTab += direction;
+    
+    // Asegurarse de que no se salga del rango
+    if (currentTab < 1) currentTab = 1;
+    if (currentTab > totalTabs) currentTab = totalTabs;
+    
+    // Mostrar la nueva pestaña
+    document.getElementById(`tab${currentTab}`).style.display = 'block';
+    
+    // Actualizar estado de los botones de navegación
+    updateNavigationButtons();
+    
+    // Si es la pestaña del video (tab3), iniciar la reproducción
+    if (currentTab === 3) {
+        playTutorialVideo();
+    }
+}
+
+// Función para actualizar el estado de los botones de navegación
+function updateNavigationButtons() {
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    
+    // Deshabilitar botón anterior en la primera pestaña
+    if (prevButton) {
+        prevButton.style.visibility = currentTab === 1 ? 'hidden' : 'visible';
+    }
+    
+    // Deshabilitar botón siguiente en la última pestaña
+    if (nextButton) {
+        nextButton.style.visibility = currentTab === totalTabs ? 'hidden' : 'visible';
+    }
+}
+
+// Función para reproducir el video del tutorial
+function playTutorialVideo() {
+    const video = document.querySelector('#tab3 video');
+    if (video) {
+        // Reiniciar el video si ya estaba reproduciendo
+        video.currentTime = 0;
+        
+        // Reproducir el video
+        video.play().catch(e => {
+            console.log('Error al reproducir el video:', e);
+            // Algunos navegadores requieren interacción del usuario para reproducir videos
+            // Mostrar un mensaje alternativo o una imagen estática
+        });
+    }
+}
+
+// Función para restablecer el tutorial a su estado inicial
+function resetTutorial() {
+    // Ocultar todas las pestañas
+    for (let i = 1; i <= totalTabs; i++) {
+        const tab = document.getElementById(`tab${i}`);
+        if (tab) {
+            tab.style.display = 'none';
+        }
+    }
+    
+    // Mostrar la primera pestaña
+    currentTab = 1;
+    const firstTab = document.getElementById(`tab${currentTab}`);
+    if (firstTab) {
+        firstTab.style.display = 'block';
+    }
+    
+    // Actualizar estado de los botones de navegación
+    updateNavigationButtons();
+}
+
+// Inicializar tutorial cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Preparar los estilos iniciales de las pestañas
+    for (let i = 1; i <= totalTabs; i++) {
+        const tab = document.getElementById(`tab${i}`);
+        if (tab) {
+            tab.style.display = 'none';
+        }
+    }
+    
+    // Verificar primera visita
+    checkFirstVisit();
+});
+
+// Asegurarse de que las funciones sean accesibles globalmente
+window.showTutorial = showTutorial;
+window.closeTutorial = closeTutorial;
+window.changeTutorialTab = changeTutorialTab;
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
