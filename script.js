@@ -1,30 +1,8 @@
-// Añadir este código al inicio del archivo script.js
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar si es la primera visita comprobando localStorage
-    if (!localStorage.getItem('tutorialShown')) {
-        // Es la primera visita, mostrar el tutorial
-        showTutorial();
-    }
-});
 
 let currentTab = 1;
 const totalTabs = 4; // Asegúrate de que este número coincida con el total de tabs que tienes
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar si es la primera visita
-    if (!localStorage.getItem('tutorialShown')) {
-        // Es la primera visita, mostrar el tutorial
-        showTutorial();
-    }
-    
-    // Configurar los event listeners para los botones de navegación
-    document.getElementById('prevButton').addEventListener('click', function() {
-        changeTutorialTab(-1);
-    });
-    
-    document.getElementById('nextButton').addEventListener('click', function() {
-        changeTutorialTab(1);
-    });
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const prefersDarkMode = localStorage.getItem('darkMode') === 'true';
     
@@ -35,83 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         darkModeToggle.setAttribute('alt', 'Cambiar a modo claro');
     }
 });
-
-function showTutorial() {
-    document.getElementById("tutorialModal").style.display = "flex";
-    document.body.classList.add('blur');
-    document.body.style.overflow = 'hidden';
-    
-    // Restablecer a la primera pestaña
-    currentTab = 1;
-    showTutorialTab(currentTab);
-}
-
-function showTutorialTab(tabNumber) {
-    // Validar que el número de tab es válido
-    if (tabNumber < 1 || tabNumber > totalTabs) return;
-    
-    // Actualizar la variable global
-    currentTab = tabNumber;
-    
-    // Ocultar todas las pestañas y pausar videos
-    const tabs = document.querySelectorAll('.tutorial-tab');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-        tab.classList.remove('active');
-        const video = tab.querySelector('video');
-        if (video) {
-            video.pause();
-        }
-    });
-    
-    // Mostrar la pestaña actual
-    const currentTabElement = document.getElementById(`tab${tabNumber}`);
-    if (currentTabElement) {
-        currentTabElement.style.display = 'flex';
-        currentTabElement.classList.add('active');
-        
-        // Reproducir video si existe en esta pestaña
-        const currentVideo = currentTabElement.querySelector('video');
-        if (currentVideo) {
-            currentVideo.load(); // Asegurarse de que el video se cargue correctamente
-            currentVideo.play().catch(e => console.log("Error reproduciendo video:", e));
-        }
-    }
-    
-    // Actualizar visibilidad de botones
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-    
-    prevButton.disabled = (tabNumber === 1);
-    nextButton.disabled = (tabNumber === totalTabs);
-    
-    // Asegurarse de que los botones estén visibles siempre (excepto cuando están deshabilitados)
-    prevButton.style.display = 'block';
-    nextButton.style.display = 'block';
-}
-
-function changeTutorialTab(direction) {
-    const newTab = currentTab + direction;
-    if (newTab >= 1 && newTab <= totalTabs) {
-        showTutorialTab(newTab);
-    }
-}
-
-function closeTutorial() {
-    // Pausar cualquier video que esté reproduciéndose
-    const videos = document.querySelectorAll('.tutorial-tab video');
-    videos.forEach(video => {
-        if (video) video.pause();
-    });
-    
-    document.getElementById("tutorialModal").style.display = "none";
-    document.body.classList.remove('blur');
-    document.body.style.overflow = 'auto';
-    
-    if (document.getElementById("noShowAgain").checked) {
-        localStorage.setItem("tutorialShown", "true");
-    }
-}
 
 let careers = {};  // Se inicializa vacío para cargar desde JSON
 let currentCareer = '';
@@ -753,19 +654,23 @@ function downloadPlanPDF() {
                     case 'final-aprobado':
                         displayStatus = "Final Aprobado";
                         cellColor = [144, 238, 144]; // Verde claro
+                        fontStyle = 'bold';
                         break;
                     case 'ingreso-aprobado':
                         displayStatus = "Ingreso Aprobado";
                         cellColor = [144, 238, 144]; // Verde claro
+                        fontStyle = 'bold';
                         break;
                     case 'cursada-aprobada':
                         displayStatus = "Cursada Aprobada";
                         cellColor = [173, 216, 230]; // Azul claro
+                        fontStyle = 'bold';
                         break;
                     case 'sin-cursada':
                     case 'sin-ingreso':
                         displayStatus = ""; // Sin texto para materias sin cursada
                         cellColor = null; // Color blanco por defecto
+                        fontStyle = 'bold';
                         break;
                     default:
                         displayStatus = "";
@@ -796,11 +701,12 @@ function downloadPlanPDF() {
         },
         styles: {
             fontSize: 8,
-            cellPadding: 2
+            cellPadding: 2,
+            fontStyle: 'bold'
         },
         columnStyles: {
             0: { cellWidth: 100 },
-            1: { cellWidth: 40, halign: 'center' },
+            1: { cellWidth: 50, halign: 'center' },
             2: { cellWidth: 20 } // Columna Nota más angosta
         },
         margin: { left: 20, right: 20 } // Ajustados márgenes para centrar mejor
