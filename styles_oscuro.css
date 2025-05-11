@@ -12,17 +12,25 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: #1a1a2e;
+    background-color: #003366;
     color: white;
 }
 
-.header-content {
-    flex-grow: 1;
-    text-align: center;
-    padding: 0 10px;
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
 }
 
-#logo, #mensaje, #dark-mode-toggle {
+.header-content {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 0 10px;
+    width: auto;
+}
+
+#logo, #mensaje, #dark-mode-toggle, #contactanos {
     height: 60px;
     width: 60px;
     max-width: 60px;
@@ -30,6 +38,7 @@ header {
     flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.3s ease;
+    margin: 0 5px;
 }
 
 #logo {
@@ -47,9 +56,10 @@ header {
     margin-left: 10px;
 }
 
-#logo:hover, #mensaje:hover, #dark-mode-toggle:hover {
+#logo:hover, #mensaje:hover, #dark-mode-toggle:hover, #contactanos:hover {
     transform: scale(1.05);
 }
+
 h1 {
     margin: 0;
     font-size: 2em;

@@ -458,9 +458,12 @@ main {
         padding: 0 5px;
     }
     
-    #logo, #mensaje, #dark-mode-toggle {
+    /* 2. Asegurar que todos los iconos del header tengan el mismo tamaño */
+    #logo, #mensaje, #dark-mode-toggle, #contactanos {
         height: 50px;
         width: 50px;
+        max-width: 50px;
+        max-height: 50px;
         margin: 0 5px;
     }
     
@@ -515,19 +518,20 @@ main {
         padding: 3px;
     }
     
-    #logo, #mensaje, #dark-mode-toggle {
+    #logo, #mensaje, #dark-mode-toggle, #contactanos {
         height: 40px;
         width: 40px;
         margin: 0 3px;
     }
     
     h1 {
-        font-size: 1.2em;
+        font-size: 0; /* Ocultar texto original */
     }
-    
+       
     nav button,
     #btn-save,
-    #btn-download-pdf {
+    #btn-download-pdf,
+    #contactanos {
         width: 100%;
         z-index: 1;
         font-size: 12px;

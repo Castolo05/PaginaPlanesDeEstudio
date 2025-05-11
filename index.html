@@ -6,12 +6,37 @@
     <title>Planes de Estudio - Facultad de Ciencias Económicas</title>
     <link rel="icon" href="media/icono.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
+
+    <script>
+      function actualizarTitulo() {
+        const tituloLargo = "Planes de Estudio - Facultad de Ciencias Económicas";
+        const tituloMedio = "Planes de Estudio - FCE"
+        const tituloCorto = "PDE - FCE";
+        const tituloH1 = document.querySelector("header h1");
+
+        const ancho = window.innerWidth;
+
+        if (ancho < 600) {
+      document.title = tituloCorto;
+      if (tituloH1) tituloH1.textContent = tituloCorto;
+    } else if (ancho >= 600 && ancho < 1024) {
+      document.title = tituloMedio;
+      if (tituloH1) tituloH1.textContent = tituloMedio;
+    } else {
+      document.title = tituloLargo;
+      if (tituloH1) tituloH1.textContent = tituloLargo;
+    }
+  } 
+
+      window.addEventListener("resize", actualizarTitulo);
+      window.addEventListener("DOMContentLoaded", actualizarTitulo);
+    </script>
 </head>
 <body>
   <header>
     <div class="header-left">
       <img id="logo" src="media/enlace.png" alt="enlaces de interes" onclick="toggleLinksModal()">
-      <img id="contactanos" src="media/comunicarse.png" alt="Contactanos" onclick="window.open('https://forms.google.com', '_blank')">
+      <img id="contactanos" src="media/comunicarse.png" alt="Contactanos" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeB-HBBFBD0XEBkbuqJoCKRi-wctDrPq0lvYQCiMofiqB_Ozg/viewform?usp=dialog')">
     </div>
     <div class="header-content">
         <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
@@ -22,141 +47,135 @@
     </div>
   </header>
 
-    <div id="faqModal" class="modal">
-      <div class="modal-content">
-        <h2>Preguntas Frecuentes</h2>
-        <div class="faq-container">
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleAnswer(1)">¿Que necesito para poder cursar el 3er año?</div>
-            <div class="faq-answer" id="answer1">Para cursar 3ro necesitas tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleAnswer(2)">¿Que necesito para cursar 5to año?</div>
-            <div class="faq-answer" id="answer2">Para cursar 5to necesitas tener completos los primeros dos años de la carrera (incluyendo talleres).</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleAnswer(3)">¿Como puedo acceder a mas información sobre mi carrera?</div>
-            <div class="faq-answer" id="answer3">En la seccion de "enlaces de interes" encontraras links a paginas oficiales y no oficiales las cuales te daran toda la información que necesitas.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleAnswer(4)">¿Como se protege la privacidad de mis datos?</div>
-            <div class="faq-answer" id="answer4">La web tiene la posibilidad de guardar la informacion que cada uno añadio a su plan de estudios, pero todos los datos se alojan en el propio almacenamiento del navegador. Por lo que nadie tiene acceso a datos o informacion personal de ningun usuario.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleAnswer(5)">¿Ya finalizó el desarrollo de esta web?</div>
-            <div class="faq-answer" id="answer5">Este proyecto aun no esta terminado. Por lo que existe la posibilidad de que el usuario pueda presenciar inconsistencias con respecto a correlatividades y/o bugs de la propia pagina. Proximamente abriremos un canal donde podran comunicarse con nosotros para informar de cualquier error que noten. Esto fue hecho para estudiantes, y ayudando a corregir los errores estan ayudando considerablemente. Tener en cuenta que no somos personas con conocimientos extensos de programacion web, por lo que cualquier mejora/corrección puede demorar.</div>
-          </div>
+  <!-- Preguntas Frecuentes -->
+  <div id="faqModal" class="modal">
+    <div class="modal-content">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(1)">¿Que necesito para poder cursar el 3er año?</div>
+          <div class="faq-answer" id="answer1">Para cursar 3ro necesitas tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados.</div>
         </div>
-        <span class="close" onclick="toggleFAQ()">&times;</span>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(2)">¿Que necesito para cursar 5to año?</div>
+          <div class="faq-answer" id="answer2">Para cursar 5to necesitas tener completos los primeros dos años de la carrera (incluyendo talleres).</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(3)">¿Como puedo acceder a mas información sobre mi carrera?</div>
+          <div class="faq-answer" id="answer3">En la seccion de "enlaces de interes" encontrarás links a páginas oficiales y no oficiales con toda la información necesaria.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(4)">¿Como se protege la privacidad de mis datos?</div>
+          <div class="faq-answer" id="answer4">Los datos se guardan solo en el almacenamiento local del navegador. Nadie más tiene acceso a ellos.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(5)">¿Ya finalizó el desarrollo de esta web?</div>
+          <div class="faq-answer" id="answer5">Este proyecto aún está en desarrollo. Puede haber errores o inconsistencias. Cualquier ayuda para mejorarlo es bienvenida.</div>
+        </div>
+      </div>
+      <span class="close" onclick="toggleFAQ()">&times;</span>
+    </div>
+  </div>
+
+  <!-- Enlaces de interés -->
+  <div id="linksModal" class="modal">
+    <div class="modal-content links-modal-content">
+      <h2>Enlaces de Interés</h2>
+      <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'oficiales')">Oficiales</button>
+        <button class="tab-button" onclick="openTab(event, 'noOficiales')">No Oficiales</button>
+      </div>
+      <div id="oficiales" class="tab-content active">
+        <div class="link-item">
+          <a href="https://www.econ.unicen.edu.ar/" target="_blank">Facultad de Ciencias Económicas</a>
+          <p>Información específica de cada carrera, incluyendo planes de estudio en PDF.</p>
+        </div>
+        <div class="link-item">
+          <a href="https://whatsapp.com/channel/0029VaYNDmj84OmKWJkiOn3v" target="_blank">Canal de Whatsapp de cartelera virtual</a>
+          <p>Avisos relacionados a la FCE.</p>
+        </div>
+        <div class="link-item">
+          <a href="https://www.instagram.com/agustinabanchiero" target="_blank">Instagram de la Facultad</a>
+          <p>Cuenta oficial de la Facultad.</p>
+        </div>
+      </div>
+      <div id="noOficiales" class="tab-content">
+        <div class="link-item">
+          <a href="https://linktr.ee/cece_franjamorada" target="_blank">Linktree Franja Morada</a>
+          <p>Web con enlaces de interés para estudiantes.</p>
+        </div>
+        <div class="link-item">
+          <a href="https://www.instagram.com/cecefranjamoradatandil/" target="_blank">Instagram de Franja Morada</a>
+          <p>Centro de Estudiantes de FCE.</p>
+        </div>
+        <div class="link-item">
+          <a href="https://drive.google.com/drive/folders/1es3w6E7UfTKW-zDkEHdbnXOpGFDxIwW9" target="_blank">Nube Morada</a>
+          <p>Drive con resúmenes y contenido útil.</p>
+        </div>
+      </div>
+      <span class="close" onclick="toggleLinksModal()">&times;</span>
+    </div>
+  </div>
+
+  <!-- Navegación -->
+  <nav>
+    <div class="career-buttons">
+      <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
+        <span>Licenciatura en</span><span>Gestión Tecnológica</span>
+      </button>
+      <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
+        <span>Licenciatura en</span><span>Economía Empresarial</span>
+      </button>
+      <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
+      <button id="btn-administracion" onclick="loadCareer('administracion')">
+        <span>Licenciatura en</span><span>Administración</span>
+      </button>
+    </div>
+    <button id="btn-save" onclick="saveChanges()">Guardar Cambios</button>
+    <button id="btn-download-pdf" onclick="downloadPlanPDF()">Descargar PDF</button>
+  </nav>
+
+  <main id="year-sections">
+    <!-- Contenido dinámico -->
+  </main>
+
+  <!-- Tutorial -->
+  <div id="tutorialModal" class="modal">
+    <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>
+    <div class="modal-content tutorial-content">
+      <div id="tutorialTabs">
+        <div class="tutorial-tab" id="tab1">
+          <h3>Bienvenido al plan de estudios interactivo.</h3>
+          <p>Te explicaremos su modo de uso.</p>
+        </div>
+        <div class="tutorial-tab" id="tab2">
+          <h3>¿Qué es esto?</h3>
+          <p>Un plan interactivo para estudiantes de la FCE que permite ver correlatividades y hacer seguimiento del avance académico.</p>
+          <p><b>Este proyecto es personal e independiente.</b></p>
+        </div>
+        <div class="tutorial-tab" id="tab3">
+          <h3>Solo indica el estado de cada materia y se habilitarán las que corresponden.</h3>
+          <video width="100%" loop muted autoplay playsinline>
+            <source src="media/video.mp4" type="video/mp4">
+            Tu navegador no soporta el tag de video.
+          </video>
+        </div>
+        <div class="tutorial-tab" id="tab4">
+          <h2>¿Listo para comenzar?</h2>
+          <label><input type="checkbox" id="noShowAgain"> No mostrar de nuevo</label>
+          <button onclick="closeTutorial()">Cerrar Tutorial</button>
+        </div>
       </div>
     </div>
+    <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>
+  </div>
 
-    <div id="linksModal" class="modal">
-      <div class="modal-content links-modal-content">
-        <h2>Enlaces de Interés</h2>
-        <div class="tabs">
-          <button class="tab-button active" onclick="openTab(event, 'oficiales')">Oficiales</button>
-          <button class="tab-button" onclick="openTab(event, 'noOficiales')">No Oficiales</button>
-        </div>
-        <div id="oficiales" class="tab-content active">
-          <div class="link-item">
-            <a href="https://www.econ.unicen.edu.ar/" target="_blank">Facultad de Ciencias Económicas</a>
-            <p>Sitio web oficial de la Facultad de Ciencias Económicas. Aqui encontraras información especifica de cada carrera ademas de los planes de estudio en PDF.</p>
-          </div>
-          <div class="link-item">
-            <a href="https://whatsapp.com/channel/0029VaYNDmj84OmKWJkiOn3v" target="_blank">Canal de Whatsapp de cartelera virtual</a>
-            <p>Canal de Whatsapp sobre avisos relacionados a la Facultad de Ciencias Economicas.</p>
-          </div>
-          <div class="link-item">
-            <a href="https://www.instagram.com/agustinabanchiero?igsh=MTg4bnF6cWh5ajhnZQ==" target="_blank">Instagram de la Facultad</a>
-            <p>Instagram oficial de la Facultad.</p>
-          </div>
-        </div>
-        <div id="noOficiales" class="tab-content">
+  <div class="derechos">
+    <p>Copyright © 2024 PEFCE - FGL</p>
+  </div>
 
-          <div class="link-item">
-            <a href="https://linktr.ee/cece_franjamorada" target="_blank">Linktree Oficial de Franja Morada FCE</a>
-            <p>Web con enlaces de interes para los estudiantes.</p>
-          </div>
-
-          <div class="link-item">
-            <a href="https://www.instagram.com/cecefranjamoradatandil/" target="_blank">Instagram de Franja Morada Economicas</a>
-            <p>Cuenta oficial del centro de estudiantes de la FCE.</p>
-          </div>
-          
-          <div class="link-item">
-            <a href="https://drive.google.com/drive/folders/1es3w6E7UfTKW-zDkEHdbnXOpGFDxIwW9?usp=sharing&pli=1" target="_blank">Nube Morada</a>
-            <p>Drive con resumenes y contenido de diversas materias.</p>
-          </div>
-        </div>
-        <span class="close" onclick="toggleLinksModal()">&times;</span>
-      </div>
-    </div>
-
-    <nav>
-        <div class="career-buttons">
-            <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
-                <span>Licenciatura en</span>
-                <span>Gestión Tecnológica</span>
-            </button>
-            <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
-                <span>Licenciatura en</span>
-                <span>Economía Empresarial</span>
-            </button>
-            <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
-            <button id="btn-administracion" onclick="loadCareer('administracion')">
-                <span>Licenciatura en</span>
-                <span>Administración</span>
-            </button>
-        </div>
-        <button id="btn-save" onclick="saveChanges()">Guardar Cambios</button>
-        <button id="btn-download-pdf" onclick="downloadPlanPDF()">Descargar PDF</button>
-    </nav>
-    <main id="year-sections">
-        <!-- Las secciones de año se cargarán aquí dinámicamente -->
-    </main>
-
-    <div id="tutorialModal" class="modal">
-        <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>
-        <div class="modal-content tutorial-content">
-            <div id="tutorialTabs">
-                <div class="tutorial-tab" id="tab1">
-                    <h3>Bienvenido al plan de estudios interactivo.</h3>
-                    
-                    <p>Te explicaremos su modo de uso.</p>
-                    
-                </div>
-                <div class="tutorial-tab" id="tab2">
-                    <h3>Para entender que es esto.</h3>
-                    <p>Creamos un plan de estudios interactivo para los estudiantes que esten cursando en la FCE</p>
-                    <p>La idea es que sirva como forma de ver las correlatividades de forma no tan engorrosa como se venia haciendo hasta la actualidad.</p>
-                    <p>Ademas de servir como forma de llevar el seguimiento propio de la carrera y tambien de ver las materias que cada uno tiene permitido cursar.</p>
-                    <p><b>Importante: Dejar en claro que este es un proyecto personal y totalmente desligado e independiente de la facultad o cualquier centro de estudiantes.</b></p>
-                </div>
-                <div class="tutorial-tab" id="tab3">
-                    <h3>Solo indica tu estado actual de la materia/taller y se habilitarán las materias correspondientes.</h3>
-                    <video width="100%" loop muted autoplay playsinline>
-                        <source src="media/video.mp4" type="video/mp4">
-                        Tu navegador no soporta el tag de video.
-                    </video>
-                </div>
-                <div class="tutorial-tab" id="tab4">
-                    <h2>¿Listo para comenzar?</h2>
-                    <label>
-                        <input type="checkbox" id="noShowAgain"> No mostrar de nuevo
-                    </label>
-                    <button onclick="closeTutorial()">Cerrar Tutorial</button>
-                </div>
-            </div>
-        </div>
-        <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>
-    </div>
-    <div class="derechos">
-    <p> Copyright © 2024 PEFCE - FGL</p>
-</div>
-
-    <script src="script.js"></script>
-    <script src="LibreriasJS/jspdf.umd.min.js"></script>
-    <script src="LibreriasJS/jspdf.plugin.autotable.js"></script>
+  <script src="script.js"></script>
+  <script src="LibreriasJS/jspdf.umd.min.js"></script>
+  <script src="LibreriasJS/jspdf.plugin.autotable.js"></script>
 </body>
 </html>
