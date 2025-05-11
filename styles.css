@@ -528,10 +528,6 @@ main {
         width: 40px;
         margin: 0 3px;
     }
-    
-    h1 {
-        font-size: 0; /* Ocultar texto original */
-    }
        
     /* Asegurar que todos los botones tengan el mismo tamaño y formato */
     nav button,
