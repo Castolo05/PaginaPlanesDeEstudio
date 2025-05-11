@@ -446,7 +446,7 @@ main {
     background-color: #8e9834;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
     header {
         flex-wrap: nowrap;
         justify-content: space-between;
