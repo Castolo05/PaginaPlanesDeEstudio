@@ -125,7 +125,7 @@ nav button:hover {
 }
 
 #btn-save:hover {
-    background-color: #3da534;
+    background-color: #194d14;
     color: #ffffff;
 }
 
@@ -413,7 +413,7 @@ main {
 
 /* Estilo del botón de descarga PDF */
 #btn-download-pdf {
-    background-color: #b7d618;
+    background-color: #99b413;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -499,13 +499,19 @@ main {
         font-size: 1.2em;
     }
     
-    nav button,
+    #btn-gestion-tecnologica, 
+    #btn-contador-publico, 
+    #btn-administracion, 
+    #btn-economia-empresarial,
     #btn-save,
-    #btn-download-pdf {
+    #btn-download-pdf,
+    nav button {
         width: 100%;
         z-index: 1;
         font-size: 12px;
         height: 45px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
