@@ -102,11 +102,14 @@ nav button span {
     width: 180px;
 }
 
+#btn-save, #btn-download-pdf {
+    width: 140px;
+    position: relative;
+}
+
 #btn-save {
     background-color: #57da3c;
     color: #ffffff;
-    width: 140px;
-    position: relative;
 }
 
 nav button.active {
@@ -413,7 +416,7 @@ main {
     color: #bebebe;
 }
 
-/* Estilo original del botón de descarga PDF */
+/* Estilo del botón de descarga PDF */
 #btn-download-pdf {
     background-color: #b7d618;
     color: white;
@@ -428,8 +431,6 @@ main {
     align-items: center;
     justify-content: center;
     white-space: nowrap;
-    width: 140px
-    
 }
 
 #btn-download-pdf:hover {
@@ -479,9 +480,9 @@ main {
     #btn-save,
     #btn-download-pdf {
         margin-left: auto;
+        margin-right: auto;
         width: calc(100% - 20px);
     }
-
     
     .year-section, .mix-section {
         max-width: 100%;
@@ -515,7 +516,9 @@ main {
         font-size: 1.2em;
     }
     
-    nav button, #btn-download-pdf {
+    nav button,
+    #btn-save,
+    #btn-download-pdf {
         width: 100%;
         z-index: 1;
         font-size: 12px;
@@ -841,4 +844,3 @@ main {
         font-size: 14px;
     }
 }
-
