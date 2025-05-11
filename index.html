@@ -16,7 +16,7 @@
 
         const ancho = window.innerWidth;
 
-        if (ancho < 600) {
+        if (ancho >= 100 && ancho < 600) {
       document.title = tituloCorto;
       if (tituloH1) tituloH1.textContent = tituloCorto;
     } else if (ancho >= 600 && ancho < 1024) {
