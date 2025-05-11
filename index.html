@@ -9,12 +9,17 @@
 </head>
 <body>
   <header>
-    <img id="logo" src="media/enlace.png" alt="enlaces de interes" onclick="toggleLinksModal()">
-    <img id="dark-mode-toggle" src="media/modo_oscuro.png" alt="Cambiar modo" onclick="toggleDarkMode()">
+    <div class="header-left">
+      <img id="logo" src="media/enlace.png" alt="enlaces de interes" onclick="toggleLinksModal()">
+      <img id="contactanos" src="media/comunicarse.png" alt="Contactanos" onclick="window.open('https://forms.google.com', '_blank')">
+    </div>
     <div class="header-content">
         <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
     </div>
-    <img id="mensaje" src="media/pregunta.png" alt="Mensaje" onclick="toggleFAQ()">
+    <div class="header-right">
+      <img id="dark-mode-toggle" src="media/modo_oscuro.png" alt="Cambiar modo" onclick="toggleDarkMode()">
+      <img id="mensaje" src="media/pregunta.png" alt="Mensaje" onclick="toggleFAQ()">
+    </div>
   </header>
 
     <div id="faqModal" class="modal">

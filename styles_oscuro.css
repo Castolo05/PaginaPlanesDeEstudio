@@ -413,7 +413,7 @@ main {
 
 /* Estilo del botón de descarga PDF */
 #btn-download-pdf {
-    background-color: #99b413;
+    background-color: #b7d618;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -499,19 +499,13 @@ main {
         font-size: 1.2em;
     }
     
-    #btn-gestion-tecnologica, 
-    #btn-contador-publico, 
-    #btn-administracion, 
-    #btn-economia-empresarial,
+    nav button,
     #btn-save,
-    #btn-download-pdf,
-    nav button {
+    #btn-download-pdf {
         width: 100%;
         z-index: 1;
         font-size: 12px;
         height: 45px;
-        margin-left: auto;
-        margin-right: auto;
     }
 }
 
