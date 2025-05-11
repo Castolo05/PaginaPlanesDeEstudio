@@ -467,7 +467,9 @@ main {
         margin: 0 5px;
     }
     
-    
+    h1 {
+        font-size: 1.5em;
+    }
     
     nav {
         flex-direction: column;

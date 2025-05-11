@@ -463,7 +463,9 @@ main {
         margin: 0 5px;
     }
     
-    
+    h1 {
+        font-size: 1.5em;
+    }
     
     nav {
         flex-direction: column;
@@ -523,9 +525,7 @@ main {
         margin: 0 3px;
     }
     
-    h1 {
-        font-size: 0; /* Ocultar texto original */
-    }
+    
        
     /* Asegurar que todos los botones tengan el mismo tamaño y formato */
     nav button,
