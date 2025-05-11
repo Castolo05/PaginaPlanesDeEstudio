@@ -6,34 +6,6 @@
   <title>Planes de Estudio - Facultad de Ciencias Económicas</title>
   <link rel="icon" href="media/icono.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
-
-  <script>
-    function actualizarTitulo() {
-      const tituloLargo = "Planes de Estudio - Facultad de Ciencias Económicas";
-      const tituloMedio = "Planes de Estudio - FCE";
-      const tituloCorto = "PDE - FCE";
-      const tituloH1 = document.querySelector("header h1");
-
-      const ancho = window.innerWidth;
-      // console.log("Ancho actual:", ancho); // Descomentar para debug
-
-      if (ancho >= 100 && ancho < 600) {
-        document.title = tituloCorto;
-        if (tituloH1) tituloH1.textContent = tituloCorto;
-      } else if (ancho >= 600 && ancho < 1024) {
-        document.title = tituloMedio;
-        if (tituloH1) tituloH1.textContent = tituloMedio;
-      } else {
-        document.title = tituloLargo;
-        if (tituloH1) tituloH1.textContent = tituloLargo;
-      }
-    }
-
-    // Escuchar diferentes eventos para mayor compatibilidad
-    window.addEventListener("DOMContentLoaded", actualizarTitulo);
-    window.addEventListener("resize", actualizarTitulo);
-    window.addEventListener("load", actualizarTitulo);
-  </script>
 </head>
 
 </head>
@@ -182,5 +154,35 @@
   <script src="script.js"></script>
   <script src="LibreriasJS/jspdf.umd.min.js"></script>
   <script src="LibreriasJS/jspdf.plugin.autotable.js"></script>
+  <script>
+    function actualizarTitulo() {
+      const tituloLargo = "Planes de Estudio - Facultad de Ciencias Económicas";
+      const tituloMedio = "Planes de Estudio - FCE";
+      const tituloCorto = "PDE - FCE";
+  
+      const tituloH1 = document.querySelector("header h1");
+      const ancho = window.innerWidth;
+  
+      let tituloActual = "";
+  
+      if (ancho >= 100 && ancho < 600) {
+        tituloActual = tituloCorto;
+      } else if (ancho >= 600 && ancho < 1024) {
+        tituloActual = tituloMedio;
+      } else {
+        tituloActual = tituloLargo;
+      }
+  
+      document.title = tituloActual;
+      if (tituloH1) {
+        tituloH1.textContent = tituloActual;
+      } else {
+        console.warn("No se encontró el <h1> en el DOM.");
+      }
+    }
+  
+    window.addEventListener("resize", actualizarTitulo);
+    window.addEventListener("load", actualizarTitulo);
+  </script>
 </body>
 </html>
