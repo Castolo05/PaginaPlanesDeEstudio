@@ -186,7 +186,7 @@ function loadCareer(careerName) {
     
         const allCourses = careers[careerName].filter(c => c.year === year);
     
-        if (year >= 3) {
+         if (year >= 3) {
             // Para años 3 y superiores, separar por cuatrimestres
             const courseGridA = document.createElement('div');
             const courseGridB = document.createElement('div');
@@ -405,30 +405,74 @@ window.onclick = function(event) {
     }
 }
 
-function saveChanges() {
+async function saveChanges() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Debes iniciar sesión primero');
+        return;
+    }
+
     const courseStates = {};
     careers[currentCareer].forEach(course => {
         const courseDiv = document.getElementById(`course-${course.id}`);
         courseStates[course.id] = courseDiv.className.split(' ')[1];
     });
-    localStorage.setItem(`${currentCareer}-states`, JSON.stringify(courseStates));
-    alert('Cambios guardados correctamente');
+
+    try {
+        const response = await fetch('http://localhost:4000/api/progress', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                career: currentCareer,
+                states: courseStates
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('Progreso guardado correctamente en la nube.');
+        } else {
+            alert('Error al guardar el progreso.');
+        }
+    } catch (error) {
+        console.error('Error al guardar:', error);
+        alert('Ocurrió un error al guardar el progreso.');
+    }
 }
 
-function loadSavedState() {
-    const savedStates = localStorage.getItem(`${currentCareer}-states`);
-    if (savedStates) {
-        const courseStates = JSON.parse(savedStates);
+
+async function loadSavedState() {
+    const token = localStorage.getItem('token');
+    if (!token) return; // Usuario no logueado, no carga nada
+
+    try {
+        const response = await fetch('http://localhost:4000/api/load', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                career: currentCareer
+            })
+        });
+
+        const data = await response.json();
+        const courseStates = data.states;
+
         Object.keys(courseStates).forEach(courseId => {
             const courseDiv = document.getElementById(`course-${courseId}`);
             if (courseDiv) {
                 courseDiv.className = `course ${courseStates[courseId]}`;
             }
         });
+    } catch (error) {
+        console.error('Error al cargar progreso:', error);
     }
 }
-
-// Funciones para el tutorial
 
 
 // Evento DOMContentLoaded
