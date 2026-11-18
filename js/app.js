@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.2';
-import * as reglasMod from './reglas.js?v=2.1.2';
-import * as almacen from './almacenamiento.js?v=2.1.2';
+import config from './config.js?v=2.1.3';
+import * as reglasMod from './reglas.js?v=2.1.3';
+import * as almacen from './almacenamiento.js?v=2.1.3';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen,
@@ -285,10 +285,13 @@ const formatearNota = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2).rep
 function renderPromedio() {
     const r = calcularResumen(carrera, plan.reglas, progresoActual());
     $('#promedio').hidden = false;
-    $('#promedio-valor').textContent = r.promedio === null ? '—' : formatearPromedio(r.promedio);
-    $('#promedio-detalle').textContent = r.promedio === null
-        ? 'Marcá un final como aprobado y cargá su nota para calcularlo.'
-        : `Calculado con ${r.cantidadNotas} ${r.cantidadNotas === 1 ? 'nota' : 'notas'} (${r.aprobadas} ${r.aprobadas === 1 ? 'materia aprobada' : 'materias aprobadas'} en total).`;
+    const valor = r.promedio === null ? '—' : formatearPromedio(r.promedio);
+    const detalle = r.promedio === null
+        ? 'Marcá un final como aprobado y cargá su nota para calcular el promedio.'
+        : `Promedio ${valor}, calculado con ${r.cantidadNotas} ${r.cantidadNotas === 1 ? 'nota' : 'notas'} (${r.aprobadas} ${r.aprobadas === 1 ? 'materia aprobada' : 'materias aprobadas'} en total).`;
+    $('#promedio-valor').textContent = valor;
+    $('#promedio').title = detalle;
+    $('#promedio').setAttribute('aria-label', detalle);
 }
 
 const formatearPromedio = (n) => n.toFixed(2).replace('.', ',');
@@ -471,7 +474,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.2');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.3');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
