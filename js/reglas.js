@@ -176,3 +176,57 @@ export function normalizarNota(valor) {
     if (!Number.isFinite(n) || n < 0 || n > 10) return null;
     return Math.round(n * 100) / 100;
 }
+
+// Todas las materias que dependen (directa o indirectamente) de una materia
+export function dependientesDe(carrera, materia) {
+    const resultado = new Map();
+    const pendientes = [materia];
+    while (pendientes.length) {
+        const actual = pendientes.shift();
+        for (const m of materiasQueHabilita(carrera, actual)) {
+            if (!resultado.has(m.id)) {
+                resultado.set(m.id, m);
+                pendientes.push(m);
+            }
+        }
+    }
+    return [...resultado.values()];
+}
+
+// Después de cambiar una materia, desmarca en cadena las materias que dependen
+// de ella y ya no cumplen sus correlativas. Cada una baja solo lo necesario:
+// un final aprobado pasa a "cursada" si las correlativas siguen cursadas, o a
+// "pendiente" si tampoco alcanza para cursarla. Las notas de los finales que se
+// desmarcan se borran. Los requisitos de año (12 finales, años completos) no
+// desmarcan nada: esas materias quedan marcadas para revisar.
+// Devuelve un progreso nuevo (no modifica el recibido) y la lista de cambios.
+export function aplicarCascada(carrera, reglas, progreso, materiaCambiada) {
+    const nuevo = {};
+    for (const [id, v] of Object.entries(progreso)) nuevo[id] = { ...v };
+    const afectadas = dependientesDe(carrera, materiaCambiada);
+    const cambios = [];
+
+    let huboCambios = true;
+    while (huboCambios) {
+        huboCambios = false;
+        for (const m of afectadas) {
+            const estado = estadoDe(nuevo, m.id);
+            if (estado === 'pendiente') continue;
+            const a = analizarMateria(carrera, reglas, nuevo, m);
+            let destino = estado;
+            if (a.faltanParaCursar.length) destino = 'pendiente';
+            else if (estado === 'aprobada' && a.faltanParaFinal.length) {
+                destino = estadosPermitidos(m).includes('cursada') ? 'cursada' : 'pendiente';
+            }
+            if (destino === estado) continue;
+
+            const previo = cambios.find((c) => c.materia.id === m.id);
+            if (previo) previo.a = destino;
+            else cambios.push({ materia: m, de: estado, a: destino });
+            if (destino === 'pendiente') delete nuevo[m.id];
+            else nuevo[m.id] = { estado: destino }; // al dejar de estar aprobada pierde la nota
+            huboCambios = true;
+        }
+    }
+    return { progreso: nuevo, cambios };
+}

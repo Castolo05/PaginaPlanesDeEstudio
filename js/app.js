@@ -1,11 +1,11 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.3';
-import * as reglasMod from './reglas.js?v=2.1.3';
-import * as almacen from './almacenamiento.js?v=2.1.3';
+import config from './config.js?v=2.1.4';
+import * as reglasMod from './reglas.js?v=2.1.4';
+import * as almacen from './almacenamiento.js?v=2.1.4';
 
 const {
-    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen,
+    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada,
     materiasQueHabilita, normalizarNota, nombreAnio, describirFaltantes,
 } = reglasMod;
 
@@ -40,12 +40,28 @@ function el(tag, attrs = {}, ...hijos) {
     return nodo;
 }
 
-function aviso(mensaje, tipo = 'info') {
+// Aviso temporal. Opcionalmente con un botón de acción (por ejemplo "Deshacer").
+function aviso(mensaje, tipo = 'info', accion = null) {
     const caja = $('#avisos');
-    const nodo = el('div', { class: `aviso aviso-${tipo}`, text: mensaje });
+    const nodo = el('div', { class: `aviso aviso-${tipo}` }, el('span', { text: mensaje }));
+    const duracion = accion ? 9000 : 4200;
+    if (accion) {
+        // Solo un "Deshacer" a la vez: uno anterior restauraría una versión más vieja
+        for (const viejo of caja.querySelectorAll('.aviso-con-accion')) viejo.remove();
+        nodo.classList.add('aviso-con-accion');
+        nodo.append(el('button', {
+            type: 'button',
+            class: 'aviso-accion',
+            text: accion.texto,
+            onclick: () => {
+                nodo.remove();
+                accion.alHacer();
+            },
+        }));
+    }
     caja.append(nodo);
-    setTimeout(() => nodo.classList.add('saliendo'), 4200);
-    setTimeout(() => nodo.remove(), 4600);
+    setTimeout(() => nodo.classList.add('saliendo'), duracion);
+    setTimeout(() => nodo.remove(), duracion + 400);
 }
 
 function confirmar(texto) {
@@ -255,7 +271,7 @@ function renderDetalle(materia, idDetalle) {
     });
 
     let campoNota = null;
-    if (a.estado === 'aprobada' && materia.tipo !== 'ingreso') {
+    if (a.estado === 'aprobada') {
         const nota = progresoActual()[materia.id]?.nota;
         campoNota = el('label', { class: 'campo-nota' },
             el('span', { text: 'Nota del final' }),
@@ -319,20 +335,39 @@ function cambiarEstado(materia, estado) {
         aviso(error, 'error');
         return;
     }
+    const anterior = JSON.parse(JSON.stringify(progreso)); // para "Deshacer"
+    const idCarrera = carrera.id;
     if (estado === 'pendiente') delete progreso[materia.id];
     else progreso[materia.id] = { ...progreso[materia.id], estado };
     if (estado !== 'aprobada' && progreso[materia.id]) delete progreso[materia.id].nota;
 
+    // Desmarcar en cadena las materias que dependían de esta
+    const { progreso: final, cambios } = aplicarCascada(carrera, plan.reglas, progreso, materia);
+    datos.progreso[carrera.id] = final;
+
     guardar();
     redibujar();
-    // Al aprobar un final, llevar el cursor directo al campo de la nota
-    if (estado === 'aprobada' && materia.tipo !== 'ingreso') {
+    // Al aprobar, llevar el cursor directo al campo de la nota
+    if (estado === 'aprobada') {
         document.querySelector(`[data-foco="nota-${materia.id}"]`)?.focus({ preventScroll: true });
     }
 
-    const conflictos = Object.values(analisis).filter((x) => x.conflicto).length;
-    if (estado !== 'aprobada' && conflictos) {
-        aviso(`${conflictos === 1 ? 'Hay 1 materia marcada' : `Hay ${conflictos} materias marcadas`} para revisar. No se borró nada.`, 'advertencia');
+    if (cambios.length) {
+        const nombres = cambios.map((c) => c.materia.nombre);
+        const lista = nombres.length > 3 ? `${nombres.slice(0, 3).join(', ')} y ${nombres.length - 3} más` : nombres.join(', ');
+        aviso(
+            `${cambios.length === 1 ? 'También se desmarcó' : `También se desmarcaron ${cambios.length} materias`}: ${lista}.`,
+            'advertencia',
+            {
+                texto: 'Deshacer',
+                alHacer: () => {
+                    datos.progreso[idCarrera] = anterior;
+                    guardar();
+                    if (carrera.id === idCarrera) redibujar();
+                    aviso('Cambio deshecho.');
+                },
+            }
+        );
     }
 }
 
@@ -474,7 +509,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.3');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.4');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);

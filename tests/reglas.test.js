@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
     analizarMateria, validarCambio, calcularResumen, contarFinales, correlativasDe, normalizarNota,
+    aplicarCascada,
 } from '../js/reglas.js';
 import { sanear } from '../js/almacenamiento.js';
 
@@ -44,7 +45,7 @@ test('con la cursada de la correlativa se puede cursar, pero no aprobar el final
     assert.match(validarCambio(gt, plan.reglas, p, mat2, 'aprobada'), /final/);
 });
 
-test('desaprobar una correlativa NO borra estados: marca conflicto', () => {
+test('datos con una correlativa faltante (por ejemplo importados) se marcan como conflicto', () => {
     const p = { L0002: { estado: 'cursada' } }; // falta el ingreso
     const a = analizarMateria(gt, plan.reglas, p, materia(gt, 'L0002'));
     assert.equal(a.estado, 'cursada');
@@ -130,4 +131,39 @@ test('notas: acepta coma decimal y rechaza fuera de rango', () => {
 test('importar: descarta estados y notas inválidos', () => {
     const d = sanear({ progreso: { x: { A: { estado: 'aprobada', nota: 99 }, B: { estado: 'raro' }, C: { estado: 'cursada' } } } });
     assert.deepEqual(d.progreso.x, { A: { estado: 'aprobada' }, C: { estado: 'cursada' } });
+});
+
+test('cascada: desmarcar un final desmarca en cadena lo que depende de él', () => {
+    // Ingreso -> Matemática I -> Matemática II
+    const p = {
+        L0000: { estado: 'aprobada', nota: 9 },
+        L0002: { estado: 'aprobada', nota: 8 },
+        L0009: { estado: 'aprobada', nota: 7 },
+        L0006: { estado: 'aprobada', nota: 6 }, // no depende del ingreso
+    };
+    delete p.L0000; // el alumno desmarca el ingreso
+    const { progreso, cambios } = aplicarCascada(gt, plan.reglas, p, materia(gt, 'L0000'));
+    assert.equal(progreso.L0002, undefined);
+    assert.equal(progreso.L0009, undefined);
+    assert.deepEqual(progreso.L0006, { estado: 'aprobada', nota: 6 });
+    assert.deepEqual(cambios.map((c) => c.materia.id).sort(), ['L0002', 'L0009']);
+    assert.equal(p.L0002.estado, 'aprobada', 'no debe modificar el progreso recibido');
+});
+
+test('cascada: si la correlativa queda cursada, el final aprobado baja a cursada', () => {
+    const p = { L0000: { estado: 'aprobada' }, L0002: { estado: 'cursada' }, L0009: { estado: 'aprobada', nota: 7 } };
+    const { progreso, cambios } = aplicarCascada(gt, plan.reglas, p, materia(gt, 'L0002'));
+    assert.deepEqual(progreso.L0009, { estado: 'cursada' });
+    assert.deepEqual(cambios.map((c) => [c.materia.id, c.de, c.a]), [['L0009', 'aprobada', 'cursada']]);
+});
+
+test('cascada: una cursada que sigue habilitada no cambia', () => {
+    const p = { L0000: { estado: 'aprobada' }, L0002: { estado: 'cursada' }, L0009: { estado: 'cursada' } };
+    const { cambios } = aplicarCascada(gt, plan.reglas, p, materia(gt, 'L0002'));
+    assert.equal(cambios.length, 0);
+});
+
+test('nota: el ingreso y los talleres también suman al promedio', () => {
+    const p = { L0000: { estado: 'aprobada', nota: 10 }, LT001: { estado: 'aprobada', nota: 6 } };
+    assert.equal(calcularResumen(gt, plan.reglas, p).promedio, 8);
 });
