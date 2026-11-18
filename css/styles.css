@@ -266,6 +266,39 @@ button, input, select { font: inherit; color: inherit; }
 .accion-guardar { background: var(--aprobada-solido); border-color: var(--aprobada-solido); }
 .accion-guardar:hover { background: var(--aprobada-solido); filter: brightness(1.1); }
 
+/* ---------- Promedio ---------- */
+.promedio {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
+}
+.promedio-interior {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    padding: 10px 14px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+}
+.promedio-etiqueta {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-suave);
+}
+.promedio-valor {
+    font-family: var(--fuente-titulo);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--texto);
+    font-variant-numeric: tabular-nums;
+}
+.promedio-detalle { font-size: 0.88rem; color: var(--texto-suave); }
+
 /* ---------- Plan ---------- */
 .plan {
     display: grid;
@@ -391,6 +424,7 @@ button, input, select { font: inherit; color: inherit; }
 .campo-nota { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; }
 .campo-nota input {
     width: 72px;
+    text-align: center;
     padding: 5px 8px;
     border: 1px solid var(--borde-fuerte);
     border-radius: var(--radio);
@@ -612,6 +646,7 @@ button, input, select { font: inherit; color: inherit; }
     .acciones { padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px)); }
     .accion { flex: 1; min-height: 44px; }
 
+    .promedio { padding: 16px max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px)); }
     .plan { grid-template-columns: 1fr; padding: 16px max(12px, env(safe-area-inset-right, 0px)) 16px max(12px, env(safe-area-inset-left, 0px)); gap: 18px; }
 }
 

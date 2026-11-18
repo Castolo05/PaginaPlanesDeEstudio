@@ -1,11 +1,11 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.1';
-import * as reglasMod from './reglas.js?v=2.1.1';
-import * as almacen from './almacenamiento.js?v=2.1.1';
+import config from './config.js?v=2.1.2';
+import * as reglasMod from './reglas.js?v=2.1.2';
+import * as almacen from './almacenamiento.js?v=2.1.2';
 
 const {
-    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe,
+    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen,
     materiasQueHabilita, normalizarNota, nombreAnio, describirFaltantes,
 } = reglasMod;
 
@@ -163,6 +163,7 @@ function renderPlan() {
     }
     contenedor.replaceChildren(...columnas);
     contenedor.setAttribute('data-listo', '1');
+    renderPromedio();
 }
 
 function renderMateria(materia) {
@@ -257,7 +258,7 @@ function renderDetalle(materia, idDetalle) {
     if (a.estado === 'aprobada' && materia.tipo !== 'ingreso') {
         const nota = progresoActual()[materia.id]?.nota;
         campoNota = el('label', { class: 'campo-nota' },
-            el('span', { text: 'Nota' }),
+            el('span', { text: 'Nota del final' }),
             el('input', {
                 // type="text" para aceptar coma decimal ("7,5"); el teclado del celular sigue siendo numérico
                 type: 'text', inputmode: 'decimal', autocomplete: 'off', maxlength: '5',
@@ -279,6 +280,18 @@ function renderDetalle(materia, idDetalle) {
 }
 
 const formatearNota = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/, '').replace('.', ','));
+
+// Promedio general de la carrera (promedio simple de las notas cargadas)
+function renderPromedio() {
+    const r = calcularResumen(carrera, plan.reglas, progresoActual());
+    $('#promedio').hidden = false;
+    $('#promedio-valor').textContent = r.promedio === null ? '—' : formatearPromedio(r.promedio);
+    $('#promedio-detalle').textContent = r.promedio === null
+        ? 'Marcá un final como aprobado y cargá su nota para calcularlo.'
+        : `Calculado con ${r.cantidadNotas} ${r.cantidadNotas === 1 ? 'nota' : 'notas'} (${r.aprobadas} ${r.aprobadas === 1 ? 'materia aprobada' : 'materias aprobadas'} en total).`;
+}
+
+const formatearPromedio = (n) => n.toFixed(2).replace('.', ',');
 
 // Vuelve a dibujar sin perder el foco del teclado
 function redibujar() {
@@ -309,6 +322,10 @@ function cambiarEstado(materia, estado) {
 
     guardar();
     redibujar();
+    // Al aprobar un final, llevar el cursor directo al campo de la nota
+    if (estado === 'aprobada' && materia.tipo !== 'ingreso') {
+        document.querySelector(`[data-foco="nota-${materia.id}"]`)?.focus({ preventScroll: true });
+    }
 
     const conflictos = Object.values(analisis).filter((x) => x.conflicto).length;
     if (estado !== 'aprobada' && conflictos) {
@@ -454,7 +471,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.1');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.2');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
