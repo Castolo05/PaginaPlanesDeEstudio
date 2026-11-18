@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.2.2';
-import * as reglasMod from './reglas.js?v=2.2.2';
-import * as almacen from './almacenamiento.js?v=2.2.2';
+import config from './config.js?v=2.2.3';
+import * as reglasMod from './reglas.js?v=2.2.3';
+import * as almacen from './almacenamiento.js?v=2.2.3';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, requisitosDelAnio,
@@ -105,7 +105,10 @@ function aplicarConfig() {
         document.documentElement.style.setProperty(variable, valor);
     }
     if (config.marcaDeAgua?.src) {
-        document.documentElement.style.setProperty('--marca-agua', `url("${config.marcaDeAgua.src}")`);
+        // Dirección completa: una ruta relativa dentro de una variable CSS se resolvería
+        // desde css/ y no encontraría la imagen
+        const src = new URL(config.marcaDeAgua.src, document.baseURI).href;
+        document.documentElement.style.setProperty('--marca-agua', `url("${src}")`);
         if (config.marcaDeAgua.opacidad != null) {
             document.documentElement.style.setProperty('--marca-agua-opacidad', String(config.marcaDeAgua.opacidad));
         }
@@ -595,7 +598,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.2.2');
+            const { descargarPDF } = await import('./pdf.js?v=2.2.3');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
