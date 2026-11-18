@@ -18,6 +18,9 @@ export default {
     // Pie de página
     pie: 'PEFCE - FGL',
     anioInicio: 2024,
-    // Colores (cualquier variable de css/styles.css se puede sobrescribir)
+    // Imagen de fondo tenue, por ejemplo { src: 'media/leon.png', opacidad: 0.2 } (null = sin imagen)
+    marcaDeAgua: null,
+    // Colores (cualquier variable de css/styles.css se puede sobrescribir, además de
+    // --carrera-activa-fondo y --carrera-activa-texto para el botón de la carrera elegida)
     colores: {},
 };

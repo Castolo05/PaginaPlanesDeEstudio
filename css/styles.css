@@ -115,6 +115,20 @@
 }
 
 /* ---------- Base ---------- */
+/* Marca de agua opcional (js/config.js → marcaDeAgua) */
+body.con-marca-agua::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--marca-agua);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: min(70vmin, 600px);
+    opacity: var(--marca-agua-opacidad, 0.15);
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
@@ -236,15 +250,16 @@ button, input, select { font: inherit; color: inherit; }
 .carrera-prefijo { font-size: 0.78rem; opacity: 0.8; }
 .carrera-boton:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.6); }
 .carrera-boton.activa {
-    background: var(--superficie);
-    border-color: var(--superficie);
-    color: var(--marca);
+    /* --carrera-activa-fondo / --carrera-activa-texto: opcionales, desde js/config.js */
+    background: var(--carrera-activa-fondo, var(--superficie));
+    border-color: var(--carrera-activa-fondo, var(--superficie));
+    color: var(--carrera-activa-texto, var(--marca));
     font-weight: 700;
     box-shadow: inset 0 -3px 0 var(--acento);
 }
-:root[data-theme="dark"] .carrera-boton.activa { color: var(--texto); }
+:root[data-theme="dark"] .carrera-boton.activa { color: var(--carrera-activa-texto, var(--texto)); }
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .carrera-boton.activa { color: var(--texto); }
+    :root:not([data-theme="light"]) .carrera-boton.activa { color: var(--carrera-activa-texto, var(--texto)); }
 }
 
 .acciones { display: flex; gap: 8px; flex: none; }
