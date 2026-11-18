@@ -4,185 +4,245 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Planes de Estudio - Facultad de Ciencias Económicas</title>
+  <meta name="description" content="Plan de estudios interactivo de la Facultad de Ciencias Económicas (UNICEN): marcá tus materias, mirá las correlatividades, calculá tu promedio y descargá tu avance en PDF.">
+  <meta name="theme-color" content="#003366">
+  <meta property="og:title" content="Plan de estudios interactivo - FCE">
+  <meta property="og:description" content="Seguí tu avance en la carrera: correlatividades, materias habilitadas, promedio y PDF.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="media/iconos/icono-512.png">
   <link rel="icon" href="media/icono.ico" type="image/x-icon">
-  <link rel="stylesheet" href="styles.css">
-</head>
-
+  <link rel="apple-touch-icon" href="media/iconos/icono-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Aplica el tema guardado antes de pintar la página (evita el "parpadeo")
+    try {
+      var d = JSON.parse(localStorage.getItem('pefce.v2') || 'null');
+      var tema = d && d.tema ? d.tema : (localStorage.getItem('darkMode') === 'true' ? 'oscuro' : null);
+      if (tema) document.documentElement.dataset.theme = tema === 'oscuro' ? 'dark' : 'light';
+    } catch (e) {}
+  </script>
 </head>
 <body>
-  <header>
-    <div class="header-left">
-      <img id="logo" src="media/enlace.png" alt="enlaces de interes" onclick="toggleLinksModal()">
-      <img id="contactanos" src="media/comunicarse.png" alt="Contactanos" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeB-HBBFBD0XEBkbuqJoCKRi-wctDrPq0lvYQCiMofiqB_Ozg/viewform?usp=dialog')">
+  <a class="saltar" href="#plan">Saltar al plan de estudios</a>
+
+  <header class="encabezado">
+    <div class="encabezado-lado">
+      <button type="button" class="icono-boton" id="btn-enlaces" aria-label="Enlaces de interés" title="Enlaces de interés">
+        <img src="media/enlace.png" alt="" width="44" height="44">
+      </button>
+      <a class="icono-boton" id="btn-contacto" href="https://docs.google.com/forms/d/e/1FAIpQLSeB-HBBFBD0XEBkbuqJoCKRi-wctDrPq0lvYQCiMofiqB_Ozg/viewform?usp=dialog" target="_blank" rel="noopener" aria-label="Contactanos (abre un formulario)" title="Contactanos">
+        <img src="media/comunicarse.png" alt="" width="44" height="44">
+      </a>
     </div>
-    <div class="header-content">
-        <h1>Planes de Estudio - Facultad de Ciencias Económicas</h1>
-    </div>
-    <div class="header-right">
-      <img id="dark-mode-toggle" src="media/modo_oscuro.png" alt="Cambiar modo" onclick="toggleDarkMode()">
-      <img id="mensaje" src="media/pregunta.png" alt="Mensaje" onclick="toggleFAQ()">
+    <h1 class="encabezado-titulo" id="titulo">
+      <span class="t-largo">Planes de Estudio - Facultad de Ciencias Económicas</span>
+      <span class="t-medio">Planes de Estudio - FCE</span>
+      <span class="t-corto">PDE - FCE</span>
+    </h1>
+    <div class="encabezado-lado">
+      <button type="button" class="icono-boton" id="btn-tema" aria-label="Cambiar a modo oscuro" title="Cambiar modo">
+        <img src="media/modo_oscuro.png" alt="" width="44" height="44">
+      </button>
+      <button type="button" class="icono-boton" id="btn-ayuda" aria-label="Preguntas frecuentes" title="Preguntas frecuentes">
+        <img src="media/pregunta.png" alt="" width="44" height="44">
+      </button>
     </div>
   </header>
 
-  <!-- Preguntas Frecuentes -->
-  <div id="faqModal" class="modal">
-    <div class="modal-content">
-      <h2>Preguntas Frecuentes</h2>
-      <div class="faq-container">
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleAnswer(1)">¿Que necesito para poder cursar el 3er año?</div>
-          <div class="faq-answer" id="answer1">Para cursar 3ro necesitas tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleAnswer(2)">¿Que necesito para cursar 5to año?</div>
-          <div class="faq-answer" id="answer2">Para cursar 5to necesitas tener completos los primeros dos años de la carrera (incluyendo talleres).</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleAnswer(3)">¿Como puedo acceder a mas información sobre mi carrera?</div>
-          <div class="faq-answer" id="answer3">En la seccion de "enlaces de interes" encontrarás links a páginas oficiales y no oficiales con toda la información necesaria.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleAnswer(4)">¿Como se protege la privacidad de mis datos?</div>
-          <div class="faq-answer" id="answer4">Los datos se guardan solo en el almacenamiento local del navegador. Nadie más tiene acceso a ellos.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleAnswer(5)">¿Ya finalizó el desarrollo de esta web?</div>
-          <div class="faq-answer" id="answer5">Este proyecto aún está en desarrollo. Puede haber errores o inconsistencias. Cualquier ayuda para mejorarlo es bienvenida.</div>
-        </div>
-      </div>
-      <span class="close" onclick="toggleFAQ()">&times;</span>
-    </div>
-  </div>
-
-  <!-- Enlaces de interés -->
-  <div id="linksModal" class="modal">
-    <div class="modal-content links-modal-content">
-      <h2>Enlaces de Interés</h2>
-      <div class="tabs">
-        <button class="tab-button active" onclick="openTab(event, 'oficiales')">Oficiales</button>
-        <button class="tab-button" onclick="openTab(event, 'noOficiales')">No Oficiales</button>
-      </div>
-      <div id="oficiales" class="tab-content active">
-        <div class="link-item">
-          <a href="https://www.econ.unicen.edu.ar/" target="_blank">Facultad de Ciencias Económicas</a>
-          <p>Información específica de cada carrera, incluyendo planes de estudio detallados en PDF.</p>
-        </div>
-        <div class="link-item">
-          <a href="https://whatsapp.com/channel/0029VaYNDmj84OmKWJkiOn3v" target="_blank">Canal de Whatsapp de cartelera virtual</a>
-          <p>Avisos relacionados a la FCE.</p>
-        </div>
-        <div class="link-item">
-          <a href="https://www.instagram.com/econ_unicen/" target="_blank">Instagram de la Facultad</a>
-          <p>Cuenta oficial de la Facultad.</p>
-        </div>
-      </div>
-      <div id="noOficiales" class="tab-content">
-        <div class="link-item">
-          <a href="https://linktr.ee/cece_franjamorada" target="_blank">Linktree Franja Morada</a>
-          <p>Web con enlaces de interés para estudiantes.</p>
-        </div>
-        <div class="link-item">
-          <a href="https://www.instagram.com/cecefranjamoradatandil/" target="_blank">Instagram de Franja Morada</a>
-          <p>Centro de Estudiantes de FCE.</p>
-        </div>
-        <div class="link-item">
-          <a href="https://drive.google.com/drive/folders/1es3w6E7UfTKW-zDkEHdbnXOpGFDxIwW9" target="_blank">Nube Morada</a>
-          <p>Drive con resúmenes y contenido útil.</p>
-        </div>
-      </div>
-      <span class="close" onclick="toggleLinksModal()">&times;</span>
-    </div>
-  </div>
-
-  <!-- Navegación -->
-  <nav>
-    <div class="career-buttons">
-      <button id="btn-gestion-tecnologica" onclick="loadCareer('gestion-tecnologica')">
-        <span>Licenciatura en</span><span>Gestión Tecnológica</span>
-      </button>
-      <button id="btn-economia-empresarial" onclick="loadCareer('economia-empresarial')">
-        <span>Licenciatura en</span><span>Economía Empresarial</span>
-      </button>
-      <button id="btn-contador-publico" onclick="loadCareer('contador-publico')">Contador Público</button>
-      <button id="btn-administracion" onclick="loadCareer('administracion')">
-        <span>Licenciatura en</span><span>Administración</span>
-      </button>
-    </div>
-    <button id="btn-save" onclick="saveChanges()">Guardar Cambios</button>
-    <button id="btn-download-pdf" onclick="downloadPlanPDF()">Descargar PDF</button>
+  <nav class="barra-carreras" aria-label="Carreras">
+    <div class="lista-carreras" id="lista-carreras"></div>
   </nav>
 
-  <main id="year-sections">
-    <!-- Contenido dinámico -->
-  </main>
-
-  <!-- Tutorial -->
-  <div id="tutorialModal" class="modal">
-    <button id="prevButton" class="nav-button" onclick="changeTutorialTab(-1)">&lt;</button>
-    <div class="modal-content tutorial-content">
-      <div id="tutorialTabs">
-        <div class="tutorial-tab" id="tab1">
-          <h3>Bienvenido al plan de estudios interactivo.</h3>
-          <p>Te explicaremos su modo de uso.</p>
+  <section class="resumen" id="resumen" aria-label="Tu avance" hidden>
+    <div class="resumen-datos">
+      <div class="progreso">
+        <div class="progreso-texto">
+          <strong id="resumen-porcentaje">0%</strong>
+          <span id="resumen-detalle">0 de 0 materias aprobadas</span>
         </div>
-        <div class="tutorial-tab" id="tab2">
-          <h3>¿Qué es esto?</h3>
-          <p>Un plan interactivo para estudiantes de la FCE que permite ver correlatividades y hacer seguimiento del avance académico.</p>
-          <p><b>Este proyecto es personal e independiente.</b></p>
-        </div>
-        <div class="tutorial-tab" id="tab3">
-          <h3>Solo indica el estado de cada materia y se habilitarán las que corresponden.</h3>
-          <video width="100%" loop muted autoplay playsinline>
-            <source src="media/video.mp4" type="video/mp4">
-            Tu navegador no soporta el tag de video.
-          </video>
-        </div>
-        <div class="tutorial-tab" id="tab4">
-          <h2>¿Listo para comenzar?</h2>
-          <label><input type="checkbox" id="noShowAgain"> No mostrar de nuevo</label>
-          <button onclick="closeTutorial()">Cerrar Tutorial</button>
+        <div class="progreso-barra" role="progressbar" aria-labelledby="resumen-detalle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="resumen-barra">
+          <div class="progreso-relleno" id="resumen-relleno"></div>
         </div>
       </div>
+      <dl class="resumen-cifras">
+        <div><dt>Promedio</dt><dd id="resumen-promedio">—</dd></div>
+        <div><dt>Cursadas sin final</dt><dd id="resumen-cursadas">0</dd></div>
+        <div id="resumen-tercero-caja"><dt id="resumen-tercero-titulo">Finales para 3er año</dt><dd id="resumen-tercero">0/12</dd></div>
+      </dl>
     </div>
-    <button id="nextButton" class="nav-button" onclick="changeTutorialTab(1)">&gt;</button>
-  </div>
+    <div class="resumen-herramientas">
+      <label class="filtro">
+        <span>Mostrar</span>
+        <select id="filtro">
+          <option value="todas">Todas las materias</option>
+          <option value="disponibles">Las que puedo cursar o rendir</option>
+          <option value="final">Cursadas con final pendiente</option>
+          <option value="aprobadas">Aprobadas</option>
+        </select>
+      </label>
+      <button type="button" class="boton boton-primario" id="btn-pdf">Descargar PDF</button>
+      <details class="menu" id="menu-mas">
+        <summary class="boton">Más opciones</summary>
+        <div class="menu-lista" role="menu">
+          <button type="button" role="menuitem" id="btn-exportar">Exportar mi progreso</button>
+          <button type="button" role="menuitem" id="btn-importar">Importar progreso</button>
+          <button type="button" role="menuitem" id="btn-tutorial">Ver tutorial</button>
+          <button type="button" role="menuitem" id="btn-reiniciar" class="peligro">Reiniciar esta carrera</button>
+        </div>
+      </details>
+      <input type="file" id="input-importar" accept="application/json,.json" hidden>
+      <span class="guardado" id="estado-guardado" aria-live="polite"></span>
+    </div>
+  </section>
 
-  <div class="derechos">
-    <p>Copyright © 2024 PEFCE - FGL</p>
-  </div>
+  <ul class="leyenda" id="leyenda" aria-label="Referencias de colores" hidden>
+    <li><span class="muestra muestra-pendiente"></span>Puedo cursarla</li>
+    <li><span class="muestra muestra-cursada"></span>Cursada aprobada</li>
+    <li><span class="muestra muestra-aprobada"></span>Final aprobado</li>
+    <li><span class="muestra muestra-bloqueada"></span>Bloqueada (faltan correlativas)</li>
+    <li><span class="muestra muestra-conflicto"></span>Revisar (falta una correlativa)</li>
+  </ul>
 
-  <script src="script.js"></script>
-  <script src="LibreriasJS/jspdf.umd.min.js"></script>
-  <script src="LibreriasJS/jspdf.plugin.autotable.js"></script>
-  <script>
-    function actualizarTitulo() {
-      const tituloLargo = "Planes de Estudio - Facultad de Ciencias Económicas";
-      const tituloMedio = "Planes de Estudio - FCE";
-      const tituloCorto = "PDE - FCE";
-  
-      const tituloH1 = document.querySelector("header h1");
-      const ancho = window.innerWidth;
-  
-      let tituloActual = "PDE - FCE";
-  
-      if (ancho >= 100 && ancho < 600) {
-        tituloActual = tituloCorto;
-      } else if (ancho >= 600 && ancho < 1024) {
-        tituloActual = tituloMedio;
-      } else {
-        tituloActual = tituloLargo;
-      }
-  
-      document.title = tituloActual;
-      if (tituloH1) {
-        tituloH1.textContent = tituloActual;
-      } else {
-        console.warn("No se encontró el <h1> en el DOM.");
-      }
-    }
-  
-    window.addEventListener("resize", actualizarTitulo);
-    window.addEventListener("load", actualizarTitulo);
-  </script>
+  <main id="plan" class="plan" tabindex="-1" aria-live="polite">
+    <p class="plan-mensaje">Cargando plan de estudios…</p>
+  </main>
+
+  <footer class="pie">
+    <p id="pie-texto">Copyright © 2024 PEFCE - FGL</p>
+    <p class="pie-privacidad">Tus datos se guardan solo en este navegador.</p>
+  </footer>
+
+  <!-- Preguntas frecuentes -->
+  <dialog id="dialogo-faq" class="dialogo" aria-labelledby="faq-titulo">
+    <div class="dialogo-contenido">
+      <button type="button" class="dialogo-cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+      <h2 id="faq-titulo">Preguntas frecuentes</h2>
+      <details class="faq">
+        <summary>¿Qué necesito para poder cursar el 3er año?</summary>
+        <p>Para cursar 3ro necesitás tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados. El curso de ingreso no cuenta. En la barra de avance ves cuántos llevás.</p>
+      </details>
+      <details class="faq">
+        <summary>¿Qué necesito para cursar 5to año?</summary>
+        <p>Para cursar 5to necesitás tener completos los primeros dos años de la carrera (incluyendo talleres).</p>
+      </details>
+      <details class="faq">
+        <summary>¿Qué significa una materia con el aviso “Revisar”?</summary>
+        <p>Que le marcaste un estado (cursada o final) pero alguna correlativa ya no está aprobada. No borramos nada: tocá la materia para ver qué falta y corregilo.</p>
+      </details>
+      <details class="faq">
+        <summary>¿Tengo que guardar los cambios?</summary>
+        <p>No. Cada cambio se guarda automáticamente en tu navegador. Para pasarlo a otro dispositivo usá “Más opciones → Exportar mi progreso” y después “Importar progreso” en el otro.</p>
+      </details>
+      <details class="faq">
+        <summary>¿Cómo puedo acceder a más información sobre mi carrera?</summary>
+        <p>En la sección de “Enlaces de interés” (ícono de cadena, arriba a la izquierda) encontrás links a páginas oficiales y no oficiales.</p>
+      </details>
+      <details class="faq">
+        <summary>¿Cómo se protege la privacidad de mis datos?</summary>
+        <p>Los datos se guardan solo en el almacenamiento local de tu navegador. Nadie más tiene acceso a ellos.</p>
+      </details>
+      <details class="faq">
+        <summary>¿Ya finalizó el desarrollo de esta web?</summary>
+        <p>El proyecto sigue en desarrollo. Puede haber errores o inconsistencias: si encontrás uno, avisanos desde el ícono de contacto. Cualquier ayuda es bienvenida.</p>
+      </details>
+    </div>
+  </dialog>
+
+  <!-- Enlaces de interés -->
+  <dialog id="dialogo-enlaces" class="dialogo" aria-labelledby="enlaces-titulo">
+    <div class="dialogo-contenido">
+      <button type="button" class="dialogo-cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+      <h2 id="enlaces-titulo">Enlaces de interés</h2>
+      <div class="pestanias" role="tablist" aria-label="Tipo de enlace">
+        <button type="button" role="tab" id="tab-oficiales" aria-controls="panel-oficiales" aria-selected="true">Oficiales</button>
+        <button type="button" role="tab" id="tab-no-oficiales" aria-controls="panel-no-oficiales" aria-selected="false" tabindex="-1">No oficiales</button>
+      </div>
+      <div class="panel-enlaces" role="tabpanel" id="panel-oficiales" aria-labelledby="tab-oficiales">
+        <a class="enlace" href="https://www.econ.unicen.edu.ar/" target="_blank" rel="noopener">
+          <strong>Facultad de Ciencias Económicas</strong>
+          <span>Información de cada carrera, incluidos los planes de estudio en PDF.</span>
+        </a>
+        <a class="enlace" href="https://whatsapp.com/channel/0029VaYNDmj84OmKWJkiOn3v" target="_blank" rel="noopener">
+          <strong>Canal de WhatsApp de cartelera virtual</strong>
+          <span>Avisos relacionados con la FCE.</span>
+        </a>
+        <a class="enlace" href="https://www.instagram.com/econ_unicen/" target="_blank" rel="noopener">
+          <strong>Instagram de la Facultad</strong>
+          <span>Cuenta oficial de la Facultad.</span>
+        </a>
+      </div>
+      <div class="panel-enlaces" role="tabpanel" id="panel-no-oficiales" aria-labelledby="tab-no-oficiales" hidden>
+        <a class="enlace" href="https://linktr.ee/cece_franjamorada" target="_blank" rel="noopener">
+          <strong>Linktree Franja Morada</strong>
+          <span>Web con enlaces de interés para estudiantes.</span>
+        </a>
+        <a class="enlace" href="https://www.instagram.com/cecefranjamoradatandil/" target="_blank" rel="noopener">
+          <strong>Instagram de Franja Morada</strong>
+          <span>Centro de Estudiantes de la FCE.</span>
+        </a>
+        <a class="enlace" href="https://drive.google.com/drive/folders/1es3w6E7UfTKW-zDkEHdbnXOpGFDxIwW9" target="_blank" rel="noopener">
+          <strong>Nube Morada</strong>
+          <span>Drive con resúmenes y contenido útil.</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Tutorial -->
+  <dialog id="dialogo-tutorial" class="dialogo dialogo-tutorial" aria-labelledby="tutorial-titulo">
+    <div class="dialogo-contenido">
+      <button type="button" class="dialogo-cerrar" data-cerrar aria-label="Cerrar tutorial">&times;</button>
+      <h2 id="tutorial-titulo" class="visualmente-oculto">Tutorial</h2>
+      <section class="paso" data-paso="1">
+        <h3>Bienvenido al plan de estudios interactivo</h3>
+        <p>Te explicamos en 30 segundos cómo usarlo.</p>
+      </section>
+      <section class="paso" data-paso="2" hidden>
+        <h3>¿Qué es esto?</h3>
+        <p>Un plan interactivo para estudiantes de la FCE que permite ver correlatividades y hacer seguimiento del avance académico.</p>
+        <p><b>Este proyecto es personal e independiente.</b> <span id="nota-tutorial"></span></p>
+      </section>
+      <section class="paso" data-paso="3" hidden>
+        <h3>Tocá una materia e indicá su estado</h3>
+        <p>Se habilitan solas las materias que podés cursar. Al tocar una materia se resaltan sus correlativas.</p>
+        <video width="560" loop muted playsinline preload="none">
+          <source src="media/video.mp4" type="video/mp4">
+          Tu navegador no puede reproducir el video.
+        </video>
+      </section>
+      <section class="paso" data-paso="4" hidden>
+        <h3>¿Listo para comenzar?</h3>
+        <ul class="tips">
+          <li>Todo se guarda automáticamente en este navegador.</li>
+          <li>Cargá la nota de cada final y calculamos tu promedio.</li>
+          <li>Usá “Mostrar” para ver solo lo que podés cursar o rendir.</li>
+          <li>Exportá tu progreso para no perderlo si cambiás de dispositivo.</li>
+        </ul>
+        <label class="casilla"><input type="checkbox" id="tutorial-no-mostrar"> No mostrar de nuevo</label>
+        <button type="button" class="boton boton-primario" data-cerrar>Empezar</button>
+      </section>
+      <div class="tutorial-navegacion">
+        <button type="button" class="boton" id="tutorial-anterior">Anterior</button>
+        <div class="puntos" id="tutorial-puntos" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <button type="button" class="boton boton-primario" id="tutorial-siguiente">Siguiente</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Confirmación genérica (reemplaza a confirm()) -->
+  <dialog id="dialogo-confirmar" class="dialogo dialogo-chico" aria-labelledby="confirmar-texto">
+    <form method="dialog" class="dialogo-contenido">
+      <p id="confirmar-texto"></p>
+      <div class="dialogo-acciones">
+        <button class="boton" value="no">Cancelar</button>
+        <button class="boton boton-peligro" value="si">Confirmar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="avisos" id="avisos" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

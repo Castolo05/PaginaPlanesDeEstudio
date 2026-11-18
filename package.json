@@ -1,0 +1,10 @@
+{
+  "name": "plan-de-estudios-fce",
+  "private": true,
+  "type": "module",
+  "description": "Plan de estudios interactivo de la FCE. Página estática: no necesita instalar dependencias.",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node --test tests/*.test.js"
+  }
+}
