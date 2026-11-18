@@ -302,3 +302,54 @@ export function compartirEntreCarreras(plan, progresoPorCarrera, carreraOrigenId
     }
     return { progreso: nuevo, cambios };
 }
+
+// La misma materia en todas las carreras que la tienen (mismo código y nombre),
+// incluida la carrera de origen.
+export function equivalentes(plan, carreraId, materiaId) {
+    const origen = plan.carreras.find((c) => c.id === carreraId);
+    const materia = origen?.materias.find((m) => m.id === materiaId);
+    if (!materia) return [];
+    const lista = [];
+    for (const c of plan.carreras) {
+        const igual = c.materias.find((m) => m.id === materia.id && m.nombre === materia.nombre);
+        if (igual) lista.push({ carrera: c, materia: igual });
+    }
+    return lista;
+}
+
+// Aplica el nuevo valor de una materia ({ estado, nota? } o null = sin cursar)
+// en todas las carreras que la tienen y, en cada una, desmarca en cadena las
+// materias que dependían de ella. Devuelve un progreso nuevo por carrera y las
+// materias desmarcadas por la cadena (con su carrera).
+export function aplicarCambioEnTodas(plan, progresoPorCarrera, carreraId, materiaId, nuevoValor) {
+    const nuevo = {};
+    for (const [id, p] of Object.entries(progresoPorCarrera)) {
+        nuevo[id] = {};
+        for (const [mid, v] of Object.entries(p)) nuevo[id][mid] = { ...v };
+    }
+    const cambios = [];
+    for (const { carrera, materia } of equivalentes(plan, carreraId, materiaId)) {
+        const prog = (nuevo[carrera.id] ||= {});
+        if (!nuevoValor || nuevoValor.estado === 'pendiente') delete prog[materia.id];
+        else if (estadosPermitidos(materia).includes(nuevoValor.estado)) prog[materia.id] = { ...nuevoValor };
+        else continue;
+        const r = aplicarCascada(carrera, plan.reglas, prog, materia);
+        nuevo[carrera.id] = r.progreso;
+        for (const c of r.cambios) cambios.push({ ...c, carrera });
+    }
+    return { progreso: nuevo, cambios };
+}
+
+// Pone al día las carreras entre sí: cada materia compartida toma el estado más
+// avanzado que tenga en cualquiera de las carreras (solo suma). Se usa al abrir
+// la página, por si hay datos guardados antes de que existiera la sincronización.
+export function unificarCarreras(plan, progresoPorCarrera) {
+    let actual = progresoPorCarrera;
+    let total = 0;
+    for (const c of plan.carreras) {
+        const r = compartirEntreCarreras(plan, actual, c.id);
+        actual = r.progreso;
+        total += r.cambios.reduce((n, x) => n + x.materias.length, 0);
+    }
+    return { progreso: actual, cambios: total };
+}

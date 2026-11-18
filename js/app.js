@@ -1,12 +1,12 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.10';
-import * as reglasMod from './reglas.js?v=2.1.10';
-import * as almacen from './almacenamiento.js?v=2.1.10';
+import config from './config.js?v=2.2.0';
+import * as reglasMod from './reglas.js?v=2.2.0';
+import * as almacen from './almacenamiento.js?v=2.2.0';
 
 const {
-    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada, requisitosDelAnio,
-    compartirEntreCarreras,
+    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, requisitosDelAnio,
+    aplicarCambioEnTodas, unificarCarreras,
     materiasQueHabilita, normalizarNota, nombreAnio, describirFaltantes,
 } = reglasMod;
 
@@ -76,13 +76,12 @@ function confirmar(texto) {
     });
 }
 
-function guardar(confirmarAlUsuario = false) {
+function guardar() {
     const ok = almacen.guardar(datos);
     if (!ok) {
         aviso('No se pudo guardar: tu navegador bloquea el almacenamiento local. Exportá tu progreso desde el ícono de ayuda para no perderlo.', 'error');
         return false;
     }
-    if (confirmarAlUsuario) aviso('Cambios guardados.');
     return true;
 }
 
@@ -148,51 +147,8 @@ function renderCarreras() {
     );
 }
 
-// Guardar cambios: además de guardar, pasa las materias aprobadas o cursadas de
-// una carrera a las otras que tienen la misma materia (solo suma, nunca borra).
-function guardarYCompartir(origenId) {
-    const { progreso, cambios } = compartirEntreCarreras(plan, datos.progreso, origenId);
-    datos.progreso = progreso;
-    if (!guardar()) return;
-    if (carrera) redibujar();
-    if (!cambios.length) {
-        aviso('Cambios guardados.');
-        return;
-    }
-    const detalle = cambios.map((c) => `${c.materias.length} en ${c.carrera.tituloCorto}`).join(', ');
-    const total = cambios.reduce((n, c) => n + c.materias.length, 0);
-    aviso(`Cambios guardados. ${total === 1 ? 'Se actualizó 1 materia compartida' : `Se actualizaron ${total} materias compartidas`} con otras carreras: ${detalle}.`);
-}
-
-// Materias de una carrera que todavía no se pasaron a las demás
-function pendientesDeCompartir(origenId) {
-    return compartirEntreCarreras(plan, datos.progreso, origenId).cambios;
-}
-
-// Punto en "Guardar cambios" cuando hay materias para pasar a otras carreras
-function actualizarAvisoGuardar() {
-    const boton = $('#btn-guardar');
-    const hay = carrera && pendientesDeCompartir(carrera.id).length > 0;
-    boton.classList.toggle('con-pendientes', Boolean(hay));
-    boton.title = hay ? 'Tenés materias para pasar a tus otras carreras' : '';
-    boton.setAttribute('aria-label', hay ? 'Guardar cambios (hay materias para pasar a otras carreras)' : 'Guardar cambios');
-}
-
 function seleccionarCarrera(id, porUsuario = false) {
-    const anterior = carrera;
     const elegida = plan.carreras.find((c) => c.id === id) || plan.carreras[0];
-    // Si se cambia de carrera con materias compartidas sin pasar, avisar y ofrecer pasarlas
-    if (porUsuario && anterior && anterior.id !== elegida.id) {
-        const pendientes = pendientesDeCompartir(anterior.id).find((c) => c.carrera.id === elegida.id);
-        if (pendientes) {
-            const n = pendientes.materias.length;
-            aviso(
-                `${n === 1 ? 'Hay 1 materia' : `Hay ${n} materias`} de ${anterior.tituloCorto} que todavía no pasaste a esta carrera. Se pasan al tocar “Guardar cambios”.`,
-                'info',
-                { texto: 'Pasarlas ahora', alHacer: () => guardarYCompartir(anterior.id) }
-            );
-        }
-    }
     carrera = elegida;
     datos.carrera = elegida.id;
     abiertas.clear();
@@ -225,7 +181,6 @@ function renderPlan() {
     contenedor.replaceChildren(...columnas);
     contenedor.setAttribute('data-listo', '1');
     renderPromedio();
-    actualizarAvisoGuardar();
     const abierta = materiaAbierta();
     if (abierta) pintarResaltado(abierta);
 }
@@ -424,15 +379,16 @@ function cambiarEstado(materia, estado) {
         aviso(error, 'error');
         return;
     }
-    const anterior = JSON.parse(JSON.stringify(progreso)); // para "Deshacer"
-    const idCarrera = carrera.id;
-    if (estado === 'pendiente') delete progreso[materia.id];
-    else progreso[materia.id] = { ...progreso[materia.id], estado };
-    if (estado !== 'aprobada' && progreso[materia.id]) delete progreso[materia.id].nota;
+    const anterior = JSON.parse(JSON.stringify(datos.progreso)); // para "Deshacer"
+    // La nota se conserva solo si sigue aprobada
+    const nuevoValor = estado === 'pendiente'
+        ? null
+        : { estado, ...(estado === 'aprobada' && typeof progreso[materia.id]?.nota === 'number' ? { nota: progreso[materia.id].nota } : {}) };
 
-    // Desmarcar en cadena las materias que dependían de esta
-    const { progreso: final, cambios } = aplicarCascada(carrera, plan.reglas, progreso, materia);
-    datos.progreso[carrera.id] = final;
+    // Se aplica en todas las carreras que tienen esta materia y, en cada una,
+    // se desmarcan en cadena las materias que dependían de ella
+    const { progreso: final, cambios } = aplicarCambioEnTodas(plan, datos.progreso, carrera.id, materia.id, nuevoValor);
+    datos.progreso = final;
 
     guardar();
     redibujar();
@@ -442,17 +398,18 @@ function cambiarEstado(materia, estado) {
     }
 
     if (cambios.length) {
-        const nombres = cambios.map((c) => c.materia.nombre);
+        const nombres = [...new Set(cambios.map((c) => c.materia.nombre))];
+        const carreras = new Set(cambios.map((c) => c.carrera.id));
         const lista = nombres.length > 3 ? `${nombres.slice(0, 3).join(', ')} y ${nombres.length - 3} más` : nombres.join(', ');
         aviso(
-            `${cambios.length === 1 ? 'También se desmarcó' : `También se desmarcaron ${cambios.length} materias`}: ${lista}.`,
+            `${nombres.length === 1 ? 'También se desmarcó' : `También se desmarcaron ${nombres.length} materias`}${carreras.size > 1 ? ` en ${carreras.size} carreras` : ''}: ${lista}.`,
             'advertencia',
             {
                 texto: 'Deshacer',
                 alHacer: () => {
-                    datos.progreso[idCarrera] = anterior;
+                    datos.progreso = anterior;
                     guardar();
-                    if (carrera.id === idCarrera) redibujar();
+                    redibujar();
                     aviso('Cambio deshecho.');
                 },
             }
@@ -469,8 +426,8 @@ function cambiarNota(materia, valor) {
         redibujar();
         return;
     }
-    if (nota === null) delete progreso[materia.id].nota;
-    else progreso[materia.id].nota = nota;
+    const nuevoValor = { estado: progreso[materia.id].estado, ...(nota === null ? {} : { nota }) };
+    datos.progreso = aplicarCambioEnTodas(plan, datos.progreso, carrera.id, materia.id, nuevoValor).progreso;
     guardar();
     redibujar();
 }
@@ -617,16 +574,13 @@ function prepararHerramientas() {
         }
     });
 
-    $('#btn-guardar').addEventListener('click', () => {
-        if (carrera) guardarYCompartir(carrera.id);
-    });
 
     $('#btn-pdf').addEventListener('click', async () => {
         const boton = $('#btn-pdf');
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.10');
+            const { descargarPDF } = await import('./pdf.js?v=2.2.0');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
@@ -656,6 +610,7 @@ function prepararHerramientas() {
             const ok = await confirmar('¿Reemplazar tu progreso actual por el del archivo? Esta acción no se puede deshacer.');
             if (!ok) return;
             datos = { ...importado, tema: datos.tema, tutorialOculto: datos.tutorialOculto };
+            datos.progreso = unificarCarreras(plan, datos.progreso).progreso;
             guardar();
             seleccionarCarrera(datos.carrera || carrera.id);
             aviso('Progreso importado correctamente.');
@@ -704,6 +659,12 @@ async function iniciar() {
         return;
     }
     datos = almacen.cargar(plan.carreras.map((c) => c.id));
+    // Poner al día las carreras entre sí (datos guardados antes de la sincronización)
+    const unificado = unificarCarreras(plan, datos.progreso);
+    if (unificado.cambios) {
+        datos.progreso = unificado.progreso;
+        guardar();
+    }
     aplicarTema();
     renderCarreras();
     seleccionarCarrera(datos.carrera || plan.carreras[0].id);

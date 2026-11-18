@@ -263,19 +263,8 @@ button, input, select { font: inherit; color: inherit; }
 }
 .accion:hover { background: rgba(255, 255, 255, 0.1); }
 .accion:disabled { opacity: 0.6; cursor: progress; }
-.accion-guardar { background: var(--aprobada-solido); border-color: var(--aprobada-solido); }
-.accion-guardar:hover { background: var(--aprobada-solido); filter: brightness(1.1); }
-.accion-guardar { position: relative; }
-/* Punto: hay materias para pasar a otras carreras */
-.accion-guardar.con-pendientes::after {
-    content: "";
-    position: absolute;
-    top: -4px; right: -4px;
-    width: 11px; height: 11px;
-    border-radius: 50%;
-    background: var(--acento);
-    border: 2px solid var(--marca-2);
-}
+
+
 
 /* ---------- Promedio (en la barra, junto a Guardar cambios) ---------- */
 .promedio {

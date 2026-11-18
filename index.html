@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
-  <link rel="stylesheet" href="css/styles.css?v=2.1.10">
+  <link rel="stylesheet" href="css/styles.css?v=2.2.0">
   <script>
     // Aplica el tema guardado antes de pintar la página (evita el "parpadeo")
     try {
@@ -61,7 +61,6 @@
           <span class="promedio-etiqueta">Promedio</span>
           <strong class="promedio-valor" id="promedio-valor">—</strong>
         </div>
-        <button type="button" class="accion accion-guardar" id="btn-guardar">Guardar cambios</button>
         <button type="button" class="accion" id="btn-pdf">Descargar PDF</button>
       </div>
     </div>
@@ -74,7 +73,7 @@
   <footer class="pie">
     <p id="pie-texto">Copyright © 2024 PEFCE - FGL</p>
     <p class="pie-privacidad">Tus datos se guardan solo en este navegador.</p>
-    <p class="pie-version">Versión 2.1.10</p>
+    <p class="pie-version">Versión 2.2.0</p>
   </footer>
 
   <!-- Preguntas frecuentes -->
@@ -100,7 +99,7 @@
       </details>
       <details class="faq">
         <summary>¿Qué pasa si desmarco una materia?</summary>
-        <p>Las materias que la tienen como correlativa se desmarcan automáticamente, en cadena. Si un final aprobado depende de una materia que queda solo cursada, pasa a “Cursada aprobada”. En el aviso que aparece podés tocar “Deshacer”.</p>
+        <p>Se desmarca en todas tus carreras, y las materias que la tienen como correlativa se desmarcan automáticamente, en cadena, en cada carrera. Si un final aprobado depende de una materia que queda solo cursada, pasa a “Cursada aprobada”. En el aviso que aparece podés tocar “Deshacer”.</p>
       </details>
       <details class="faq">
         <summary>¿Cómo se calcula el promedio?</summary>
@@ -108,11 +107,11 @@
       </details>
       <details class="faq">
         <summary>¿Tengo que guardar los cambios?</summary>
-        <p>Cada cambio se guarda automáticamente en tu navegador. El botón “Guardar cambios” además pasa tus materias aprobadas o cursadas a las otras carreras que tienen la misma materia (ver la pregunta siguiente). Para pasar tu progreso a otro dispositivo usá las opciones de abajo.</p>
+        <p>No. Cada cambio se guarda automáticamente en tu navegador. Para pasar tu progreso a otro dispositivo usá las opciones de abajo.</p>
       </details>
       <details class="faq">
         <summary>Si curso más de una carrera, ¿tengo que cargar dos veces las materias en común?</summary>
-        <p>No. Al tocar “Guardar cambios”, las materias aprobadas o cursadas de la carrera que estás viendo (con su nota) se pasan a las demás carreras que tienen la misma materia. Solo se suman avances: nunca se desmarca nada en otra carrera. Si desmarcás una materia, hacelo en cada carrera.</p>
+        <p>No. Cada cambio en una materia (aprobarla, marcarla como cursada, desmarcarla o cambiar su nota) se aplica automáticamente en todas las carreras que tienen esa misma materia.</p>
       </details>
       <details class="faq">
         <summary>¿Cómo puedo acceder a más información sobre mi carrera?</summary>
@@ -203,7 +202,7 @@
         <h3>¿Listo para comenzar?</h3>
         <ul class="tips">
           <li>Todo se guarda automáticamente en este navegador.</li>
-          <li>Al aprobar un final podés cargar su nota: tu promedio aparece junto a “Guardar cambios” y en el PDF.</li>
+          <li>Al aprobar un final podés cargar su nota: tu promedio aparece junto a “Descargar PDF” y en el PDF.</li>
           <li>Desde el ícono de ayuda podés exportar tu progreso para no perderlo si cambiás de dispositivo.</li>
         </ul>
         <label class="casilla"><input type="checkbox" id="tutorial-no-mostrar"> No mostrar de nuevo</label>
@@ -257,6 +256,6 @@
   <script nomodule>
     document.getElementById('plan').innerHTML = '<p class="plan-mensaje">Tu navegador es demasiado antiguo para esta página. Actualizalo o probá con otro navegador.</p>';
   </script>
-  <script type="module" src="js/app.js?v=2.1.10"></script>
+  <script type="module" src="js/app.js?v=2.2.0"></script>
 </body>
 </html>

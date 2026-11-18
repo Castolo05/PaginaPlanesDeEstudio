@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import {
     analizarMateria, validarCambio, calcularResumen, contarFinales, correlativasDe, normalizarNota,
     aplicarCascada, requisitosDelAnio, describirFaltantes, compartirEntreCarreras,
+    aplicarCambioEnTodas, unificarCarreras,
 } from '../js/reglas.js';
 import { sanear } from '../js/almacenamiento.js';
 
@@ -221,4 +222,32 @@ test('compartir: mismo código con distinto nombre no se considera la misma mate
         const igual = c.materias.find((m) => m.id === 'LT006').nombre === nombreOrigen;
         assert.equal(Boolean(progreso[c.id]?.LT006), igual, c.id);
     }
+});
+
+test('sincronizar: aprobar una materia la aprueba en todas las carreras que la tienen', () => {
+    const { progreso } = aplicarCambioEnTodas(plan, {}, 'administracion', 'L0000', { estado: 'aprobada', nota: 9 });
+    for (const c of plan.carreras) assert.deepEqual(progreso[c.id].L0000, { estado: 'aprobada', nota: 9 }, c.id);
+});
+
+test('sincronizar: desmarcar desmarca en todas las carreras y en cadena en cada una', () => {
+    const datos = {};
+    for (const c of plan.carreras) datos[c.id] = { L0000: { estado: 'aprobada' }, L0002: { estado: 'aprobada', nota: 8 } };
+    const { progreso, cambios } = aplicarCambioEnTodas(plan, datos, 'contador-publico', 'L0000', null);
+    for (const c of plan.carreras) {
+        assert.equal(progreso[c.id].L0000, undefined, c.id);
+        assert.equal(progreso[c.id].L0002, undefined, c.id);
+    }
+    assert.equal(cambios.length, plan.carreras.length);
+    assert.ok(datos.administracion.L0000, 'no debe modificar los datos recibidos');
+});
+
+test('sincronizar: al abrir, las carreras se ponen al día con lo más avanzado', () => {
+    const datos = { 'gestion-tecnologica': { L0000: { estado: 'aprobada' } }, administracion: { L0002: { estado: 'cursada' } } };
+    const { progreso, cambios } = unificarCarreras(plan, datos);
+    for (const c of plan.carreras) {
+        assert.equal(progreso[c.id].L0000.estado, 'aprobada', c.id);
+        assert.equal(progreso[c.id].L0002.estado, 'cursada', c.id);
+    }
+    assert.ok(cambios > 0);
+    assert.equal(unificarCarreras(plan, progreso).cambios, 0, 'una segunda pasada no cambia nada');
 });
