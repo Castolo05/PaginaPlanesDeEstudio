@@ -1,6 +1,8 @@
-import config from './config.js';
-import * as reglasMod from './reglas.js';
-import * as almacen from './almacenamiento.js';
+// El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
+// Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
+import config from './config.js?v=2.1.1';
+import * as reglasMod from './reglas.js?v=2.1.1';
+import * as almacen from './almacenamiento.js?v=2.1.1';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe,
@@ -15,7 +17,7 @@ let analisis = {};      // resultado de analizarCarrera
 const abiertas = new Set(); // materias con el detalle desplegado
 
 const $ = (sel, raiz = document) => raiz.querySelector(sel);
-const progresoActual = () => (datos.progreso[carrera.id] ||= {});
+const progresoActual = () => datos.progreso[carrera.id] || (datos.progreso[carrera.id] = {});
 
 const ETIQUETA_ESTADO = {
     pendiente: { materia: 'Sin cursar', practica: 'Sin cursar', taller: 'Sin aprobar', ingreso: 'Sin ingreso' },
@@ -160,6 +162,7 @@ function renderPlan() {
         );
     }
     contenedor.replaceChildren(...columnas);
+    contenedor.setAttribute('data-listo', '1');
 }
 
 function renderMateria(materia) {
@@ -434,9 +437,13 @@ function prepararTutorial() {
 // ---------- Herramientas ----------
 function prepararHerramientas() {
     $('#btn-tema').addEventListener('click', alternarTema);
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const consultaOscuro = window.matchMedia('(prefers-color-scheme: dark)');
+    const alCambiarSistema = () => {
         if (!datos.tema) aplicarTema();
-    });
+    };
+    // addListener: navegadores antiguos (Safari < 14)
+    if (consultaOscuro.addEventListener) consultaOscuro.addEventListener('change', alCambiarSistema);
+    else if (consultaOscuro.addListener) consultaOscuro.addListener(alCambiarSistema);
 
     $('#btn-guardar').addEventListener('click', () => {
         if (carrera) guardar(true);
@@ -447,7 +454,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.1');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
@@ -505,6 +512,7 @@ async function cargarPlan() {
 }
 
 function mostrarErrorCarga() {
+    $('#plan').setAttribute('data-listo', '1');
     $('#plan').replaceChildren(
         el('div', { class: 'plan-mensaje' },
             el('p', { text: 'No se pudo cargar el plan de estudios.' }),

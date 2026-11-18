@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=2.1.1">
   <script>
     // Aplica el tema guardado antes de pintar la página (evita el "parpadeo")
     try {
@@ -213,6 +213,33 @@
 
   <div class="avisos" id="avisos" role="status" aria-live="polite"></div>
 
-  <script type="module" src="js/app.js"></script>
+  <script>
+    // Si la aplicación no logra arrancar, mostrar el motivo en lugar de "Cargando…" para siempre.
+    (function () {
+      var mostrado = false;
+      function mostrarFallo(detalle) {
+        var plan = document.getElementById('plan');
+        if (mostrado || !plan || plan.getAttribute('data-listo')) return;
+        mostrado = true;
+        plan.innerHTML = '<div class="plan-mensaje"><p><strong>No se pudo iniciar la página.</strong></p>' +
+          '<p>Recargá la página. Si el problema sigue, avisanos desde el ícono de contacto e incluí este detalle:</p>' +
+          '<p><code></code></p><p><button type="button" class="boton boton-primario">Recargar</button></p></div>';
+        plan.querySelector('code').textContent = detalle || 'sin detalle';
+        plan.querySelector('button').onclick = function () { location.reload(); };
+      }
+      window.__mostrarFallo = mostrarFallo;
+      window.addEventListener('error', function (e) {
+        // Solo errores de código o de scripts que no cargaron (no imágenes ni tipografías)
+        if (e.target && e.target !== window && e.target.tagName !== 'SCRIPT') return;
+        mostrarFallo(e.message || (e.target && e.target.src ? 'No se pudo cargar ' + e.target.src : ''));
+      }, true);
+      window.addEventListener('unhandledrejection', function (e) { mostrarFallo(e.reason && e.reason.message ? e.reason.message : String(e.reason)); });
+      setTimeout(function () { mostrarFallo('La página tardó demasiado en cargar.'); }, 15000);
+    })();
+  </script>
+  <script nomodule>
+    document.getElementById('plan').innerHTML = '<p class="plan-mensaje">Tu navegador es demasiado antiguo para esta página. Actualizalo o probá con otro navegador.</p>';
+  </script>
+  <script type="module" src="js/app.js?v=2.1.1"></script>
 </body>
 </html>
