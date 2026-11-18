@@ -137,7 +137,32 @@ export function describirFaltantes(materias, requisitos = [], prefijo = '') {
         partes.push(`${prefijo ? prefijo + ' ' : ''}${nombres.join(', ')}`.trim());
     }
     partes.push(...requisitos);
-    return partes.join('. ') + '.';
+    // Sin punto final duplicado cuando una parte ya termina en punto
+    return partes.map((p) => p.replace(/\.+$/, '')).join('. ') + '.';
+}
+
+// Requisitos de año (para el ícono "?" del título de cada año) y si se cumplen
+export function requisitosDelAnio(carrera, reglas, progreso, anio) {
+    const lista = [];
+    const rf = reglas?.finalesParaAnio;
+    if (rf && anio >= rf.desdeAnio) {
+        const { total } = contarFinales(carrera, progreso, rf);
+        lista.push({
+            texto: `Para cursar las materias de ${nombreAnio(rf.desdeAnio)} en adelante se necesitan ${rf.finales} finales aprobados (hasta ${rf.maxTalleres} pueden ser talleres). El curso de ingreso no cuenta y los talleres no tienen este requisito.`,
+            cumple: total >= rf.finales,
+            estado: total >= rf.finales ? 'Cumplido.' : `Llevás ${total} de ${rf.finales}.`,
+        });
+    }
+    const ra = reglas?.aniosCompletosParaAnio;
+    if (ra && anio >= ra.desdeAnio) {
+        const faltan = carrera.materias.filter((m) => m.anio <= ra.aniosCompletos && !estaAprobada(progreso, m.id)).length;
+        lista.push({
+            texto: `Para cursar ${nombreAnio(ra.desdeAnio)} se necesitan completos los primeros ${ra.aniosCompletos} años, incluidos los talleres.`,
+            cumple: faltan === 0,
+            estado: faltan === 0 ? 'Cumplido.' : `Te ${faltan === 1 ? 'falta 1 materia' : `faltan ${faltan} materias`} de esos años.`,
+        });
+    }
+    return lista;
 }
 
 // Progreso global de la carrera
@@ -227,6 +252,53 @@ export function aplicarCascada(carrera, reglas, progreso, materiaCambiada) {
             else nuevo[m.id] = { estado: destino }; // al dejar de estar aprobada pierde la nota
             huboCambios = true;
         }
+    }
+    return { progreso: nuevo, cambios };
+}
+
+// Materias compartidas entre carreras: mismo código y mismo nombre.
+// (Hay códigos repetidos con distinto nombre, por ejemplo talleres optativos:
+// esos no se consideran la misma materia.)
+const RANGO_ESTADO = { pendiente: 0, cursada: 1, aprobada: 2 };
+
+// Copia el avance de una carrera a las demás para las materias compartidas.
+// Solo suma: si en la otra carrera la materia ya está igual o más avanzada,
+// no se toca, y nunca se desmarca nada. La nota de un final aprobado se copia.
+// Devuelve un progreso nuevo por carrera y la lista de cambios por carrera.
+export function compartirEntreCarreras(plan, progresoPorCarrera, carreraOrigenId) {
+    const origen = plan.carreras.find((c) => c.id === carreraOrigenId);
+    const progresoOrigen = progresoPorCarrera[carreraOrigenId] || {};
+    const nuevo = {};
+    for (const [id, p] of Object.entries(progresoPorCarrera)) {
+        nuevo[id] = {};
+        for (const [mid, v] of Object.entries(p)) nuevo[id][mid] = { ...v };
+    }
+    const cambios = []; // { carrera, materias: [materia] }
+
+    for (const destino of plan.carreras) {
+        if (destino.id === carreraOrigenId) continue;
+        const progDestino = (nuevo[destino.id] ||= {});
+        const actualizadas = [];
+        for (const m of origen.materias) {
+            const v = progresoOrigen[m.id];
+            if (!v || v.estado === 'pendiente') continue;
+            const igual = destino.materias.find((d) => d.id === m.id && d.nombre === m.nombre);
+            if (!igual || !estadosPermitidos(igual).includes(v.estado)) continue;
+
+            const previo = progDestino[m.id];
+            const rangoPrevio = RANGO_ESTADO[previo?.estado || 'pendiente'];
+            let cambio = false;
+            if (RANGO_ESTADO[v.estado] > rangoPrevio) {
+                progDestino[m.id] = { estado: v.estado };
+                cambio = true;
+            }
+            if (v.estado === 'aprobada' && typeof v.nota === 'number' && progDestino[m.id].nota !== v.nota) {
+                progDestino[m.id].nota = v.nota;
+                cambio = true;
+            }
+            if (cambio) actualizadas.push(igual);
+        }
+        if (actualizadas.length) cambios.push({ carrera: destino, materias: actualizadas });
     }
     return { progreso: nuevo, cambios };
 }

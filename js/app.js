@@ -1,11 +1,12 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.4';
-import * as reglasMod from './reglas.js?v=2.1.4';
-import * as almacen from './almacenamiento.js?v=2.1.4';
+import config from './config.js?v=2.1.7';
+import * as reglasMod from './reglas.js?v=2.1.7';
+import * as almacen from './almacenamiento.js?v=2.1.7';
 
 const {
-    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada,
+    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada, requisitosDelAnio,
+    compartirEntreCarreras,
     materiasQueHabilita, normalizarNota, nombreAnio, describirFaltantes,
 } = reglasMod;
 
@@ -15,6 +16,7 @@ let datos = null;       // datos guardados del alumno
 let carrera = null;     // carrera seleccionada
 let analisis = {};      // resultado de analizarCarrera
 const abiertas = new Set(); // materias con el detalle desplegado
+let anioConAyuda = null;     // año con el recuadro de requisitos abierto
 
 const $ = (sel, raiz = document) => raiz.querySelector(sel);
 const progresoActual = () => datos.progreso[carrera.id] || (datos.progreso[carrera.id] = {});
@@ -173,13 +175,50 @@ function renderPlan() {
         const materias = carrera.materias.filter((m) => m.anio === anio);
         columnas.push(
             el('section', { class: 'anio', 'aria-labelledby': `anio-${anio}` },
-                el('h2', { class: 'anio-titulo', id: `anio-${anio}`, text: nombreAnio(anio).replace(/^./, (l) => l.toUpperCase()) }),
+                renderTituloAnio(anio),
                 el('div', { class: 'anio-materias' }, materias.map(renderMateria)))
         );
     }
     contenedor.replaceChildren(...columnas);
     contenedor.setAttribute('data-listo', '1');
     renderPromedio();
+    const abierta = materiaAbierta();
+    if (abierta) pintarResaltado(abierta);
+}
+
+// Título del año. Si el año tiene requisitos (3ro en adelante), suma un ícono "?"
+// que despliega el requisito y cuánto le falta al alumno.
+function renderTituloAnio(anio) {
+    const titulo = nombreAnio(anio).replace(/^./, (l) => l.toUpperCase());
+    const requisitos = requisitosDelAnio(carrera, plan.reglas, progresoActual(), anio);
+    const h2 = el('h2', { class: 'anio-titulo', id: `anio-${anio}` }, el('span', { text: titulo }));
+    if (!requisitos.length) return h2;
+
+    const abierta = anioConAyuda === anio;
+    const idAyuda = `ayuda-anio-${anio}`;
+    h2.append(el('button', {
+        type: 'button',
+        class: 'anio-ayuda-boton',
+        'aria-expanded': String(abierta),
+        'aria-controls': idAyuda,
+        'aria-label': `Requisitos para cursar ${titulo.toLowerCase()}`,
+        title: 'Requisitos para cursar este año',
+        'data-foco': `ayuda-${anio}`,
+        onclick: (e) => {
+            e.stopPropagation();
+            anioConAyuda = abierta ? null : anio;
+            redibujar();
+        },
+    }, '?'));
+
+    const contenedor = el('div', { class: 'anio-cabecera' }, h2);
+    if (abierta) {
+        contenedor.append(el('div', { class: 'anio-ayuda', id: idAyuda, role: 'note' },
+            requisitos.map((r) => el('p', {},
+                r.texto, ' ',
+                el('strong', { class: r.cumple ? 'cumple' : 'no-cumple', text: r.estado })))));
+    }
+    return contenedor;
 }
 
 function renderMateria(materia) {
@@ -238,10 +277,13 @@ function renderDetalle(materia, idDetalle) {
         const faltan = a.estado === 'aprobada' && a.habilitada ? a.faltanParaFinal : a.faltanParaCursar;
         avisos.push(el('p', { class: 'detalle-aviso detalle-aviso-conflicto' },
             el('strong', { text: 'Revisar: ' }),
-            `marcaste esta materia como “${etiquetaEstado(a.estado, materia.tipo).toLowerCase()}”, pero falta: ${describirFaltantes(faltan, a.habilitada ? [] : a.requisitos)}`));
-    } else if (!a.habilitada) {
+            faltan.length
+                ? `marcaste esta materia como “${etiquetaEstado(a.estado, materia.tipo).toLowerCase()}”, pero falta: ${describirFaltantes(faltan)}`
+                : 'ya no cumplís el requisito para cursar este año (ver el ícono ? junto al año).'));
+    } else if (!a.habilitada && a.faltanParaCursar.length) {
+        // Los requisitos de año (12 finales, años completos) se explican en el ícono "?" del año
         avisos.push(el('p', { class: 'detalle-aviso' },
-            el('strong', { text: 'Para cursarla falta: ' }), describirFaltantes(a.faltanParaCursar, a.requisitos)));
+            el('strong', { text: 'Para cursarla falta: ' }), describirFaltantes(a.faltanParaCursar)));
     } else if (a.estado === 'cursada' && !a.puedeAprobar) {
         avisos.push(el('p', { class: 'detalle-aviso' },
             el('strong', { text: 'Para rendir el final falta: ' }), describirFaltantes(a.faltanParaFinal, [], 'final de')));
@@ -319,12 +361,19 @@ function redibujar() {
     if (foco) document.querySelector(`[data-foco="${foco}"]`)?.focus({ preventScroll: true });
 }
 
+// Solo una materia abierta por vez: abrir otra cierra la anterior
 function alternarDetalle(materia) {
-    if (abiertas.has(materia.id)) abiertas.delete(materia.id);
-    else abiertas.add(materia.id);
+    const yaAbierta = abiertas.has(materia.id);
+    abiertas.clear();
+    if (!yaAbierta) abiertas.add(materia.id);
     redibujar();
-    resaltar(materia);
+    if (yaAbierta) limpiarResaltado(); // al cerrar, se apaga la iluminación
 }
+
+const materiaAbierta = () => {
+    const [id] = abiertas;
+    return id ? carrera.materias.find((m) => m.id === id) : null;
+};
 
 function cambiarEstado(materia, estado) {
     const progreso = progresoActual();
@@ -387,8 +436,21 @@ function cambiarNota(materia, valor) {
 }
 
 // Resalta correlativas (lo que pide) y lo que habilita la materia
+// Mientras haya una materia abierta, su resaltado queda fijo y el mouse no lo cambia.
 function resaltar(materia) {
-    quitarResaltado();
+    const abierta = materiaAbierta();
+    if (abierta && abierta.id !== materia.id) return;
+    pintarResaltado(materia);
+}
+
+function quitarResaltado() {
+    const abierta = materiaAbierta();
+    if (abierta) pintarResaltado(abierta);
+    else limpiarResaltado();
+}
+
+function pintarResaltado(materia) {
+    limpiarResaltado();
     const plano = $('#plan');
     plano.classList.add('resaltando');
     document.querySelector(`.materia[data-id="${materia.id}"]`)?.classList.add('foco');
@@ -400,7 +462,7 @@ function resaltar(materia) {
     }
 }
 
-function quitarResaltado() {
+function limpiarResaltado() {
     $('#plan').classList.remove('resaltando');
     for (const n of document.querySelectorAll('.foco, .resalta-requisito, .resalta-habilita')) {
         n.classList.remove('foco', 'resalta-requisito', 'resalta-habilita');
@@ -500,8 +562,37 @@ function prepararHerramientas() {
     if (consultaOscuro.addEventListener) consultaOscuro.addEventListener('change', alCambiarSistema);
     else if (consultaOscuro.addListener) consultaOscuro.addListener(alCambiarSistema);
 
+    document.addEventListener('click', (e) => {
+        if (anioConAyuda !== null && !e.target.closest('.anio-cabecera')) {
+            anioConAyuda = null;
+            redibujar();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && anioConAyuda !== null) {
+            const foco = `ayuda-${anioConAyuda}`;
+            anioConAyuda = null;
+            redibujar();
+            document.querySelector(`[data-foco="${foco}"]`)?.focus();
+        }
+    });
+
+    // Guardar cambios: además de guardar, pasa las materias aprobadas o cursadas
+    // a las otras carreras que tienen la misma materia (solo suma, nunca borra).
     $('#btn-guardar').addEventListener('click', () => {
-        if (carrera) guardar(true);
+        if (!carrera) return;
+        const { progreso, cambios } = compartirEntreCarreras(plan, datos.progreso, carrera.id);
+        datos.progreso = progreso;
+        if (!guardar()) return;
+        if (!cambios.length) {
+            aviso('Cambios guardados.');
+            return;
+        }
+        const detalle = cambios
+            .map((c) => `${c.materias.length} en ${c.carrera.tituloCorto}`)
+            .join(', ');
+        const total = cambios.reduce((n, c) => n + c.materias.length, 0);
+        aviso(`Cambios guardados. ${total === 1 ? 'Se actualizó 1 materia compartida' : `Se actualizaron ${total} materias compartidas`} con otras carreras: ${detalle}.`);
     });
 
     $('#btn-pdf').addEventListener('click', async () => {
@@ -509,7 +600,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.4');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.7');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);

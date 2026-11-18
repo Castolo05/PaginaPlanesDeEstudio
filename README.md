@@ -9,7 +9,7 @@ automáticamente las que pueden cursar según las correlatividades.
 - 4 carreras: Gestión Tecnológica, Economía Empresarial, Contador Público y Administración.
 - Estados por materia: sin cursar, cursada aprobada, final aprobado (talleres e ingreso: aprobado o no).
 - Reglas de correlatividad, de 12 finales para cursar 3er año y de años completos para 5to.
-- **Guardado automático** en el navegador (el botón "Guardar cambios" lo confirma).
+- **Guardado automático** en el navegador. "Guardar cambios" además pasa las materias aprobadas o cursadas a las otras carreras que tienen la misma materia (mismo código y nombre; solo suma, nunca borra).
 - Al desmarcar una materia se desmarcan en cadena las que la tienen como correlativa (con opción de deshacer).
 - Si una materia deja de cumplir un requisito de año (12 finales, años completos), se marca con **Revisar**.
 - Nota de cada final, taller e ingreso, con promedio general junto a "Guardar cambios"; el PDF incluye estado, notas, avance y promedio.
@@ -68,7 +68,7 @@ Todo está en `careers.json`. Cada materia tiene esta forma:
 - Las reglas de 3er y 5to año están en `reglas`, al principio del archivo.
 
 Después de editar, ejecutar `npm test`: verifica que no haya ids repetidos ni correlativas inexistentes.
-Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.1.4`)
+Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.1.7`)
 en `index.html`, en los `import` de `js/app.js` y `js/pdf.js`, y la `VERSION` de `sw.js`.
 Así los navegadores no mezclan archivos viejos con nuevos. Si se agregan o quitan archivos,
 actualizar también la lista de `sw.js`.

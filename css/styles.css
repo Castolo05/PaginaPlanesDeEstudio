@@ -325,6 +325,44 @@ button, input, select { font: inherit; color: inherit; }
 }
 .anio-materias { display: flex; flex-direction: column; gap: 4px; }
 
+/* Ícono "?" con los requisitos del año */
+.anio-cabecera { margin: 0 0 8px; }
+.anio-cabecera .anio-titulo { margin: 0; }
+.anio-titulo { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.anio-ayuda-boton {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 20px; height: 20px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sobre-marca);
+    font-family: var(--fuente-texto);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.anio-ayuda-boton:hover,
+.anio-ayuda-boton[aria-expanded="true"] { background: var(--sobre-marca); color: var(--marca); }
+.anio-ayuda-boton:focus-visible { outline-color: var(--sobre-marca); }
+.anio-ayuda {
+    padding: 10px 12px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-top: 0;
+    border-radius: 0 0 var(--radio) var(--radio);
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+}
+.anio-ayuda p { margin: 0; }
+.anio-ayuda p + p { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--borde); }
+.anio-ayuda strong { color: var(--texto); }
+.anio-ayuda .cumple { color: var(--aprobada-solido); }
+
 /* ---------- Materia ---------- */
 .materia {
     background: var(--pendiente-fondo);
@@ -353,7 +391,11 @@ button, input, select { font: inherit; color: inherit; }
     text-align: left;
     cursor: pointer;
 }
-.materia-cabecera:hover .materia-nombre { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.materia-cabecera:hover { background: rgba(0, 0, 0, 0.045); }
+:root[data-theme="dark"] .materia-cabecera:hover { background: rgba(255, 255, 255, 0.05); }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .materia-cabecera:hover { background: rgba(255, 255, 255, 0.05); }
+}
 .materia-cuatri {
     font-size: 0.72rem;
     font-weight: 600;
@@ -541,7 +583,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 .enlace:last-child { border-bottom: 0; }
 .enlace strong { display: block; color: var(--cursada-solido); font-size: 1rem; }
-.enlace:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.enlace:hover { background: var(--superficie-2); }
 .enlace span { color: var(--texto-suave); font-size: 0.9rem; }
 
 /* Tutorial */

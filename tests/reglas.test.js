@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
     analizarMateria, validarCambio, calcularResumen, contarFinales, correlativasDe, normalizarNota,
-    aplicarCascada,
+    aplicarCascada, requisitosDelAnio, describirFaltantes, compartirEntreCarreras,
 } from '../js/reglas.js';
 import { sanear } from '../js/almacenamiento.js';
 
@@ -166,4 +166,59 @@ test('cascada: una cursada que sigue habilitada no cambia', () => {
 test('nota: el ingreso y los talleres también suman al promedio', () => {
     const p = { L0000: { estado: 'aprobada', nota: 10 }, LT001: { estado: 'aprobada', nota: 6 } };
     assert.equal(calcularResumen(gt, plan.reglas, p).promedio, 8);
+});
+
+test('requisitos del año: 1ro y 2do no tienen; 3ro muestra cuántos finales lleva', () => {
+    assert.equal(requisitosDelAnio(gt, plan.reglas, {}, 2).length, 0);
+    const p = { L0002: { estado: 'aprobada' }, L0001: { estado: 'aprobada' }, L0000: { estado: 'aprobada' } };
+    const r = requisitosDelAnio(gt, plan.reglas, p, 3);
+    assert.equal(r.length, 1);
+    assert.equal(r[0].estado, 'Llevás 2 de 12.');
+    assert.equal(r[0].cumple, false);
+});
+
+test('requisitos del año: 5to suma el de años completos', () => {
+    const ee = carrera('economia-empresarial');
+    const r = requisitosDelAnio(ee, plan.reglas, {}, 5);
+    assert.equal(r.length, 2);
+    assert.match(r[1].estado, /^Te faltan \d+ materias de esos años\.$/);
+});
+
+test('describirFaltantes no duplica el punto final', () => {
+    assert.equal(describirFaltantes([], ['Llevás 10.']), 'Llevás 10.');
+    assert.equal(describirFaltantes([{ nombre: 'Matemática I' }], ['Requisito.']), 'Matemática I. Requisito.');
+});
+
+test('compartir: las materias aprobadas pasan a las demás carreras con su nota', () => {
+    const datos = { administracion: { L0000: { estado: 'aprobada' }, L0001: { estado: 'aprobada', nota: 9 }, L0002: { estado: 'cursada' } } };
+    const { progreso, cambios } = compartirEntreCarreras(plan, datos, 'administracion');
+    for (const id of ['gestion-tecnologica', 'contador-publico', 'economia-empresarial']) {
+        assert.deepEqual(progreso[id].L0001, { estado: 'aprobada', nota: 9 }, id);
+        assert.deepEqual(progreso[id].L0002, { estado: 'cursada' }, id);
+    }
+    assert.equal(cambios.length, 3);
+    assert.equal(datos['contador-publico'], undefined, 'no debe modificar los datos recibidos');
+});
+
+test('compartir: solo suma, nunca baja ni borra lo de otra carrera', () => {
+    const datos = {
+        administracion: { L0002: { estado: 'cursada' } },
+        'contador-publico': { L0002: { estado: 'aprobada', nota: 7 }, L0003: { estado: 'aprobada' } },
+    };
+    const { progreso } = compartirEntreCarreras(plan, datos, 'administracion');
+    assert.deepEqual(progreso['contador-publico'].L0002, { estado: 'aprobada', nota: 7 });
+    assert.deepEqual(progreso['contador-publico'].L0003, { estado: 'aprobada' });
+});
+
+test('compartir: mismo código con distinto nombre no se considera la misma materia', () => {
+    const conLT006 = plan.carreras.filter((c) => c.materias.some((m) => m.id === 'LT006'));
+    const nombres = new Set(conLT006.map((c) => c.materias.find((m) => m.id === 'LT006').nombre));
+    assert.ok(nombres.size > 1, 'el dato de prueba debe seguir existiendo');
+    const origen = conLT006[0];
+    const nombreOrigen = origen.materias.find((m) => m.id === 'LT006').nombre;
+    const { progreso } = compartirEntreCarreras(plan, { [origen.id]: { LT006: { estado: 'aprobada' } } }, origen.id);
+    for (const c of conLT006.slice(1)) {
+        const igual = c.materias.find((m) => m.id === 'LT006').nombre === nombreOrigen;
+        assert.equal(Boolean(progreso[c.id]?.LT006), igual, c.id);
+    }
 });
