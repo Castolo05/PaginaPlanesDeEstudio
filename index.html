@@ -4,15 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Planes de Estudio - Facultad de Ciencias Económicas</title>
-  <meta name="description" content="Plan de estudios interactivo de la Facultad de Ciencias Económicas (UNICEN): marcá tus materias, mirá las correlatividades, calculá tu promedio y descargá tu avance en PDF.">
+  <meta name="description" content="Plan de estudios interactivo de la Facultad de Ciencias Económicas (UNICEN): marcá tus materias, mirá las correlatividades y descargá tu avance en PDF.">
   <meta name="theme-color" content="#003366">
   <meta property="og:title" content="Plan de estudios interactivo - FCE">
-  <meta property="og:description" content="Seguí tu avance en la carrera: correlatividades, materias habilitadas, promedio y PDF.">
+  <meta property="og:description" content="Seguí tu avance en la carrera: correlatividades, materias habilitadas y PDF.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="media/iconos/icono-512.png">
   <link rel="icon" href="media/icono.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="media/iconos/icono-192.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Aplica el tema guardado antes de pintar la página (evita el "parpadeo")
@@ -51,58 +54,14 @@
   </header>
 
   <nav class="barra-carreras" aria-label="Carreras">
-    <div class="lista-carreras" id="lista-carreras"></div>
-  </nav>
-
-  <section class="resumen" id="resumen" aria-label="Tu avance" hidden>
-    <div class="resumen-datos">
-      <div class="progreso">
-        <div class="progreso-texto">
-          <strong id="resumen-porcentaje">0%</strong>
-          <span id="resumen-detalle">0 de 0 materias aprobadas</span>
-        </div>
-        <div class="progreso-barra" role="progressbar" aria-labelledby="resumen-detalle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="resumen-barra">
-          <div class="progreso-relleno" id="resumen-relleno"></div>
-        </div>
+    <div class="barra-interior">
+      <div class="lista-carreras" id="lista-carreras"></div>
+      <div class="acciones">
+        <button type="button" class="accion accion-guardar" id="btn-guardar">Guardar cambios</button>
+        <button type="button" class="accion" id="btn-pdf">Descargar PDF</button>
       </div>
-      <dl class="resumen-cifras">
-        <div><dt>Promedio</dt><dd id="resumen-promedio">—</dd></div>
-        <div><dt>Cursadas sin final</dt><dd id="resumen-cursadas">0</dd></div>
-        <div id="resumen-tercero-caja"><dt id="resumen-tercero-titulo">Finales para 3er año</dt><dd id="resumen-tercero">0/12</dd></div>
-      </dl>
     </div>
-    <div class="resumen-herramientas">
-      <label class="filtro">
-        <span>Mostrar</span>
-        <select id="filtro">
-          <option value="todas">Todas las materias</option>
-          <option value="disponibles">Las que puedo cursar o rendir</option>
-          <option value="final">Cursadas con final pendiente</option>
-          <option value="aprobadas">Aprobadas</option>
-        </select>
-      </label>
-      <button type="button" class="boton boton-primario" id="btn-pdf">Descargar PDF</button>
-      <details class="menu" id="menu-mas">
-        <summary class="boton">Más opciones</summary>
-        <div class="menu-lista" role="menu">
-          <button type="button" role="menuitem" id="btn-exportar">Exportar mi progreso</button>
-          <button type="button" role="menuitem" id="btn-importar">Importar progreso</button>
-          <button type="button" role="menuitem" id="btn-tutorial">Ver tutorial</button>
-          <button type="button" role="menuitem" id="btn-reiniciar" class="peligro">Reiniciar esta carrera</button>
-        </div>
-      </details>
-      <input type="file" id="input-importar" accept="application/json,.json" hidden>
-      <span class="guardado" id="estado-guardado" aria-live="polite"></span>
-    </div>
-  </section>
-
-  <ul class="leyenda" id="leyenda" aria-label="Referencias de colores" hidden>
-    <li><span class="muestra muestra-pendiente"></span>Puedo cursarla</li>
-    <li><span class="muestra muestra-cursada"></span>Cursada aprobada</li>
-    <li><span class="muestra muestra-aprobada"></span>Final aprobado</li>
-    <li><span class="muestra muestra-bloqueada"></span>Bloqueada (faltan correlativas)</li>
-    <li><span class="muestra muestra-conflicto"></span>Revisar (falta una correlativa)</li>
-  </ul>
+  </nav>
 
   <main id="plan" class="plan" tabindex="-1" aria-live="polite">
     <p class="plan-mensaje">Cargando plan de estudios…</p>
@@ -120,11 +79,15 @@
       <h2 id="faq-titulo">Preguntas frecuentes</h2>
       <details class="faq">
         <summary>¿Qué necesito para poder cursar el 3er año?</summary>
-        <p>Para cursar 3ro necesitás tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados. El curso de ingreso no cuenta. En la barra de avance ves cuántos llevás.</p>
+        <p>Para cursar 3ro necesitás tener 12 finales, de los cuales hasta 3 pueden ser talleres aprobados. El curso de ingreso no cuenta.</p>
       </details>
       <details class="faq">
         <summary>¿Qué necesito para cursar 5to año?</summary>
         <p>Para cursar 5to necesitás tener completos los primeros dos años de la carrera (incluyendo talleres).</p>
+      </details>
+      <details class="faq">
+        <summary>¿Qué significa cada color?</summary>
+        <p>Blanco: la podés cursar. Azul: cursada aprobada. Verde: final aprobado. Gris: todavía no se puede cursar porque faltan correlativas.</p>
       </details>
       <details class="faq">
         <summary>¿Qué significa una materia con el aviso “Revisar”?</summary>
@@ -132,7 +95,7 @@
       </details>
       <details class="faq">
         <summary>¿Tengo que guardar los cambios?</summary>
-        <p>No. Cada cambio se guarda automáticamente en tu navegador. Para pasarlo a otro dispositivo usá “Más opciones → Exportar mi progreso” y después “Importar progreso” en el otro.</p>
+        <p>Cada cambio se guarda automáticamente en tu navegador; el botón “Guardar cambios” lo confirma. Para pasar tu progreso a otro dispositivo usá las opciones de abajo.</p>
       </details>
       <details class="faq">
         <summary>¿Cómo puedo acceder a más información sobre mi carrera?</summary>
@@ -146,6 +109,14 @@
         <summary>¿Ya finalizó el desarrollo de esta web?</summary>
         <p>El proyecto sigue en desarrollo. Puede haber errores o inconsistencias: si encontrás uno, avisanos desde el ícono de contacto. Cualquier ayuda es bienvenida.</p>
       </details>
+      <h3 class="faq-subtitulo">Tu progreso</h3>
+      <div class="faq-acciones">
+        <button type="button" class="boton" id="btn-exportar">Exportar a un archivo</button>
+        <button type="button" class="boton" id="btn-importar">Importar desde un archivo</button>
+        <button type="button" class="boton" id="btn-tutorial">Ver tutorial</button>
+        <button type="button" class="boton boton-texto-peligro" id="btn-reiniciar">Reiniciar esta carrera</button>
+      </div>
+      <input type="file" id="input-importar" accept="application/json,.json" hidden>
     </div>
   </dialog>
 
@@ -215,9 +186,8 @@
         <h3>¿Listo para comenzar?</h3>
         <ul class="tips">
           <li>Todo se guarda automáticamente en este navegador.</li>
-          <li>Cargá la nota de cada final y calculamos tu promedio.</li>
-          <li>Usá “Mostrar” para ver solo lo que podés cursar o rendir.</li>
-          <li>Exportá tu progreso para no perderlo si cambiás de dispositivo.</li>
+          <li>Podés cargar la nota de cada final: aparece en el PDF junto con tu promedio.</li>
+          <li>Desde el ícono de ayuda podés exportar tu progreso para no perderlo si cambiás de dispositivo.</li>
         </ul>
         <label class="casilla"><input type="checkbox" id="tutorial-no-mostrar"> No mostrar de nuevo</label>
         <button type="button" class="boton boton-primario" data-cerrar>Empezar</button>

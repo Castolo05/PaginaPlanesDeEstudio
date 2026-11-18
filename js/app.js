@@ -3,7 +3,7 @@ import * as reglasMod from './reglas.js';
 import * as almacen from './almacenamiento.js';
 
 const {
-    analizarCarrera, validarCambio, estadosPermitidos, calcularResumen, correlativasDe,
+    analizarCarrera, validarCambio, estadosPermitidos, correlativasDe,
     materiasQueHabilita, normalizarNota, nombreAnio, describirFaltantes,
 } = reglasMod;
 
@@ -22,7 +22,7 @@ const ETIQUETA_ESTADO = {
     cursada: { materia: 'Cursada aprobada', practica: 'Cursada aprobada' },
     aprobada: { materia: 'Final aprobado', practica: 'Aprobada', taller: 'Aprobado', ingreso: 'Ingreso aprobado' },
 };
-export const etiquetaEstado = (estado, tipo) => ETIQUETA_ESTADO[estado][tipo] || ETIQUETA_ESTADO[estado].materia;
+const etiquetaEstado = (estado, tipo) => ETIQUETA_ESTADO[estado][tipo] || ETIQUETA_ESTADO[estado].materia;
 
 // ---------- Utilidades de interfaz ----------
 function el(tag, attrs = {}, ...hijos) {
@@ -56,18 +56,14 @@ function confirmar(texto) {
     });
 }
 
-let temporizadorGuardado;
-function guardar() {
+function guardar(confirmarAlUsuario = false) {
     const ok = almacen.guardar(datos);
-    const indicador = $('#estado-guardado');
     if (!ok) {
-        indicador.textContent = '';
-        aviso('No se pudo guardar: tu navegador bloquea el almacenamiento local. Exportá tu progreso para no perderlo.', 'error');
-        return;
+        aviso('No se pudo guardar: tu navegador bloquea el almacenamiento local. Exportá tu progreso desde el ícono de ayuda para no perderlo.', 'error');
+        return false;
     }
-    indicador.textContent = '✓ Guardado';
-    clearTimeout(temporizadorGuardado);
-    temporizadorGuardado = setTimeout(() => (indicador.textContent = ''), 2000);
+    if (confirmarAlUsuario) aviso('Cambios guardados.');
+    return true;
 }
 
 // ---------- Configuración visual ----------
@@ -144,27 +140,10 @@ function seleccionarCarrera(id, porUsuario = false) {
         b.setAttribute('aria-pressed', String(activa));
         if (activa && porUsuario) b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
     }
-    $('#resumen').hidden = false;
-    $('#leyenda').hidden = false;
     renderPlan();
 }
 
 // ---------- Plan de estudios ----------
-function coincideFiltro(materia) {
-    const filtro = $('#filtro').value;
-    const a = analisis[materia.id];
-    switch (filtro) {
-        case 'disponibles':
-            return a.habilitada && a.estado !== 'aprobada' && !a.conflicto;
-        case 'final':
-            return a.estado === 'cursada';
-        case 'aprobadas':
-            return a.estado === 'aprobada';
-        default:
-            return true;
-    }
-}
-
 function renderPlan() {
     analisis = analizarCarrera(carrera, plan.reglas, progresoActual());
     const contenedor = $('#plan');
@@ -174,20 +153,13 @@ function renderPlan() {
     const columnas = [];
     for (let anio = 1; anio <= anios; anio++) {
         const materias = carrera.materias.filter((m) => m.anio === anio);
-        const visibles = materias.filter(coincideFiltro);
-        const aprobadas = materias.filter((m) => analisis[m.id].estado === 'aprobada').length;
         columnas.push(
             el('section', { class: 'anio', 'aria-labelledby': `anio-${anio}` },
-                el('h2', { class: 'anio-titulo', id: `anio-${anio}` },
-                    el('span', { text: nombreAnio(anio).replace(/^./, (l) => l.toUpperCase()) }),
-                    el('span', { class: 'anio-contador', text: `${aprobadas}/${materias.length}`, title: 'Aprobadas en este año' })),
-                visibles.length
-                    ? el('div', { class: 'anio-materias' }, visibles.map(renderMateria))
-                    : el('p', { class: 'anio-vacio', text: 'Nada para mostrar en este año.' }))
+                el('h2', { class: 'anio-titulo', id: `anio-${anio}`, text: nombreAnio(anio).replace(/^./, (l) => l.toUpperCase()) }),
+                el('div', { class: 'anio-materias' }, materias.map(renderMateria)))
         );
     }
     contenedor.replaceChildren(...columnas);
-    renderResumen();
 }
 
 function renderMateria(materia) {
@@ -200,10 +172,8 @@ function renderMateria(materia) {
     if (abierta) clases.push('abierta');
 
     let indicador = null;
-    if (a.conflicto) indicador = el('span', { class: 'indicador indicador-conflicto', text: '⚠ Revisar' });
-    else if (a.estado === 'aprobada') indicador = el('span', { class: 'indicador', text: typeof nota === 'number' ? `✓ ${formatearNota(nota)}` : '✓' });
-    else if (a.estado === 'cursada') indicador = el('span', { class: 'indicador', text: 'Cursada' });
-    else if (!a.habilitada) indicador = el('span', { class: 'indicador indicador-candado', text: '🔒', 'aria-hidden': 'true' });
+    if (a.conflicto) indicador = el('span', { class: 'indicador indicador-conflicto', text: 'Revisar' });
+    else if (a.estado === 'aprobada' && typeof nota === 'number') indicador = el('span', { class: 'indicador indicador-nota', text: formatearNota(nota), title: 'Nota del final' });
 
     const idDetalle = `detalle-${materia.id}`;
     const etiquetaAccesible = `${materia.nombre}. ${etiquetaEstado(a.estado, materia.tipo)}${a.conflicto ? '. Revisar: falta una correlativa' : ''}${!a.habilitada && a.estado === 'pendiente' ? '. Bloqueada' : ''}`;
@@ -225,8 +195,7 @@ function renderMateria(materia) {
             onfocus: () => resaltar(materia),
             onblur: quitarResaltado,
         },
-            materia.cuatrimestre ? el('span', { class: 'chip-cuatri', text: `${materia.cuatrimestre}C`, title: `${materia.cuatrimestre}º cuatrimestre` }) : null,
-            materia.tipo === 'taller' ? el('span', { class: 'chip-cuatri chip-tipo', text: 'Taller' }) : null,
+            el('span', { class: 'materia-cuatri', text: materia.cuatrimestre ? `${materia.cuatrimestre}C` : '', title: materia.cuatrimestre ? `${materia.cuatrimestre}º cuatrimestre` : null }),
             el('span', { class: 'materia-nombre', text: materia.nombre }),
             indicador),
         abierta ? renderDetalle(materia, idDetalle) : el('div', { id: idDetalle, hidden: true })
@@ -241,7 +210,7 @@ function renderDetalle(materia, idDetalle) {
     const nombre = (id) => carrera.materias.find((m) => m.id === id)?.nombre || id;
     const estadoCorto = (id) => {
         const e = analisis[id]?.estado;
-        return e === 'aprobada' ? ' ✓' : e === 'cursada' ? ' (cursada)' : '';
+        return e === 'aprobada' ? ' (aprobada)' : e === 'cursada' ? ' (cursada)' : '';
     };
 
     const avisos = [];
@@ -340,7 +309,7 @@ function cambiarEstado(materia, estado) {
 
     const conflictos = Object.values(analisis).filter((x) => x.conflicto).length;
     if (estado !== 'aprobada' && conflictos) {
-        aviso(`${conflictos === 1 ? 'Hay 1 materia' : `Hay ${conflictos} materias`} para revisar (marcadas con ⚠). No se borró nada.`, 'advertencia');
+        aviso(`${conflictos === 1 ? 'Hay 1 materia marcada' : `Hay ${conflictos} materias marcadas`} para revisar. No se borró nada.`, 'advertencia');
     }
 }
 
@@ -377,26 +346,6 @@ function quitarResaltado() {
     $('#plan').classList.remove('resaltando');
     for (const n of document.querySelectorAll('.foco, .resalta-requisito, .resalta-habilita')) {
         n.classList.remove('foco', 'resalta-requisito', 'resalta-habilita');
-    }
-}
-
-// ---------- Resumen ----------
-function renderResumen() {
-    const r = calcularResumen(carrera, plan.reglas, progresoActual());
-    $('#resumen-porcentaje').textContent = `${r.porcentaje}%`;
-    $('#resumen-detalle').textContent = `${r.aprobadas} de ${r.total} materias aprobadas`;
-    $('#resumen-relleno').style.width = `${r.porcentaje}%`;
-    $('#resumen-barra').setAttribute('aria-valuenow', String(r.porcentaje));
-    $('#resumen-promedio').textContent = r.promedio === null ? '—' : formatearNota(Math.round(r.promedio * 100) / 100);
-    $('#resumen-promedio').title = r.cantidadNotas ? `Sobre ${r.cantidadNotas} nota(s) cargada(s)` : 'Cargá la nota de tus finales para calcularlo';
-    $('#resumen-cursadas').textContent = String(r.cursadas);
-    const caja = $('#resumen-tercero-caja');
-    if (r.tercerAnio) {
-        caja.hidden = false;
-        $('#resumen-tercero-titulo').textContent = `Finales para ${nombreAnio(r.tercerAnio.desdeAnio)}`;
-        $('#resumen-tercero').textContent = r.tercerAnio.cumple ? '✓ Cumplido' : `${r.tercerAnio.actuales}/${r.tercerAnio.requeridos}`;
-    } else {
-        caja.hidden = true;
     }
 }
 
@@ -477,7 +426,7 @@ function prepararTutorial() {
         }
     });
     $('#btn-tutorial').addEventListener('click', () => {
-        $('#menu-mas').open = false;
+        $('#dialogo-faq').close();
         abrirTutorial();
     });
 }
@@ -489,8 +438,8 @@ function prepararHerramientas() {
         if (!datos.tema) aplicarTema();
     });
 
-    $('#filtro').addEventListener('change', () => {
-        renderPlan();
+    $('#btn-guardar').addEventListener('click', () => {
+        if (carrera) guardar(true);
     });
 
     $('#btn-pdf').addEventListener('click', async () => {
@@ -510,13 +459,13 @@ function prepararHerramientas() {
     });
 
     $('#btn-exportar').addEventListener('click', () => {
-        $('#menu-mas').open = false;
+        $('#dialogo-faq').close();
         almacen.exportarArchivo(datos);
         aviso('Progreso exportado. Guardá el archivo para importarlo en otro dispositivo.');
     });
 
     $('#btn-importar').addEventListener('click', () => {
-        $('#menu-mas').open = false;
+        $('#dialogo-faq').close();
         $('#input-importar').click();
     });
     $('#input-importar').addEventListener('change', async (e) => {
@@ -537,7 +486,7 @@ function prepararHerramientas() {
     });
 
     $('#btn-reiniciar').addEventListener('click', async () => {
-        $('#menu-mas').open = false;
+        $('#dialogo-faq').close();
         const ok = await confirmar(`¿Borrar todo tu progreso de ${carrera.titulo}? Esta acción no se puede deshacer.`);
         if (!ok) return;
         datos.progreso[carrera.id] = {};
@@ -545,15 +494,6 @@ function prepararHerramientas() {
         abiertas.clear();
         renderPlan();
         aviso('Progreso reiniciado.');
-    });
-
-    // Cerrar el menú "Más opciones" al tocar fuera o con Escape
-    document.addEventListener('click', (e) => {
-        const menu = $('#menu-mas');
-        if (menu.open && !menu.contains(e.target)) menu.open = false;
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') $('#menu-mas').open = false;
     });
 }
 

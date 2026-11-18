@@ -2,7 +2,7 @@
 // Estrategia "primero la red": si hay internet siempre se usa la versión más
 // nueva (así los cambios se ven enseguida); si no hay, se usa la copia guardada.
 // Al cambiar la lista de archivos, subir el número de VERSION.
-const VERSION = 'pefce-v2.0.0';
+const VERSION = 'pefce-v2.1.0';
 const ARCHIVOS = [
     './',
     'index.html',

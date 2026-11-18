@@ -9,13 +9,11 @@ automáticamente las que pueden cursar según las correlatividades.
 - 4 carreras: Gestión Tecnológica, Economía Empresarial, Contador Público y Administración.
 - Estados por materia: sin cursar, cursada aprobada, final aprobado (talleres e ingreso: aprobado o no).
 - Reglas de correlatividad, de 12 finales para cursar 3er año y de años completos para 5to.
-- **Guardado automático** en el navegador (no hace falta ningún botón).
-- Si una correlativa deja de estar aprobada, la materia se marca con **⚠ Revisar**: no se borra nada.
-- Barra de avance, finales para 3er año, **notas y promedio**.
-- Filtro: "las que puedo cursar o rendir", "cursadas con final pendiente", "aprobadas".
-- Al pasar el mouse o tocar una materia se resaltan sus correlativas (violeta) y las materias que habilita (verde agua).
-- PDF con estado, notas y promedio.
-- Exportar e importar el progreso (archivo `.json`) para pasarlo a otro dispositivo.
+- **Guardado automático** en el navegador (el botón "Guardar cambios" lo confirma).
+- Si una correlativa deja de estar aprobada, la materia se marca con **Revisar**: no se borra nada.
+- Nota de cada final; el PDF incluye estado, notas, avance y promedio.
+- Al pasar el mouse o tocar una materia se resaltan sus correlativas (azul) y las materias que habilita (verde).
+- Exportar e importar el progreso (archivo `.json`) desde el ícono de ayuda, para pasarlo a otro dispositivo.
 - Modo claro / oscuro (respeta la preferencia del sistema).
 - Funciona sin conexión y se puede instalar en el celular (PWA).
 - Accesible con teclado y lector de pantalla.
