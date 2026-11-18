@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.2.3';
-import * as reglasMod from './reglas.js?v=2.2.3';
-import * as almacen from './almacenamiento.js?v=2.2.3';
+import config from './config.js?v=2.2.4';
+import * as reglasMod from './reglas.js?v=2.2.4';
+import * as almacen from './almacenamiento.js?v=2.2.4';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, requisitosDelAnio,
@@ -191,8 +191,11 @@ function renderPlan() {
     contenedor.replaceChildren(...columnas);
     contenedor.setAttribute('data-listo', '1');
     renderPromedio();
+    // Con una materia abierta se mantiene su iluminación; si no hay ninguna (por
+    // ejemplo, al cambiar de carrera) se apaga para que no queden materias oscuras
     const abierta = materiaAbierta();
     if (abierta) pintarResaltado(abierta);
+    else limpiarResaltado();
 }
 
 // Título del año. Si el año tiene requisitos (3ro en adelante), suma un ícono "?"
@@ -598,7 +601,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.2.3');
+            const { descargarPDF } = await import('./pdf.js?v=2.2.4');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
