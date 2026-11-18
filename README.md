@@ -69,7 +69,7 @@ Todo está en `careers.json`. Cada materia tiene esta forma:
 - Las reglas de 3er y 5to año están en `reglas`, al principio del archivo.
 
 Después de editar, ejecutar `npm test`: verifica que no haya ids repetidos ni correlativas inexistentes.
-Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.2.0`)
+Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.2.1`)
 en `index.html`, en los `import` de `js/app.js` y `js/pdf.js`, y la `VERSION` de `sw.js`.
 Así los navegadores no mezclan archivos viejos con nuevos. Si se agregan o quitan archivos,
 actualizar también la lista de `sw.js`.

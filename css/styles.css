@@ -434,6 +434,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 
 .materia-detalle {
+    cursor: pointer;
     padding: 2px 12px 12px;
     border-top: 1px solid var(--borde);
     font-size: 0.86rem;
@@ -477,7 +478,7 @@ button, input, select { font: inherit; color: inherit; }
 .estado-boton-cursada[aria-pressed="true"] { background: var(--cursada-solido); border-color: var(--cursada-solido); color: #fff; }
 .estado-boton[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
 
-.campo-nota { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; }
+.campo-nota { cursor: default; display: flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; }
 .campo-nota input {
     width: 72px;
     text-align: center;

@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.2.0';
-import * as reglasMod from './reglas.js?v=2.2.0';
-import * as almacen from './almacenamiento.js?v=2.2.0';
+import config from './config.js?v=2.2.1';
+import * as reglasMod from './reglas.js?v=2.2.1';
+import * as almacen from './almacenamiento.js?v=2.2.1';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, requisitosDelAnio,
@@ -241,6 +241,14 @@ function renderMateria(materia) {
         'data-id': materia.id,
         onmouseenter: () => resaltar(materia),
         onmouseleave: quitarResaltado,
+        // Con la materia abierta, tocar en cualquier parte de su recuadro la cierra
+        // (salvo los botones de estado y el campo de la nota, que hacen lo suyo)
+        onclick: (e) => {
+            if (!abiertas.has(materia.id)) return;
+            if (e.target.closest('button, input, label, a, select, textarea')) return;
+            if (String(window.getSelection?.() || '').length) return; // está seleccionando texto
+            alternarDetalle(materia);
+        },
     },
         el('button', {
             type: 'button',
@@ -580,7 +588,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.2.0');
+            const { descargarPDF } = await import('./pdf.js?v=2.2.1');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
