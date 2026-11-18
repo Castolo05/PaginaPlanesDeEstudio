@@ -1,6 +1,6 @@
 // Genera el PDF del plan con el estado y las notas del alumno.
 // jsPDF se carga recién cuando se pide el PDF, para que la página abra más rápido.
-import { analizarCarrera, calcularResumen, nombreAnio } from './reglas.js?v=2.1.8';
+import { analizarCarrera, calcularResumen, nombreAnio } from './reglas.js?v=2.1.10';
 
 function cargarScript(src) {
     return new Promise((resolver, rechazar) => {

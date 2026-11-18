@@ -265,6 +265,17 @@ button, input, select { font: inherit; color: inherit; }
 .accion:disabled { opacity: 0.6; cursor: progress; }
 .accion-guardar { background: var(--aprobada-solido); border-color: var(--aprobada-solido); }
 .accion-guardar:hover { background: var(--aprobada-solido); filter: brightness(1.1); }
+.accion-guardar { position: relative; }
+/* Punto: hay materias para pasar a otras carreras */
+.accion-guardar.con-pendientes::after {
+    content: "";
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--acento);
+    border: 2px solid var(--marca-2);
+}
 
 /* ---------- Promedio (en la barra, junto a Guardar cambios) ---------- */
 .promedio {
@@ -326,7 +337,7 @@ button, input, select { font: inherit; color: inherit; }
 .anio-materias { display: flex; flex-direction: column; gap: 4px; }
 
 /* Ícono "?" con los requisitos del año */
-.anio-cabecera { margin: 0 0 8px; }
+.anio-cabecera { position: relative; margin: 0 0 8px; }
 .anio-cabecera .anio-titulo { margin: 0; }
 .anio-titulo { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .anio-ayuda-boton {
@@ -349,14 +360,35 @@ button, input, select { font: inherit; color: inherit; }
 .anio-ayuda-boton:hover,
 .anio-ayuda-boton[aria-expanded="true"] { background: var(--sobre-marca); color: var(--marca); }
 .anio-ayuda-boton:focus-visible { outline-color: var(--sobre-marca); }
+
+/* Ventanita flotante: se superpone a las materias sin moverlas */
 .anio-ayuda {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 30;
+    width: min(290px, 100%);
     padding: 10px 12px;
     background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-top: 0;
-    border-radius: 0 0 var(--radio) var(--radio);
-    font-size: 0.85rem;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-dialogo);
+    font-size: 0.82rem;
+    line-height: 1.45;
     color: var(--texto-suave);
+    animation: aparecer 0.12s ease;
+}
+/* Flechita que apunta al ícono */
+.anio-ayuda::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 9px;
+    width: 10px; height: 10px;
+    background: var(--superficie);
+    border-left: 1px solid var(--borde-fuerte);
+    border-top: 1px solid var(--borde-fuerte);
+    transform: rotate(45deg);
 }
 .anio-ayuda p { margin: 0; }
 .anio-ayuda p + p { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--borde); }

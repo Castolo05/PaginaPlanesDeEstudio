@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.8';
-import * as reglasMod from './reglas.js?v=2.1.8';
-import * as almacen from './almacenamiento.js?v=2.1.8';
+import config from './config.js?v=2.1.10';
+import * as reglasMod from './reglas.js?v=2.1.10';
+import * as almacen from './almacenamiento.js?v=2.1.10';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada, requisitosDelAnio,
@@ -148,8 +148,51 @@ function renderCarreras() {
     );
 }
 
+// Guardar cambios: además de guardar, pasa las materias aprobadas o cursadas de
+// una carrera a las otras que tienen la misma materia (solo suma, nunca borra).
+function guardarYCompartir(origenId) {
+    const { progreso, cambios } = compartirEntreCarreras(plan, datos.progreso, origenId);
+    datos.progreso = progreso;
+    if (!guardar()) return;
+    if (carrera) redibujar();
+    if (!cambios.length) {
+        aviso('Cambios guardados.');
+        return;
+    }
+    const detalle = cambios.map((c) => `${c.materias.length} en ${c.carrera.tituloCorto}`).join(', ');
+    const total = cambios.reduce((n, c) => n + c.materias.length, 0);
+    aviso(`Cambios guardados. ${total === 1 ? 'Se actualizó 1 materia compartida' : `Se actualizaron ${total} materias compartidas`} con otras carreras: ${detalle}.`);
+}
+
+// Materias de una carrera que todavía no se pasaron a las demás
+function pendientesDeCompartir(origenId) {
+    return compartirEntreCarreras(plan, datos.progreso, origenId).cambios;
+}
+
+// Punto en "Guardar cambios" cuando hay materias para pasar a otras carreras
+function actualizarAvisoGuardar() {
+    const boton = $('#btn-guardar');
+    const hay = carrera && pendientesDeCompartir(carrera.id).length > 0;
+    boton.classList.toggle('con-pendientes', Boolean(hay));
+    boton.title = hay ? 'Tenés materias para pasar a tus otras carreras' : '';
+    boton.setAttribute('aria-label', hay ? 'Guardar cambios (hay materias para pasar a otras carreras)' : 'Guardar cambios');
+}
+
 function seleccionarCarrera(id, porUsuario = false) {
+    const anterior = carrera;
     const elegida = plan.carreras.find((c) => c.id === id) || plan.carreras[0];
+    // Si se cambia de carrera con materias compartidas sin pasar, avisar y ofrecer pasarlas
+    if (porUsuario && anterior && anterior.id !== elegida.id) {
+        const pendientes = pendientesDeCompartir(anterior.id).find((c) => c.carrera.id === elegida.id);
+        if (pendientes) {
+            const n = pendientes.materias.length;
+            aviso(
+                `${n === 1 ? 'Hay 1 materia' : `Hay ${n} materias`} de ${anterior.tituloCorto} que todavía no pasaste a esta carrera. Se pasan al tocar “Guardar cambios”.`,
+                'info',
+                { texto: 'Pasarlas ahora', alHacer: () => guardarYCompartir(anterior.id) }
+            );
+        }
+    }
     carrera = elegida;
     datos.carrera = elegida.id;
     abiertas.clear();
@@ -182,6 +225,7 @@ function renderPlan() {
     contenedor.replaceChildren(...columnas);
     contenedor.setAttribute('data-listo', '1');
     renderPromedio();
+    actualizarAvisoGuardar();
     const abierta = materiaAbierta();
     if (abierta) pintarResaltado(abierta);
 }
@@ -280,10 +324,6 @@ function renderDetalle(materia, idDetalle) {
             faltan.length
                 ? `marcaste esta materia como “${etiquetaEstado(a.estado, materia.tipo).toLowerCase()}”, pero falta: ${describirFaltantes(faltan)}`
                 : 'ya no cumplís el requisito para cursar este año (ver el ícono ? junto al año).'));
-    } else if (!a.habilitada && a.faltanParaCursar.length) {
-        // Los requisitos de año (12 finales, años completos) se explican en el ícono "?" del año
-        avisos.push(el('p', { class: 'detalle-aviso' },
-            el('strong', { text: 'Para cursarla falta: ' }), describirFaltantes(a.faltanParaCursar)));
     } else if (a.estado === 'cursada' && !a.puedeAprobar) {
         avisos.push(el('p', { class: 'detalle-aviso' },
             el('strong', { text: 'Para rendir el final falta: ' }), describirFaltantes(a.faltanParaFinal, [], 'final de')));
@@ -577,22 +617,8 @@ function prepararHerramientas() {
         }
     });
 
-    // Guardar cambios: además de guardar, pasa las materias aprobadas o cursadas
-    // a las otras carreras que tienen la misma materia (solo suma, nunca borra).
     $('#btn-guardar').addEventListener('click', () => {
-        if (!carrera) return;
-        const { progreso, cambios } = compartirEntreCarreras(plan, datos.progreso, carrera.id);
-        datos.progreso = progreso;
-        if (!guardar()) return;
-        if (!cambios.length) {
-            aviso('Cambios guardados.');
-            return;
-        }
-        const detalle = cambios
-            .map((c) => `${c.materias.length} en ${c.carrera.tituloCorto}`)
-            .join(', ');
-        const total = cambios.reduce((n, c) => n + c.materias.length, 0);
-        aviso(`Cambios guardados. ${total === 1 ? 'Se actualizó 1 materia compartida' : `Se actualizaron ${total} materias compartidas`} con otras carreras: ${detalle}.`);
+        if (carrera) guardarYCompartir(carrera.id);
     });
 
     $('#btn-pdf').addEventListener('click', async () => {
@@ -600,7 +626,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.8');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.10');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
