@@ -1,8 +1,8 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.1.7';
-import * as reglasMod from './reglas.js?v=2.1.7';
-import * as almacen from './almacenamiento.js?v=2.1.7';
+import config from './config.js?v=2.1.8';
+import * as reglasMod from './reglas.js?v=2.1.8';
+import * as almacen from './almacenamiento.js?v=2.1.8';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, aplicarCascada, requisitosDelAnio,
@@ -600,7 +600,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.1.7');
+            const { descargarPDF } = await import('./pdf.js?v=2.1.8');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);
