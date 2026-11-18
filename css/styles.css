@@ -116,7 +116,7 @@
 
 /* ---------- Base ---------- */
 /* Marca de agua opcional (js/config.js → marcaDeAgua) */
-body.con-marca-agua::before {
+.con-marca-agua body::before {
     content: "";
     position: fixed;
     inset: 0;

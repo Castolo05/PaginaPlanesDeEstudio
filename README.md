@@ -26,7 +26,7 @@ automáticamente las que pueden cursar según las correlatividades.
 index.html              Página
 css/styles.css          Estilos (claro y oscuro en un solo archivo, con variables)
 careers.json            Datos de las carreras, materias, correlativas y reglas
-js/config.js            Textos, logo y colores de la versión (ver "Otras versiones")
+js/config.js            Textos, logo y colores de la versión (script común, se carga primero)
 js/app.js               Interfaz
 js/reglas.js            Lógica de correlatividades (sin DOM, testeada)
 js/almacenamiento.js    Guardado, migración de la versión anterior, exportar/importar
@@ -69,7 +69,7 @@ Todo está en `careers.json`. Cada materia tiene esta forma:
 - Las reglas de 3er y 5to año están en `reglas`, al principio del archivo.
 
 Después de editar, ejecutar `npm test`: verifica que no haya ids repetidos ni correlativas inexistentes.
-Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.2.4`)
+Al publicar cambios en el código o los estilos, subir el número de versión (`?v=2.2.5`)
 en `index.html`, en los `import` de `js/app.js` y `js/pdf.js`, y la `VERSION` de `sw.js`.
 Así los navegadores no mezclan archivos viejos con nuevos. Si se agregan o quitan archivos,
 actualizar también la lista de `sw.js`.

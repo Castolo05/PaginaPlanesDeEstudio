@@ -1,8 +1,11 @@
 // Personalización de la página (textos, logo y colores).
 // Para crear otra versión (por ejemplo la de Franja Morada) basta con cambiar
 // este archivo: ver el ejemplo en temas/franja-morada.js.
+//
+// Es un script común (no un módulo) que se carga al principio de index.html, para
+// que los colores y el logo se apliquen antes de que se vea la página.
 
-export default {
+window.CONFIG_PLAN = {
     // Título del encabezado según el ancho de pantalla
     titulo: {
         largo: 'Planes de Estudio - Facultad de Ciencias Económicas',

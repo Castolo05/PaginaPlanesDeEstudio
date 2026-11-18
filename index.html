@@ -16,7 +16,29 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
-  <link rel="stylesheet" href="css/styles.css?v=2.2.4">
+  <link rel="stylesheet" href="css/styles.css?v=2.2.5">
+  <script src="js/config.js?v=2.2.5"></script>
+  <script>
+    // Aplica colores, marca de agua y título de la configuración antes de pintar
+    // la página, para que no se vean por un instante los colores por defecto.
+    (function () {
+      var c = window.CONFIG_PLAN || {};
+      var raiz = document.documentElement;
+      var colores = c.colores || {};
+      for (var variable in colores) raiz.style.setProperty(variable, colores[variable]);
+      if (c.marcaDeAgua && c.marcaDeAgua.src) {
+        // Dirección completa: una ruta relativa dentro de una variable CSS se resolvería desde css/
+        raiz.style.setProperty('--marca-agua', 'url("' + new URL(c.marcaDeAgua.src, document.baseURI).href + '")');
+        if (c.marcaDeAgua.opacidad != null) raiz.style.setProperty('--marca-agua-opacidad', String(c.marcaDeAgua.opacidad));
+        raiz.classList.add('con-marca-agua');
+      }
+      if (c.titulo && c.titulo.largo) document.title = c.titulo.largo;
+      if (colores['--marca']) {
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', colores['--marca']);
+      }
+    })();
+  </script>
   <script>
     // Aplica el tema guardado antes de pintar la página (evita el "parpadeo")
     try {
@@ -43,6 +65,24 @@
       <span class="t-medio">Planes de Estudio - FCE</span>
       <span class="t-corto">PDE - FCE</span>
     </h1>
+    <script>
+      // Logo o títulos de la configuración, antes de que se vea el encabezado
+      (function () {
+        var c = window.CONFIG_PLAN || {};
+        var h1 = document.getElementById('titulo');
+        if (c.logoEncabezado && c.logoEncabezado.src) {
+          var img = document.createElement('img');
+          img.src = c.logoEncabezado.src;
+          img.alt = c.logoEncabezado.alt || '';
+          img.className = 'logo-encabezado';
+          h1.replaceChildren(img);
+        } else if (c.titulo) {
+          h1.querySelector('.t-largo').textContent = c.titulo.largo;
+          h1.querySelector('.t-medio').textContent = c.titulo.medio;
+          h1.querySelector('.t-corto').textContent = c.titulo.corto;
+        }
+      })();
+    </script>
     <div class="encabezado-lado">
       <button type="button" class="icono-boton" id="btn-tema" aria-label="Cambiar a modo oscuro" title="Cambiar modo">
         <img src="media/modo_oscuro.png" alt="" width="44" height="44">
@@ -73,7 +113,7 @@
   <footer class="pie">
     <p id="pie-texto">Copyright © 2024 PEFCE - FGL</p>
     <p class="pie-privacidad">Tus datos se guardan solo en este navegador.</p>
-    <p class="pie-version">Versión 2.2.4</p>
+    <p class="pie-version">Versión 2.2.5</p>
   </footer>
 
   <!-- Preguntas frecuentes -->
@@ -256,6 +296,6 @@
   <script nomodule>
     document.getElementById('plan').innerHTML = '<p class="plan-mensaje">Tu navegador es demasiado antiguo para esta página. Actualizalo o probá con otro navegador.</p>';
   </script>
-  <script type="module" src="js/app.js?v=2.2.4"></script>
+  <script type="module" src="js/app.js?v=2.2.5"></script>
 </body>
 </html>

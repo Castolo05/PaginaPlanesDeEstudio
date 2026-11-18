@@ -1,8 +1,9 @@
 // El ?v= evita que el navegador mezcle versiones viejas y nuevas de los archivos.
 // Al publicar cambios, subir el número aquí, en index.html, en pdf.js y en sw.js.
-import config from './config.js?v=2.2.4';
-import * as reglasMod from './reglas.js?v=2.2.4';
-import * as almacen from './almacenamiento.js?v=2.2.4';
+// La configuración (js/config.js) se carga como script común en index.html
+const config = window.CONFIG_PLAN || { titulo: {}, pie: '' };
+import * as reglasMod from './reglas.js?v=2.2.5';
+import * as almacen from './almacenamiento.js?v=2.2.5';
 
 const {
     analizarCarrera, validarCambio, estadosPermitidos, correlativasDe, calcularResumen, requisitosDelAnio,
@@ -86,34 +87,12 @@ function guardar() {
 }
 
 // ---------- Configuración visual ----------
+// Textos de la configuración (colores, logo y título se aplican antes, en index.html)
 function aplicarConfig() {
-    const t = config.titulo;
-    const h1 = $('#titulo');
-    if (config.logoEncabezado) {
-        h1.replaceChildren(el('img', { src: config.logoEncabezado.src, alt: config.logoEncabezado.alt, class: 'logo-encabezado' }));
-    } else {
-        $('.t-largo', h1).textContent = t.largo;
-        $('.t-medio', h1).textContent = t.medio;
-        $('.t-corto', h1).textContent = t.corto;
-    }
-    document.title = t.largo;
     const anio = new Date().getFullYear();
     const rango = config.anioInicio && config.anioInicio < anio ? `${config.anioInicio}–${anio}` : `${anio}`;
     $('#pie-texto').textContent = `Copyright © ${rango} ${config.pie}`;
     if (config.notaTutorial) $('#nota-tutorial').textContent = config.notaTutorial;
-    for (const [variable, valor] of Object.entries(config.colores || {})) {
-        document.documentElement.style.setProperty(variable, valor);
-    }
-    if (config.marcaDeAgua?.src) {
-        // Dirección completa: una ruta relativa dentro de una variable CSS se resolvería
-        // desde css/ y no encontraría la imagen
-        const src = new URL(config.marcaDeAgua.src, document.baseURI).href;
-        document.documentElement.style.setProperty('--marca-agua', `url("${src}")`);
-        if (config.marcaDeAgua.opacidad != null) {
-            document.documentElement.style.setProperty('--marca-agua-opacidad', String(config.marcaDeAgua.opacidad));
-        }
-        document.body.classList.add('con-marca-agua');
-    }
 }
 
 // ---------- Tema claro / oscuro ----------
@@ -601,7 +580,7 @@ function prepararHerramientas() {
         boton.disabled = true;
         boton.textContent = 'Generando…';
         try {
-            const { descargarPDF } = await import('./pdf.js?v=2.2.4');
+            const { descargarPDF } = await import('./pdf.js?v=2.2.5');
             await descargarPDF({ carrera, reglas: plan.reglas, progreso: progresoActual(), config });
         } catch (e) {
             console.error(e);

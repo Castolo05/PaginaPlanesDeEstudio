@@ -3,7 +3,7 @@
 // media/morada-blanco.png (logo) y media/leon.png (marca de agua).
 // Así las dos versiones comparten el mismo código.
 
-export default {
+window.CONFIG_PLAN = {
     // Título de la pestaña del navegador (el encabezado muestra el logo)
     titulo: {
         largo: 'Planes de Estudio - Facultad de Ciencias Económicas',
